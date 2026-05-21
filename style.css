@@ -1,0 +1,513 @@
+/* =========================================
+   1. 共通・ベース設定
+   ========================================= */
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #f0f0f0;
+    margin: 0;
+}
+
+/* =========================================
+   2. 全体レイアウト（位置関係の固定）
+   ========================================= */
+/* 🔼 上部：キャラクターたちが並ぶメインフィールド */
+.battle-field {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px;
+    justify-content: center;
+    min-height: 380px; /* キャラクターエリアの縦幅を確保して安定させる */
+}
+
+/* 🔽 下部：ログ・デバッグ・ボタンを包むコントロールパネル */
+.control-panel {
+    width: 720px; /* 💡 ログ窓の幅とピッタリ合わせる */
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* =========================================
+   3. 字幕ログウィンドウ（スマートな1行専用）
+   ========================================= */
+#log {
+    width: 720px;
+    height: 38px; /* border(3px×2) + 中身(32px) ＝ ちょうど1行分に固定 */
+    background: rgba(30, 30, 36, 0.85); 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #f1f2f6;
+    border: 3px solid rgba(58, 58, 74, 0.8);
+    border-radius: 8px;
+    margin: 0 auto 15px auto !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    font-size: 16px; 
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    overflow: hidden; /* 過去のログは上に押し出されて隠れる */
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+/* 字幕の1行ごとの正確な配置設定 */
+#log div {
+    height: 32px; /* 1行の縦幅を完全に固定 */
+    line-height: 32px; /* 文字の上下中央揃え */
+    text-align: center;
+    white-space: nowrap; /* ログが長くなっても絶対に2行に改行させない */
+    overflow: hidden; 
+    text-overflow: ellipsis; /* 万が一長すぎた場合は末尾に「...」 */
+    box-sizing: border-box;
+    animation: subtitleIn 0.18s ease-out forwards;
+}
+
+/* 字幕アニメーション */
+@keyframes subtitleIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   4. キャラクターセクション & ステータス
+   ========================================= */
+.character-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 160px;
+    background: #fafafa;
+    border: 3px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+/* 💀 キャラクターが倒れた（HP0）時のスタイル */
+.character-section.is-dead {
+    background-color: #fce4e4 !important; /* ほんのり赤い背景 */
+    border-color: #e74c3c !important;     /* 枠線を警告の赤に */
+    box-shadow: inset 0 0 15px rgba(231, 76, 60, 0.2);
+}
+
+.character-image {
+    width: 128px;
+    height: 128px;
+    border: 2px solid #333;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.character-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* 倒れたキャラの画像（イラスト）を白黒＋半透明化 */
+.character-section.is-dead .character-image,
+.character-section.is-dead .character-image img {
+    filter: grayscale(100%) brightness(0.7);
+    opacity: 0.4;
+}
+
+/* HPバー */
+.hp-bar-container {
+    width: 140px;
+    height: 12px;
+    background-color: #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 5px 0;
+}
+
+.hp-bar { 
+    height: 100%; 
+    background-color: #4cd137; 
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.hp-text {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* =========================================
+   5. コマンドUI (ルーレット)
+   ========================================= */
+.roulette {
+    display: flex;
+    flex-direction: column;
+    width: 140px; 
+    border: 2px solid #333;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #eee;
+}
+
+/* 倒れたキャラのルーレットを暗くして触れなくする */
+.character-section.is-dead .roulette {
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+.cmd-item {
+    position: relative;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    background: white;
+    transition: background-color 0.15s;
+}
+
+.cmd-item:last-child {
+    border-bottom: none;
+}
+
+.cmd-item.active {
+    background-color: #ff7675 !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+/* =========================================
+   6. デバッグモード & バトル開始ボタン
+   ========================================= */
+.debug-container {
+    margin-bottom: 20px;
+}
+
+.debug-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s ease;
+}
+
+.debug-label:hover {
+    color: #1e1e24;
+}
+
+.debug-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* 🔥 立体的なバトル開始ボタン */
+#atk-btn {
+    display: block;
+    width: 280px;
+    padding: 15px 0;
+    margin: 0 auto;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.15em;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ff7675, #d63031); 
+    border: none;
+    border-radius: 30px; 
+    box-shadow: 0 6px 0 #a22021, 0 10px 20px rgba(214, 48, 49, 0.35);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
+}
+
+#atk-btn:hover {
+    background: linear-gradient(135deg, #ff8a88, #e13c3a);
+    box-shadow: 0 7px 0 #a22021, 0 12px 25px rgba(214, 48, 49, 0.45);
+    transform: translateY(-1px);
+}
+
+#atk-btn:active {
+    transform: translateY(5px);
+    box-shadow: 0 1px 0 #a22021, 0 3px 10px rgba(214, 48, 49, 0.2);
+}
+
+#atk-btn:disabled {
+    background: linear-gradient(135deg, #b2bec3, #636e72) !important;
+    color: #dfe6e9 !important;
+    text-shadow: none !important;
+    transform: translateY(4px) !important; 
+    box-shadow: 0 2px 0 #2d3436, 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   7. 画面遷移・メニュー・キャラ選択専用スタイル
+   ========================================= */
+
+.hidden { display: none !important; }
+
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    width: 100%;
+}
+
+.menu-title {
+    font-size: 28px;
+    color: #2d3436;
+    text-shadow: 1px 1px 0px #dfe6e9;
+    margin-bottom: 30px;
+    letter-spacing: 0.1em;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 450px;
+}
+
+.menu-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #ffffff;
+    box-shadow: 0 5px 0 #1e7e43;
+    transition: all 0.1s ease;
+}
+.menu-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #1e7e43; }
+.menu-btn:disabled { background: #b2bec3 !important; box-shadow: 0 5px 0 #636e72 !important; cursor: not-allowed; }
+
+.mode-normal { background: linear-gradient(135deg, #2ecc71, #27ae60); box-shadow: 0 5px 0 #1e7e43; }
+.mode-boss { background: linear-gradient(135deg, #e67e22, #d35400); box-shadow: 0 5px 0 #963b00; }
+.mode-endless { background: linear-gradient(135deg, #9b59b6, #8e44ad); box-shadow: 0 5px 0 #5b2c70; }
+
+/* 10体のキャラクター選択用グリッド */
+.candidate-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 120px);
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.candidate-card {
+    background: white;
+    border: 3px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.candidate-card:hover { transform: scale(1.05); border-color: #2ecc71; }
+
+/* キャラが選択された時の目立つ枠線 */
+.candidate-card.selected {
+    border-color: #e74c3c;
+    background: #fff0f0;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
+    transform: scale(1.05);
+}
+
+.candidate-img {
+    width: 64px;
+    height: 64px;
+    margin: 5px auto;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    /* 💡 以下の4行を追加して画像を中央に綺麗に収めます */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.candidate-name { font-size: 13px; font-weight: bold; }
+
+/* 🏰 現在の階層メーターバッジ */
+#floor-badge {
+    background: #2d3436;
+    color: #fff;
+    padding: 8px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    letter-spacing: 0.05em;
+}
+
+/* =========================================
+   💡 追加：キャラクター詳細ポップアップ（モーダル）
+   ========================================= */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* 背景を暗く */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal.hidden {
+    display: none !important;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 550px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #aaa;
+    user-select: none;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+/* 詳細内の全リール表示用レイアウト */
+.modal-reel-container {
+    margin-top: 20px;
+}
+
+.modal-reel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    background: #f8f9fa;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+.modal-reel-title {
+    font-weight: bold;
+    font-size: 0.85em;
+    width: 75px;
+    color: #555;
+    flex-shrink: 0;
+}
+
+.modal-cmd-list {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.modal-cmd-item {
+    border: 1px solid #ddd;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    background: white;
+    font-weight: bold;
+    color: #333;
+}
+
+/* =========================================
+   バトル演出用の追加スタイル
+   ========================================= */
+
+/* 1. 行動中のキャラクター（強調された赤枠） */
+.acting {
+    border: 3px solid #ff4d4d !important;
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.7) !important;
+    animation: pulse-red-border 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-red-border {
+    0% { box-shadow: 0 0 12px rgba(255, 77, 77, 0.5); }
+    50% { box-shadow: 0 0 22px rgba(255, 77, 77, 0.9); }
+    100% { box-shadow: 0 0 12px rgba(255, 77, 77, 0.5); }
+}
+
+/* 2. ダメージ・回復ポップアップ（中央配置用） */
+/* ポップアップをキャラ枠の絶対中央にするため、キャラ要素を relative に設定 */
+[id^="player-"], [id^="enemy-"] {
+    position: relative;
+}
+
+.battle-popup {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    font-weight: 900;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    /* 黒い縁取りをつけて数字をクッキリ見せる */
+    text-shadow: 
+        -2px -2px 0 #000,  2px -2px 0 #000,
+        -2px  2px 0 #000,  2px  2px 0 #000,
+         0px -2px 0 #000,  0px  2px 0 #000,
+        -2px  0px 0 #000,  2px  0px 0 #000;
+    pointer-events: none; /* クリックの邪魔をしない */
+    z-index: 999;
+    animation: popup-float-fade 0.8s ease-out forwards;
+}
+
+/* ダメージは赤、回復は緑 */
+.popup-damage { color: #ff3333; }
+.popup-heal   { color: #33ff33; }
+
+/* ふわっと拡大して上に消えていくアニメーション */
+@keyframes popup-float-fade {
+    0% {
+        transform: translate(-50%, -20%) scale(0.4);
+        opacity: 0;
+    }
+    15% {
+        transform: translate(-50%, -60%) scale(1.3);
+        opacity: 1;
+    }
+    30% {
+        transform: translate(-50%, -50%) scale(1.0);
+        opacity: 1;
+    }
+    70% {
+        transform: translate(-50%, -65%) scale(1.0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -85%) scale(0.8);
+        opacity: 0;
+    }
+}

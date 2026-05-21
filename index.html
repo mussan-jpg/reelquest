@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>リールクエスト</title>
+</head>
+<body>
+
+    <div id="menu-screen" class="menu-container">
+        <h1 class="menu-title">リールクエスト</h1>
+        <div class="menu-buttons">
+            <button class="menu-btn mode-normal" onclick="selectMode('rush')">
+                <div class="btn-main">👑 5階層の試練 (モード1)</div>
+                <div class="btn-sub">候補から3体を選び、5連戦を勝ち抜け！</div>
+            </button>
+            <button class="menu-btn mode-boss" onclick="alert('今後のアップデートをお楽しみに！')">
+                <div class="btn-main">🔒 モード2 (Coming Soon)</div>
+            </button>
+            <button class="menu-btn mode-endless" onclick="alert('今後のアップデートをお楽しみに！')">
+                <div class="btn-main">🔒 モード3 (Coming Soon)</div>
+            </button>
+            <button class="menu-btn mode-library" onclick="openLibrary()">
+                <div class="btn-main">📚 キャラ図鑑</div>
+                <div class="btn-sub">全キャラのステータスを確認</div>
+            </button>
+        </div>
+    </div>
+
+    <div id="char-select-screen" class="menu-container hidden">
+        <h1 class="menu-title">👥 パーティ結成（3体選択） 👥</h1>
+        <div id="floor-indicator" style="font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #d63031;"></div>
+        <div id="candidate-list" class="candidate-grid"></div>
+        <button id="start-adventure-btn" class="menu-btn mode-normal" style="width: 300px; margin-top: 30px;" disabled>
+            この3体で出発する！
+        </button>
+    </div>
+
+    <div id="library-screen" class="menu-container hidden">
+        <h1 class="menu-title">📚 キャラ図鑑</h1>
+        <div id="library-list" class="candidate-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px;"></div>
+        <button class="menu-btn" style="width: 260px; margin-top: 24px;" onclick="backToMenu()">
+            メニューに戻る
+        </button>
+    </div>
+
+    <div id="replacement-screen" class="menu-container hidden">
+        <h1 class="menu-title">🔄 階層クリア後のメンバー入れ替え</h1>
+        <div id="replacement-description" style="max-width: 700px; text-align: center; margin-bottom: 20px; color: #2d3436; line-height: 1.6;"></div>
+        <div id="replacement-candidate-list" class="candidate-grid" style="grid-template-columns: repeat(4, 120px);"></div>
+        <div style="display:flex; flex-direction:column; align-items:center; width:100%; max-width:760px; gap:10px; margin-top:20px;">
+            <div style="font-weight:bold;">現在のパーティ (1体を選択して新しい仲間と交代)</div>
+            <div id="replacement-party-list" class="candidate-grid" style="grid-template-columns: repeat(3, 120px);"></div>
+        </div>
+        <div style="display:flex; gap:12px; margin-top: 30px; flex-wrap: wrap; justify-content: center;">
+            <button id="replacement-confirm-btn" class="menu-btn mode-normal" style="width: 240px;" disabled>
+                メンバーを入れ替える
+            </button>
+            <button id="replacement-skip-btn" class="menu-btn" style="width: 240px; background: #7f8c8d; box-shadow: 0 5px 0 #636e72;">
+                入れ替えずに次へ
+            </button>
+        </div>
+    </div>
+
+    <div id="battle-screen" class="hidden">
+        <div id="floor-badge">🏰 現在の階層: 1 / 5 F</div>
+
+        <div class="battle-field" id="game-container"></div>
+        
+        <div class="control-panel">
+            <div id="log"></div>
+            <button id="atk-btn" onclick="gameTurn()">バトル開始！</button>
+            <div class="debug-container" style="margin-top: 12px;">
+                <label class="debug-label">
+                    <input type="checkbox" id="debug-mode"> 🛠️ デバッグモード（味方のコマンドを手動選択）
+                </label>
+                <label class="debug-label" style="margin-left:12px;">
+                    <input type="checkbox" id="quick-mode"> ⚡ 高速モード（瞬時決着）
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div id="detail-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modal-char-info"></div>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
