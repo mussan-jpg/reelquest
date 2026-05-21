@@ -216,13 +216,13 @@ export const commandEffects = {
     },
     "misc_support_reel_up2": {
         name: "エールの歌",
-        desc: "他の味方1体のリールを1段階上げる応援技",
+        desc: "他の味方1体のリールを2段階上げる応援技",
         calcDamage: (attacker) => 0,
         action: (attacker, target) => {
             if (!target) return `🟢 ${attacker.name}のエール！ しかし仲間が見つからない。`;
             const maxReelIndex = Array.isArray(target.commands[0]) ? target.commands.length - 1 : 0;
             if (target.currentReel < maxReelIndex) {
-                target.currentReel += 1;
+                target.currentReel += 2;
                 return `🟢 ${attacker.name}の「エールの歌」！ ${target.name}のリールが1段階上がった！`;
             }
             return `🟢 ${attacker.name}の「エールの歌」！ しかし ${target.name} はこれ以上リールを上げられない。`;
