@@ -11,6 +11,9 @@ export class Character {
         this.atk = data.atk ?? 10;
         this.int = data.int ?? 10;
         this.spd = data.spd ?? 10;
+        this.baseAtk = data.baseAtk ?? this.atk;
+        this.baseInt = data.baseInt ?? this.int;
+        this.baseSpd = data.baseSpd ?? this.spd;
         this.image = data.image;
         
         // コマンドの配列（最大4段階の二次元配列）

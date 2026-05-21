@@ -302,7 +302,7 @@ export const masterCharacters = [
             ["atk02", "atk02", "heal01", "atk03", "misc03", "cmd_up12"],
             ["atk03", "atk03", "heal02", "atk03", "misc03", "cmd_down12"]
         ],
-        image: "images/player.svg"
+        image: "images/yusha.svg"
     },
     // 🏹 【既存職】狩人
     {
@@ -314,7 +314,7 @@ export const masterCharacters = [
             ["atk02", "atk03", "misc03", "atk03", "atk03", "cmd_up12"],
             ["atk03", "atk03", "atk03", "atk03", "misc03", "cmd_down12"]
         ],
-        image: "images/player.svg"
+        image: "images/hunter.svg"
     },
     // 🔫 【既存職】ガンマン
     {
@@ -326,7 +326,7 @@ export const masterCharacters = [
             ["atk02", "atk02", "atk03", "atk03", "misc03", "cmd_up12"],
             ["atk03", "atk03", "atk03", "atk03", "atk03", "cmd_down12"]
         ],
-        image: "images/player.svg"
+        image: "images/gunman.svg"
     },
     // 🔮 【既存職】召喚士
     {
@@ -338,7 +338,7 @@ export const masterCharacters = [
             ["atk02", "misc01", "misc03", "atk03", "misc02", "cmd_up12"],
             ["atk03", "misc02", "misc02", "atk03", "misc02", "cmd_down12"]
         ],
-        image: "images/player.svg"
+        image: "images/summoner.svg"
     },
 
     // =========================================================================

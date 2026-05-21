@@ -217,13 +217,6 @@ async function execute(attacker, target, commandId, gameState, attackerPrefix, a
 
     const targetEl = document.getElementById(`${targetPrefix}-section-${targetIdx}`);
     
-    if (targetEl && !isReelUp && !isReelDown && !isMisc) {
-        const isHeal = commandId.includes('heal'); 
-        const flashColor = isHeal ? 'rgba(46, 204, 113, 0.6)' : 'rgba(231, 76, 60, 0.6)';
-        targetEl.style.backgroundColor = flashColor;
-        targetEl.style.transition = 'background-color 0.1s';
-    }
-
     updateAllHPBars(gameState);
     updateDeathStates(gameState); 
     
@@ -242,11 +235,6 @@ async function execute(attacker, target, commandId, gameState, attackerPrefix, a
 
     await sleep(400);
     
-    if (targetEl && !isReelUp && !isReelDown && !isMisc) {
-        targetEl.style.backgroundColor = ''; 
-        targetEl.style.transition = 'background-color 0.3s ease-out';
-    }
-
     if (attacker.hp <= 0) alertLog(`${attacker.name}は力尽きた！`);
     if (target.hp <= 0) alertLog(`${target.name}は力尽きた！`);
     updateDeathStates(gameState); 
@@ -440,7 +428,7 @@ export function initBattleSystem(gameState) {
                 alertLog("味方が全滅しました…ゲームオーバー。");
                 if (btn) {
                     btn.disabled = false; 
-                    btn.innerText = "💀 GAME OVER (メニューに戻る)";
+                    btn.innerText = "GAME OVER - メニューへ";
                     
                     const menuBtn = btn.cloneNode(true);
                     menuBtn.addEventListener('click', () => {
@@ -482,7 +470,7 @@ export function initBattleSystem(gameState) {
                     alertLog("5階層の試練をすべて突破！完全クリア！！");
                     if (btn) {
                         btn.disabled = false;
-                        btn.innerText = "🏆 COMPLETE!! (メニューに戻る)";
+                        btn.innerText = "COMPLETE - メニューへ";
                         
                         const menuBtn = btn.cloneNode(true);
                         menuBtn.addEventListener('click', () => {

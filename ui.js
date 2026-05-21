@@ -69,6 +69,8 @@ document.addEventListener('mousemove', (e) => {
 
 // 💡 追加：キャラクターの直前のHPを記憶するマップ（ダメージ・回復ポップアップの自動検知用）
 const prevHpMap = new Map();
+const prevStatusMap = new Map();
+const prevStatMap = new Map();
 
 // コマンド名を取得するヘルパー関数
 function getCommandName(commandId) {
@@ -82,33 +84,32 @@ function getReelGradeStyle(reelIdx) {
             return {
                 text: "★1",
                 style: "background: linear-gradient(135deg, #a05a2c, #d08a5c) !important; color: #fff !important; border: 1px solid #703a1c !important;",
-                cardBg: "linear-gradient(135deg, rgba(160, 90, 44, 0.15), rgba(208, 138, 92, 0.15))" // 薄い銅色
+                cardBg: "#f2dcc9"
             };
         case 1: // ★2 (銀)
             return {
                 text: "★2",
                 style: "background: linear-gradient(135deg, #bdc3c7, #ecf0f1) !important; color: #333 !important; border: 1px solid #95a5a6 !important;",
-                cardBg: "linear-gradient(135deg, rgba(189, 195, 199, 0.25), rgba(236, 240, 241, 0.25))" // 薄い銀色
+                cardBg: "#e1e8eb"
             };
         case 2: // ★3 (金)
             return {
                 text: "★3",
                 style: "background: linear-gradient(135deg, #f1c40f, #f39c12) !important; color: #fff !important; border: 1px solid #d35400 !important; text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;",
-                cardBg: "linear-gradient(135deg, rgba(241, 196, 15, 0.15), rgba(243, 156, 18, 0.15))" // 薄い金色
+                cardBg: "#ffe999"
             };
         case 3: // ★4 虹（最深部）
         default:
             return {
                 text: "★4",
                 style: "background: linear-gradient(45deg, #ff7675, #ffeaa7, #55efc4, #74b9ff, #a29bfe) !important; background-size: 400% 400% !important; animation: rainbow-bg 4s ease infinite !important; color: #fff !important; border: 1px solid #fff !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;",
-                cardBg: "linear-gradient(45deg, rgba(255,118,117,0.12), rgba(255,234,167,0.12), rgba(85,239,196,0.12), rgba(116,185,255,0.12), rgba(162,155,254,0.12))", // 薄い虹色
-                cardAnimation: "rainbow-bg 4s ease infinite" // ★4は背景カード自体もうっすら動くように
+                cardBg: "linear-gradient(135deg, #ffd6c6, #ffeaa5, #c9f3e8, #d9dcff)"
             };
     }
 }
 
 // 💡 追加：ダメージ・回復のポップアップエフェクトをキャラクターの中央に表示する関数
-export function showPopupEffect(prefix, charIdx, text, type) {
+export function showPopupEffect(prefix, charIdx, text, type, customColor = null) {
     const sectionEl = document.getElementById(`${prefix}-section-${charIdx}`);
     if (!sectionEl) return;
 
@@ -117,11 +118,17 @@ export function showPopupEffect(prefix, charIdx, text, type) {
     popup.innerText = text;
 
     // タイプに応じたテキスト色
-    let color = '#e74c3c'; // デフォルト：赤（ダメージ）
+    let color = customColor || '#e74c3c'; // デフォルト：赤（ダメージ）
     if (type === 'heal') {
-        color = '#2ecc71'; // 緑（回復）
+        color = customColor || '#2ecc71'; // 緑（回復）
     } else if (type === 'system') {
-        color = '#3498db'; // 青（リール昇格など）
+        color = customColor || '#3498db'; // 青（リール昇格など）
+    } else if (type === 'status') {
+        color = customColor || '#9b59b6';
+    } else if (type === 'buff') {
+        color = customColor || '#27ae60';
+    } else if (type === 'debuff') {
+        color = customColor || '#e67e22';
     }
 
     // スタイルの設定（中央配置、縁取り文字、フェードアップアニメーション）
@@ -148,6 +155,54 @@ export function showPopupEffect(prefix, charIdx, text, type) {
     setTimeout(() => {
         popup.remove();
     }, 800);
+}
+
+function flashCharacterEffect(prefix, charIdx, color) {
+    const sectionEl = document.getElementById(`${prefix}-section-${charIdx}`);
+    if (!sectionEl) return;
+
+    const flash = document.createElement('div');
+    flash.className = 'character-effect-flash';
+    flash.style.background = color;
+    sectionEl.style.position = 'relative';
+    sectionEl.appendChild(flash);
+
+    setTimeout(() => flash.remove(), 520);
+}
+
+function getStatusEffectColor(statusId) {
+    return statusEffects?.[statusId]?.color || '#9b59b6';
+}
+
+function getStatSnapshot(char) {
+    return {
+        atk: char.atk,
+        int: char.int,
+        spd: char.spd
+    };
+}
+
+function formatStatValue(icon, current, base) {
+    const diff = current - base;
+    const diffHtml = diff === 0
+        ? ''
+        : `<span class="stat-delta ${diff > 0 ? 'positive' : 'negative'}">${diff > 0 ? '+' : ''}${diff}</span>`;
+
+    return `<div>${icon}${current}${diffHtml}</div>`;
+}
+
+function buildCommandTooltip(effect, char) {
+    if (!effect) return '効果: 詳細なし';
+
+    let tooltipText = `${effect.name}\n効果: ${effect.desc || '詳細なし'}`;
+    if (typeof effect.calcDamage === 'function') {
+        const dmg = effect.calcDamage(char);
+        if (dmg > 0) {
+            tooltipText += `\n\n【予想ダメージ: ${dmg}】`;
+        }
+    }
+
+    return tooltipText;
 }
 
 // コマンド（ルーレット）の生成
@@ -303,10 +358,10 @@ function renderSection(characters, prefix) {
                             <img src="${char.image}" alt="${char.name}" style="width: 100%; height: 100%; object-fit: contain;">
                         </div>
                         
-                        <div style="font-size: 0.7em; color: #444; display: flex; flex-direction: column; gap: 2px; background: rgba(0,0,0,0.04); padding: 4px; border-radius: 4px; flex: 1; box-sizing: border-box; text-align: left;">
-                            <div>⚔️${char.atk}</div>
-                            <div>🔮${char.int}</div>
-                            <div>👟${char.spd}</div>
+                        <div id="${prefix}-stats-${i}" class="stat-list" style="font-size: 0.7em; color: #444; display: flex; flex-direction: column; gap: 2px; background: rgba(0,0,0,0.04); padding: 4px; border-radius: 4px; flex: 1; box-sizing: border-box; text-align: left;">
+                            ${formatStatValue('⚔️', char.atk, char.baseAtk ?? char.atk)}
+                            ${formatStatValue('🔮', char.int, char.baseInt ?? char.int)}
+                            ${formatStatValue('👟', char.spd, char.baseSpd ?? char.spd)}
                         </div>
                     </div>
                 </div>
@@ -398,6 +453,10 @@ export function render(gameState) {
     // 初回描画時に前回のHPマップをセット（初回からポップアップが出るのを防ぐため）
     gameState.players.forEach((char, i) => prevHpMap.set(`p-${i}`, char.hp));
     gameState.enemies.forEach((char, i) => prevHpMap.set(`e-${i}`, char.hp));
+    gameState.players.forEach((char, i) => prevStatusMap.set(`p-${i}`, [...(char.status || [])]));
+    gameState.enemies.forEach((char, i) => prevStatusMap.set(`e-${i}`, [...(char.status || [])]));
+    gameState.players.forEach((char, i) => prevStatMap.set(`p-${i}`, getStatSnapshot(char)));
+    gameState.enemies.forEach((char, i) => prevStatMap.set(`e-${i}`, getStatSnapshot(char)));
 
     updateAllHPBars(gameState);
 }
@@ -409,6 +468,7 @@ export function updateAllHPBars(gameState) {
             const bar = document.getElementById(`${prefix}-hp-bar-${i}`);
             const text = document.getElementById(`${prefix}-hp-text-${i}`);
             const status = document.getElementById(`${prefix}-status-${i}`);
+            const stats = document.getElementById(`${prefix}-stats-${i}`);
             const sectionEl = document.getElementById(`${prefix}-section-${i}`);
 
             // 💡 追加：自動HP差分検知（前回のHPと比較して変化があればポップアップを表示）
@@ -419,12 +479,42 @@ export function updateAllHPBars(gameState) {
                 if (diff < 0) {
                     // ダメージを受けた（赤文字）
                     showPopupEffect(prefix, i, Math.abs(diff), 'damage');
+                    flashCharacterEffect(prefix, i, 'rgba(231, 76, 60, 0.34)');
                 } else if (diff > 0) {
                     // 回復した（緑文字、頭にプラス付き）
                     showPopupEffect(prefix, i, `+${diff}`, 'heal');
+                    flashCharacterEffect(prefix, i, 'rgba(46, 204, 113, 0.34)');
                 }
             }
             prevHpMap.set(key, char.hp); // 今回のHPを次のターンのために記憶
+
+            const prevStatuses = prevStatusMap.get(key) || [];
+            const currentStatuses = char.status || [];
+            const addedStatuses = currentStatuses.filter(statusId => !prevStatuses.includes(statusId));
+            const removedStatuses = prevStatuses.filter(statusId => !currentStatuses.includes(statusId));
+            if (addedStatuses.length > 0) {
+                const statusId = addedStatuses[0];
+                const statusName = statusEffects?.[statusId]?.name || statusId;
+                const statusColor = getStatusEffectColor(statusId);
+                showPopupEffect(prefix, i, statusName, 'status', statusColor);
+                flashCharacterEffect(prefix, i, `${statusColor}66`);
+            } else if (removedStatuses.length > 0) {
+                showPopupEffect(prefix, i, '解除', 'system');
+                flashCharacterEffect(prefix, i, 'rgba(52, 152, 219, 0.28)');
+            }
+            prevStatusMap.set(key, [...currentStatuses]);
+
+            const prevStats = prevStatMap.get(key);
+            const currentStats = getStatSnapshot(char);
+            if (prevStats) {
+                const statDiffs = ['atk', 'int', 'spd'].map(stat => currentStats[stat] - prevStats[stat]);
+                const totalDiff = statDiffs.reduce((sum, diff) => sum + diff, 0);
+                if (totalDiff !== 0) {
+                    showPopupEffect(prefix, i, totalDiff > 0 ? '能力UP' : '能力DOWN', totalDiff > 0 ? 'buff' : 'debuff');
+                    flashCharacterEffect(prefix, i, totalDiff > 0 ? 'rgba(39, 174, 96, 0.28)' : 'rgba(230, 126, 34, 0.3)');
+                }
+            }
+            prevStatMap.set(key, currentStats);
 
             if (bar) {
                 const percent = (char.hp / char.maxHp) * 100;
@@ -433,6 +523,13 @@ export function updateAllHPBars(gameState) {
             }
             if (text) text.innerText = `${Math.max(0, char.hp)} / ${char.maxHp}`;
             if (status) status.innerHTML = generateStatusBadges(char.status);
+            if (stats) {
+                stats.innerHTML = `
+                    ${formatStatValue('⚔️', char.atk, char.baseAtk ?? char.atk)}
+                    ${formatStatValue('🔮', char.int, char.baseInt ?? char.int)}
+                    ${formatStatValue('👟', char.spd, char.baseSpd ?? char.spd)}
+                `;
+            }
 
             // 💡 修正：最大グレードのスタイルを取得（生存時のカード背景用）
             const maxReelIdx = (char.commands && Array.isArray(char.commands[0])) ? char.commands.length - 1 : 0;
@@ -485,15 +582,7 @@ export function updateAllHPBars(gameState) {
 
                         const effect = commandEffects[cmdId];
                         if (effect) {
-                            let tooltipText = `${effect.name}\n${effect.desc}`;
-
-                            // ダメージ計算関数があれば、現在のキャラクターのステータスを渡して計算
-                            if (typeof effect.calcDamage === 'function') {
-                                const dmg = effect.calcDamage(char);
-                                if (dmg > 0) {
-                                    tooltipText += `\n\n【予想ダメージ: ${dmg}】`;
-                                }
-                            }
+                            const tooltipText = buildCommandTooltip(effect, char);
                             // カスタムツールチップ用に data-tooltip を設定（ネイティブの title は消す）
                             cmdEl.removeAttribute('title');
                             cmdEl.setAttribute('data-tooltip', tooltipText);

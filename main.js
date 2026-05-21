@@ -83,72 +83,154 @@ window.backToMenu = function () {
     document.getElementById('menu-screen').classList.remove('hidden');
 };
 
+function getCharacterRarity(char) {
+    return normalizeCommandReels(char.commands).length;
+}
+
+function getCharacterRarityClass(char) {
+    const rarity = Math.max(1, Math.min(4, getCharacterRarity(char)));
+    return `rarity-${rarity}`;
+}
+
+function normalizeCommandReels(commands) {
+    if (typeof commands === 'string') {
+        return [commands.split(',').map(command => command.trim()).filter(Boolean)];
+    }
+
+    if (!Array.isArray(commands)) {
+        return [[]];
+    }
+
+    return Array.isArray(commands[0]) ? commands : [commands];
+}
+
+function buildCommandTooltip(cmd, charData) {
+    if (!cmd) return '効果: 詳細なし';
+
+    let tooltip = `${cmd.name}\n効果: ${cmd.desc || '詳細なし'}`;
+    if (typeof cmd.calcDamage === 'function') {
+        const calculatedDmg = cmd.calcDamage(charData);
+        if (calculatedDmg > 0) {
+            tooltip += `\n予測ダメージ: ${calculatedDmg}`;
+        }
+    }
+
+    return tooltip;
+}
+
+function getRarityMeta(rarity) {
+    const normalizedRarity = Math.max(1, Math.min(4, rarity));
+    const meta = {
+        1: {
+            label: '★1 ノーマル',
+            cardClass: 'rarity-1',
+            description: '基本性能が扱いやすいキャラクター'
+        },
+        2: {
+            label: '★★ レア',
+            cardClass: 'rarity-2',
+            description: 'リールが増えて戦術が広がるキャラクター'
+        },
+        3: {
+            label: '★★★ スーパーレア',
+            cardClass: 'rarity-3',
+            description: '高い能力や強力なコマンドを持つキャラクター'
+        },
+        4: {
+            label: '★★★★ レジェンド',
+            cardClass: 'rarity-4',
+            description: '最上位のリールと個性を持つキャラクター'
+        }
+    };
+
+    return meta[normalizedRarity];
+}
+
 function setupLibraryScreen() {
     const list = document.getElementById('library-list');
     if (!list) return;
     list.innerHTML = '';
 
-    masterCharacters.forEach(char => {
-        const rarity = Array.isArray(char.commands)
-            ? (Array.isArray(char.commands[0]) ? char.commands.length : 1)
-            : (typeof char.commands === 'string' ? char.commands.split(',').length : 1);
-        const stars = '★'.repeat(Math.max(1, Math.min(4, rarity)));
+    const groupedCharacters = [1, 2, 3, 4].map(rarity => ({
+        rarity,
+        characters: masterCharacters
+            .filter(char => Math.max(1, Math.min(4, getCharacterRarity(char))) === rarity)
+            .sort((a, b) => a.name.localeCompare(b.name, 'ja'))
+    }));
 
-        const card = document.createElement('div');
-        card.className = 'candidate-card';
-        card.style.cursor = 'pointer';
-        card.style.padding = '12px';
-        card.style.textAlign = 'center';
-        card.style.background = '#fff';
-        card.style.border = '2px solid #ccc';
-        card.style.borderRadius = '12px';
-        card.style.boxShadow = '0 3px 10px rgba(0,0,0,0.08)';
-        card.style.display = 'flex';
-        card.style.flexDirection = 'column';
-        card.style.alignItems = 'center';
-        card.style.gap = '8px';
+    groupedCharacters.forEach(group => {
+        if (group.characters.length === 0) return;
 
-        const image = document.createElement('img');
-        image.src = char.image;
-        image.alt = char.name;
-        image.style.width = '80px';
-        image.style.height = '80px';
-        image.style.objectFit = 'contain';
-        image.style.borderRadius = '10px';
-        image.style.border = '1px solid #eee';
+        const rarityMeta = getRarityMeta(group.rarity);
+        const section = document.createElement('section');
+        section.className = `library-section ${rarityMeta.cardClass}`;
 
-        const name = document.createElement('div');
-        name.style.fontWeight = '700';
-        name.style.fontSize = '0.95rem';
-        name.innerText = `${char.name} ${stars}`;
+        const header = document.createElement('div');
+        header.className = 'library-section-header';
 
-        const stats = document.createElement('div');
-        stats.style.fontSize = '0.78rem';
-        stats.style.lineHeight = '1.4';
-        stats.style.color = '#444';
-        stats.innerText = `HP ${char.maxHp} / ATK ${char.atk} / INT ${char.int} / SPD ${char.spd}`;
+        const title = document.createElement('h2');
+        title.innerText = rarityMeta.label;
 
-        const commands = document.createElement('div');
-        commands.style.fontSize = '0.72rem';
-        commands.style.color = '#666';
-        commands.style.whiteSpace = 'pre-line';
-        commands.style.textAlign = 'left';
-        const cmdNames = (Array.isArray(char.commands[0]) ? char.commands[0] : char.commands)
-            .map(cmdId => commandEffects[cmdId] ? commandEffects[cmdId].name : cmdId);
-        commands.innerText = `コマンド: ${cmdNames.join(' / ')}`;
+        const count = document.createElement('span');
+        count.innerText = `${group.characters.length}体`;
 
-        card.appendChild(image);
-        card.appendChild(name);
-        card.appendChild(stats);
-        card.appendChild(commands);
+        const description = document.createElement('p');
+        description.innerText = rarityMeta.description;
 
-        card.addEventListener('click', () => window.showCharacterDetail(char.id));
-        card.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            window.showCharacterDetail(char.id);
+        header.appendChild(title);
+        header.appendChild(count);
+        section.appendChild(header);
+        section.appendChild(description);
+
+        const grid = document.createElement('div');
+        grid.className = 'library-grid';
+
+        group.characters.forEach(char => {
+            const stars = '★'.repeat(group.rarity);
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = `library-card ${rarityMeta.cardClass}`;
+
+            const image = document.createElement('img');
+            image.src = char.image;
+            image.alt = char.name;
+            image.className = 'library-card-image';
+
+            const name = document.createElement('div');
+            name.className = 'library-card-name';
+            name.innerText = char.name;
+
+            const rarityLabel = document.createElement('div');
+            rarityLabel.className = 'library-card-rarity';
+            rarityLabel.innerText = stars;
+
+            const stats = document.createElement('div');
+            stats.className = 'library-card-stats';
+            stats.innerText = `HP ${char.maxHp} / ATK ${char.atk} / INT ${char.int} / SPD ${char.spd}`;
+
+            const commands = document.createElement('div');
+            commands.className = 'library-card-commands';
+            const firstReel = normalizeCommandReels(char.commands)[0];
+            const cmdNames = firstReel.map(cmdId => commandEffects[cmdId] ? commandEffects[cmdId].name : cmdId);
+            commands.innerText = cmdNames.join(' / ');
+
+            card.appendChild(image);
+            card.appendChild(name);
+            card.appendChild(rarityLabel);
+            card.appendChild(stats);
+            card.appendChild(commands);
+
+            card.addEventListener('click', () => window.showCharacterDetail(char.id));
+            card.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                window.showCharacterDetail(char.id);
+            });
+
+            grid.appendChild(card);
         });
 
-        list.appendChild(card);
+        section.appendChild(grid);
+        list.appendChild(section);
     });
 }
 
@@ -173,36 +255,18 @@ function setupCharacterSelection() {
         if (!charData) return;
 
         const card = document.createElement('div');
-        card.className = 'candidate-card';
-
-        // 🛠️ 追加：最大グレード（最大リール数）を判定
-        const maxReelIdx = (charData.commands && Array.isArray(charData.commands[0]))
-            ? charData.commands.length - 1
-            : 0;
-
-        // 🛠️ 追加：最大グレードに応じたデフォルトの枠線と背景をセット（ui.jsと統一）
-        if (maxReelIdx === 0) { // ★1
-            card.style.border = '3px solid #a05a2c';
-            card.style.background = 'rgba(160, 90, 44, 0.1)';
-        } else if (maxReelIdx === 1) { // ★2
-            card.style.border = '3px solid #bdc3c7';
-            card.style.background = 'rgba(189, 195, 199, 0.15)';
-        } else if (maxReelIdx === 2) { // ★3
-            card.style.border = '3px solid #f1c40f';
-            card.style.background = 'rgba(241, 196, 15, 0.12)';
-        } else { // ★4
-            card.style.border = '3px solid #a29bfe';
-            card.style.background = 'rgba(162, 155, 254, 0.15)';
-        }
+        card.className = `candidate-card ${getCharacterRarityClass(charData)}`;
         card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
         card.style.transition = 'all 0.2s ease';
+        const rarity = getCharacterRarity(charData);
+        const stars = '★'.repeat(Math.max(1, Math.min(4, rarity)));
 
         card.innerHTML = `
                 <div class="candidate-img" style="cursor: pointer;" data-tooltip="右クリックで詳細表示">
                     <img src="${charData.image}" alt="${charData.name}" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
-            <div class="candidate-name">${charData.name}</div>
-            <div style="font-size:11px; color:#777;">HP:${charData.maxHp || charData.hp} ATK:${charData.atk}</div>
+            <div class="candidate-name party-select-card-name">${charData.name}</div>
+            <div class="party-select-card-stars">${stars}</div>
         `;
 
         const imgArea = card.querySelector('.candidate-img');
@@ -285,16 +349,10 @@ window.showCharacterDetail = function (charId) {
             const cmdItems = reel.map(cmdId => {
                 const cmd = commandEffects[cmdId];
                 const cmdName = cmd ? cmd.name : cmdId;
-                const cmdDesc = cmd ? cmd.desc : '詳細なし';
-
-                let dmgInfo = '';
-                if (cmd && typeof cmd.calcDamage === 'function') {
-                    const calculatedDmg = cmd.calcDamage(charData);
-                    dmgInfo = `\n予測ダメージ: ${calculatedDmg}`;
-                }
+                const tooltip = buildCommandTooltip(cmd, charData);
 
                 return `
-        <div data-tooltip="${escapeHtml(cmdDesc + dmgInfo)}" style="flex: 1; padding: 5px; background: rgba(255,255,255,0.7); border: 1px solid #ccc; font-size: 0.8em; text-align: center; border-radius: 3px; cursor: help;">
+        <div data-tooltip="${escapeHtml(tooltip)}" style="flex: 1; padding: 5px; background: rgba(255,255,255,0.7); border: 1px solid #ccc; font-size: 0.8em; text-align: center; border-radius: 3px; cursor: help;">
             ${cmdName}
         </div>
     `;
@@ -372,9 +430,7 @@ window.showReplacementSelection = function (gameState) {
         const pool = allPlayerIds.filter(id => {
             const data = masterCharacters.find(char => char.id === id);
             if (!data) return false;
-            const rarity = Array.isArray(data.commands)
-                ? (Array.isArray(data.commands[0]) ? data.commands.length : 1)
-                : data.commands.split(',').length;
+            const rarity = getCharacterRarity(data);
             return rarity >= minRarity && rarity <= maxRarity && !currentIds.includes(id);
         });
 
@@ -393,31 +449,29 @@ window.showReplacementSelection = function (gameState) {
             confirmBtn.style.color = canReplace ? '#fff' : '#7f8c8d';
         };
 
-        const createCard = (char, infoText) => {
+        const createCard = (char) => {
             const card = document.createElement('div');
-            card.className = 'candidate-card';
+            card.className = `candidate-card ${getCharacterRarityClass(char)}`;
             card.style.cursor = 'pointer';
             // レア度（コマンド配列の段数）を算出して★表記を作る
-            const rarity = Array.isArray(char.commands)
-                ? (Array.isArray(char.commands[0]) ? char.commands.length : 1)
-                : (typeof char.commands === 'string' ? char.commands.split(',').length : 1);
+            const rarity = getCharacterRarity(char);
             const stars = '★'.repeat(Math.max(1, Math.min(4, rarity)));
 
             card.innerHTML = `
                 <div class="candidate-img" style="height: 80px;">
                     <img src="${char.image}" alt="${char.name}" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
-                <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
-                    <div class="candidate-name" style="font-size: 0.95em;">${char.name}</div>
-                    <div style="font-size:0.85em; color:#f39c12;">${stars}</div>
-                </div>
-                <div style="font-size: 11px; color: #777; margin-top: 4px;">${infoText}</div>
+                <div class="candidate-name replacement-card-name">${char.name}</div>
+                <div class="replacement-card-stars">${stars}</div>
             `;
             return card;
         };
 
-        const clearSelection = () => {
+        const clearCandidateSelection = () => {
             candidateCards.forEach(card => card.classList.remove('selected'));
+        };
+
+        const clearPartySelection = () => {
             partyCards.forEach(card => card.classList.remove('selected'));
         };
 
@@ -427,11 +481,10 @@ window.showReplacementSelection = function (gameState) {
         displayIds.forEach(id => {
             const charData = masterCharacters.find(c => c.id === id);
             if (!charData) return;
-            const infoText = `HP:${charData.maxHp || charData.hp} ATK:${charData.atk}`;
-            const card = createCard(charData, infoText);
+            const card = createCard(charData);
             card.addEventListener('click', () => {
                 selectedCandidateId = id;
-                clearSelection();
+                clearCandidateSelection();
                 card.classList.add('selected');
                 updateButtons();
             });
@@ -445,11 +498,10 @@ window.showReplacementSelection = function (gameState) {
         });
 
         gameState.players.forEach((player, idx) => {
-            const infoText = `HP:${player.hp}/${player.maxHp} ATK:${player.atk}`;
-            const card = createCard(player, infoText);
+            const card = createCard(player);
             card.addEventListener('click', () => {
                 selectedPartyIdx = idx;
-                clearSelection();
+                clearPartySelection();
                 card.classList.add('selected');
                 updateButtons();
             });
