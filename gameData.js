@@ -8,12 +8,17 @@ export class Character {
         // hp や atk もデータから動的に受け取れるようにしておくと便利です
         this.hp = data.hp ?? 100;
         this.maxHp = data.maxHp ?? 100;
+        this.baseMaxHp = data.baseMaxHp ?? this.maxHp;
         this.atk = data.atk ?? 10;
         this.int = data.int ?? 10;
         this.spd = data.spd ?? 10;
         this.baseAtk = data.baseAtk ?? this.atk;
         this.baseInt = data.baseInt ?? this.int;
         this.baseSpd = data.baseSpd ?? this.spd;
+        this.rarity = data.rarity;
+        this.slotCost = Math.max(1, Math.min(3, data.slotCost || 1));
+        this.isSpecialOnly = !!data.isSpecialOnly;
+        this.species = data.species || 'none';
         this.image = data.image;
         
         // コマンドの配列（最大4段階の二次元配列）
@@ -23,7 +28,16 @@ export class Character {
         this.currentReel = 0; 
         
         this.status = []; // 状態異常リスト
+        this.statusSources = {};
         this.poisonedIndices = [];
+        
+        // 攻撃力の倍率修正（攻撃コマンドやステータス効果で変更される）
+        // 例: { modifier: 0.7, source: "weak" }
+        this.statBonuses = { atk: 0, int: 0, spd: 0 };
+        this.attackPowerModifiers = [];
+        
+        // 挑発関連（「かばう」「守護結界」は同じ状態を延長する）
+        this.tauntDuration = 0; // 挑発が残りあと何ターン継続するか
     }
 
     /**

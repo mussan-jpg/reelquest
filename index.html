@@ -6,19 +6,24 @@
     <title>リールクエスト</title>
 </head>
 <body>
+    <button id="title-return-btn" class="title-return-btn" onclick="location.reload()">
+        タイトルへ戻る
+    </button>
 
     <div id="menu-screen" class="menu-container">
         <h1 class="menu-title">リールクエスト</h1>
+        <div id="app-version" class="app-version"></div>
         <div class="menu-buttons">
             <button class="menu-btn mode-normal" onclick="selectMode('rush')">
-                <div class="btn-main">👑 5階層の試練 (モード1)</div>
-                <div class="btn-sub">候補から3体を選び、5連戦を勝ち抜け！</div>
+                <div class="btn-main">👑 6階層の試練 (モード1)</div>
+                <div class="btn-sub">候補から3枠ぶん選び、6連戦を勝ち抜け！</div>
             </button>
             <button class="menu-btn mode-boss" onclick="alert('今後のアップデートをお楽しみに！')">
                 <div class="btn-main">🔒 モード2 (Coming Soon)</div>
             </button>
-            <button class="menu-btn mode-endless" onclick="alert('今後のアップデートをお楽しみに！')">
-                <div class="btn-main">🔒 モード3 (Coming Soon)</div>
+            <button class="menu-btn mode-endless" onclick="selectMode('custom')">
+                <div class="btn-main">⚔️ カスタムバトル (モード3)</div>
+                <div class="btn-sub">好きな味方と敵を選んで1戦だけ戦う</div>
             </button>
             <button class="menu-btn mode-library" onclick="openLibrary()">
                 <div class="btn-main">📚 キャラ図鑑</div>
@@ -28,26 +33,50 @@
     </div>
 
     <div id="char-select-screen" class="menu-container hidden">
-        <h1 class="menu-title">👥 パーティ結成（3体選択） 👥</h1>
+        <h1 class="menu-title">👥 パーティ結成（3枠選択） 👥</h1>
         <div id="floor-indicator" style="font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #d63031;"></div>
         <div id="candidate-list" class="candidate-grid"></div>
         <button id="start-adventure-btn" class="menu-btn mode-normal" style="width: 300px; margin-top: 30px;" disabled>
-            この3体で出発する！
+            このパーティで出発する！
         </button>
     </div>
 
     <div id="library-screen" class="menu-container hidden">
         <h1 class="menu-title">📚 キャラ図鑑</h1>
-        <button class="menu-btn library-back-btn" onclick="backToMenu()">メニューに戻る</button>
         <div id="library-list" class="library-list"></div>
-        <button class="menu-btn" style="width: 260px; margin-top: 24px;" onclick="backToMenu()">
-            メニューに戻る
+    </div>
+
+    <div id="custom-select-screen" class="menu-container hidden">
+        <h1 class="menu-title">⚔️ カスタムバトル</h1>
+        <div class="custom-battle-description">味方3枠・敵3枠を自由に選んで戦えます</div>
+        <div class="custom-battle-board">
+            <section class="custom-battle-column">
+                <h2>🛡️ 味方を選択 <span id="custom-player-slots">0 / 3</span></h2>
+                <div id="custom-player-picks" class="custom-pick-list"></div>
+            </section>
+            <section class="custom-battle-pool">
+                <div class="custom-pick-targets">
+                    <button id="custom-pick-player-btn" class="custom-pick-target active" type="button">味方にピック</button>
+                    <button id="custom-pick-enemy-btn" class="custom-pick-target" type="button">敵にピック</button>
+                </div>
+                <div id="custom-character-tabs" class="custom-grade-tabs"></div>
+                <div id="custom-character-list" class="candidate-grid custom-candidate-grid"></div>
+            </section>
+            <section class="custom-battle-column">
+                <h2>⚔️ 敵を選択 <span id="custom-enemy-slots">0 / 3</span></h2>
+                <button id="custom-random-enemy-btn" class="custom-random-btn" type="button">ランダム敵編成</button>
+                <div id="custom-enemy-picks" class="custom-pick-list"></div>
+            </section>
+        </div>
+        <button id="start-custom-battle-btn" class="menu-btn mode-endless" style="width: 320px; margin-top: 24px;" disabled>
+            この組み合わせで戦う！
         </button>
     </div>
 
     <div id="replacement-screen" class="menu-container hidden">
         <h1 class="menu-title">🔄 階層クリア後のメンバー入れ替え</h1>
         <div id="replacement-description" style="max-width: 700px; text-align: center; margin-bottom: 20px; color: #2d3436; line-height: 1.6;"></div>
+        <div id="next-enemy-preview" class="next-enemy-preview"></div>
         <div id="replacement-candidate-list" class="candidate-grid" style="grid-template-columns: repeat(4, 120px);"></div>
         <div style="display:flex; flex-direction:column; align-items:center; width:100%; max-width:760px; gap:10px; margin-top:20px;">
             <div style="font-weight:bold;">現在のパーティ (1体を選択して新しい仲間と交代)</div>
@@ -57,30 +86,73 @@
             <button id="replacement-confirm-btn" class="menu-btn mode-normal" style="width: 240px;" disabled>
                 メンバーを入れ替える
             </button>
-            <button id="replacement-skip-btn" class="menu-btn" style="width: 240px; background: #7f8c8d; box-shadow: 0 5px 0 #636e72;">
+            <button id="replacement-skip-btn" class="menu-btn replacement-skip-btn" style="width: 240px;">
                 入れ替えずに次へ
             </button>
         </div>
     </div>
 
+    <div id="result-screen" class="menu-container hidden">
+        <h1 id="result-title" class="menu-title">リザルト</h1>
+        <div id="result-winner" class="result-winner"></div>
+        <div class="result-help">キャラカードを右クリックすると詳細を表示できます</div>
+        <div class="result-board">
+            <section class="result-section">
+                <h2>🛡️ YOUR ALLIES</h2>
+                <div id="result-allies" class="result-list"></div>
+            </section>
+            <section class="result-section">
+                <h2>⚔️ ENEMIES</h2>
+                <div id="result-enemies" class="result-list"></div>
+            </section>
+        </div>
+        <div class="result-action-row">
+            <button id="result-continue-btn" class="menu-btn mode-normal result-continue-btn">
+                次へ
+            </button>
+            <button id="result-battle-stats-button" class="icon-btn battle-stats-toggle" title="ランキング表示" aria-label="ランキング表示" onclick="toggleBattleStatsPanel()">📊</button>
+            <button id="result-full-log-button" class="icon-btn full-log-toggle" title="全ログ表示" aria-label="全ログ表示" onclick="toggleFullLog()">📜</button>
+        </div>
+    </div>
+
     <div id="battle-screen" class="hidden">
-        <div id="floor-badge">🏰 現在の階層: 1 / 5 F</div>
+        <div id="floor-badge" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 12px; background: linear-gradient(135deg, #fff9e6, #fffbf0); border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div style="font-size: 1.1em; font-weight: bold; color: #d68910;">🏰 現在の階層: <span id="floor-text">1 / 6</span> F</div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div id="next-action-icon" style="display:flex; align-items:center; gap:8px; min-width:180px; justify-content:center;"></div>
+            </div>
+        </div>
 
         <div class="battle-field" id="game-container"></div>
         
         <div class="control-panel">
-            <div id="log"></div>
-            <button id="atk-btn" onclick="gameTurn()">バトル開始！</button>
-            <div class="debug-container" style="margin-top: 12px;">
+            <div class="log-toolbar" style="display:flex; align-items:center; justify-content:center; margin-bottom: 10px; width: 100%;">
+                <div id="log"></div>
+            </div>
+            <div class="action-row">
+                <button id="atk-btn" onclick="gameTurn()">バトル開始！</button>
+                <button id="end-turn-btn" class="menu-btn small-btn" onclick="advanceToTurnEnd()">このターン終了まで進める</button>
+                <button id="battle-stats-button" class="icon-btn battle-stats-toggle" title="ランキング表示" aria-label="ランキング表示" onclick="toggleBattleStatsPanel()">📊</button>
+                <button id="full-log-button" class="icon-btn full-log-toggle" title="全ログ表示" aria-label="全ログ表示" onclick="toggleFullLog()">📜</button>
+            </div>
+            <div class="debug-container">
                 <label class="debug-label">
-                    <input type="checkbox" id="debug-mode"> 🛠️ デバッグモード（味方のコマンドを手動選択）
+                    <input type="checkbox" id="debug-mode"> 🛠️ デバッグモード（行動コマンドを手動選択）
                 </label>
-                <label class="debug-label" style="margin-left:12px;">
-                    <input type="checkbox" id="quick-mode"> ⚡ 高速モード（瞬時決着）
+                <label class="debug-label">
+                    ⚡ バトル速度
+                    <span id="battle-speed" class="battle-speed-toggle" data-speed="1">
+                        <button type="button" class="battle-speed-btn active" data-speed="1" onclick="setBattleSpeed(1)">➤</button>
+                        <button type="button" class="battle-speed-btn" data-speed="3" onclick="setBattleSpeed(3)">➤➤</button>
+                        <button type="button" class="battle-speed-btn" data-speed="10" onclick="setBattleSpeed(10)">➤➤➤</button>
+                    </span>
                 </label>
             </div>
         </div>
     </div>
+
+    <div id="full-log-panel" class="full-log-panel hidden"><div id="full-log-content"></div></div>
+    <div id="battle-stats-panel" class="battle-stats-panel hidden"></div>
 
     <div id="detail-modal" class="modal hidden">
         <div class="modal-content">

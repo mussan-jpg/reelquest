@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="abyssKrakenBody" x1="32" y1="18" x2="96" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#67e8f9"/>
+      <stop offset="0.48" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="abyssKrakenTentacle" x1="18" y1="58" x2="110" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#312e81"/>
+    </linearGradient>
+  </defs>
+  <path d="M64 18 C42 18 30 38 32 60 C34 82 48 94 64 94 C80 94 94 82 96 60 C98 38 86 18 64 18 Z" fill="url(#abyssKrakenBody)"/>
+  <path d="M38 76 C24 84 20 98 10 104" stroke="url(#abyssKrakenTentacle)" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M50 88 C38 98 36 112 24 118" stroke="url(#abyssKrakenTentacle)" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M64 92 C60 104 60 116 52 124" stroke="url(#abyssKrakenTentacle)" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M78 88 C90 98 92 112 104 118" stroke="url(#abyssKrakenTentacle)" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M90 76 C104 84 108 98 118 104" stroke="url(#abyssKrakenTentacle)" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M46 42 Q64 26 82 42" stroke="#a5f3fc" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="52" cy="58" r="8" fill="#e0f2fe"/>
+  <circle cx="76" cy="58" r="8" fill="#e0f2fe"/>
+  <circle cx="52" cy="58" r="3.5" fill="#111827"/>
+  <circle cx="76" cy="58" r="3.5" fill="#111827"/>
+  <path d="M52 75 Q64 84 76 75" stroke="#dbeafe" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="30" cy="94" r="3" fill="#bae6fd"/>
+  <circle cx="44" cy="108" r="3" fill="#bae6fd"/>
+  <circle cx="84" cy="108" r="3" fill="#bae6fd"/>
+  <circle cx="98" cy="94" r="3" fill="#bae6fd"/>
+</svg>

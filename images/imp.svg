@@ -1,11 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <rect width="128" height="128" fill="#f9ebd2" rx="15"/>
-  <path d="M20 50 L5 30 L25 35 Z M108 50 L123 30 L103 35 Z" fill="#2c3e50"/>
-  <circle cx="64" cy="65" r="28" fill="#ec7063"/>
-  <path d="M40 35 L30 15 L50 30 Z M88 35 L98 15 L78 30 Z" fill="#c0392b"/>
-  <circle cx="52" cy="65" r="5" fill="#f4d03f"/>
-  <circle cx="52" cy="65" r="2" fill="#000"/>
-  <circle cx="76" cy="65" r="5" fill="#f4d03f"/>
-  <circle cx="76" cy="65" r="2" fill="#000"/>
-  <path d="M44 82 Q64 95 84 82" stroke="#2c3e50" stroke-width="3" fill="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <!-- 悪魔の尻尾 -->
+  <path d="M 200 280 Q 250 340 280 300 Q 300 280 290 260" fill="none" stroke="#6C5CE7" stroke-width="12" stroke-linecap="round" />
+  <polygon points="290,245 270,270 310,270" fill="#6C5CE7" transform="rotate(45 290 255)" />
+
+  <!-- 羽（左・右） -->
+  <polygon points="150,180 70,130 110,210" fill="#2D3436" />
+  <polygon points="250,180 330,130 290,210" fill="#2D3436" />
+
+  <!-- 髪（後ろ） -->
+  <circle cx="200" cy="190" r="85" fill="#2D3436" />
+
+  <!-- ツノ（左・右） -->
+  <polygon points="140,115 110,70 160,85" fill="#FF7675" />
+  <polygon points="260,115 290,70 240,85" fill="#FF7675" />
+
+  <!-- 顔/輪郭 -->
+  <circle cx="200" cy="200" r="65" fill="#FFEAA7" />
+
+  <!-- 髪（前髪・サイド） -->
+  <polygon points="135,170 150,130 200,135" fill="#2D3436" />
+  <polygon points="265,170 250,130 200,135" fill="#2D3436" />
+  <polygon points="200,150 180,135 220,135" fill="#2D3436" />
+
+  <!-- 目（左・右） -->
+  <polygon points="160,190 180,180 180,195" fill="#6C5CE7" />
+  <polygon points="240,190 220,180 220,195" fill="#6C5CE7" />
+
+  <!-- ほっぺ（左・右） -->
+  <circle cx="155" cy="210" r="8" fill="#FF7675" opacity="0.6" />
+  <circle cx="245" cy="210" r="8" fill="#FF7675" opacity="0.6" />
+
+  <!-- 口（牙） -->
+  <polygon points="190,215 210,215 200,225" fill="#FFFFFF" />
+
+  <!-- 体/服 -->
+  <polygon points="200,260 150,330 250,330" fill="#6C5CE7" />
+
+  <!-- 襟元 -->
+  <polygon points="200,280 180,260 220,260" fill="#FF7675" />
 </svg>

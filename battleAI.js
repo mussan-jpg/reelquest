@@ -9,8 +9,8 @@ export function determineTarget(commandId, attackerIdx, currentSide, gameState) 
     const myPrefix = currentSide;
     const enemyPrefix = currentSide === 'p' ? 'e' : 'p';
 
-    // 自己対象の技（ぬるぬる等）は自分をターゲットにする
-    if (commandId === 'misc01' || commandId === 'misc02') {
+    // 自己対象の技（ぬるぬる、身を隠す、かばう等）は自分をターゲットにする
+    if (commandId.startsWith('cmd_up') || commandId.startsWith('cmd_down') || commandId === 'misc01' || commandId === 'misc02' || commandId === 'misc_focus' || commandId === 'misc_guard' || commandId === 'cmd_cover') {
         return { data: myParty[attackerIdx], prefix: myPrefix, index: attackerIdx };
     }
 

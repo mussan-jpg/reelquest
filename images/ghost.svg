@@ -1,7 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <rect width="128" height="128" fill="#eaeded" rx="15"/>
-  <path d="M64 25 C40 25 34 50 34 80 C34 110 44 105 54 115 C64 125 64 105 74 115 C84 105 94 110 94 80 C94 50 88 25 64 25 Z" fill="#fff" stroke="#bdc3c7" stroke-width="2"/>
-  <ellipse cx="50" cy="55" rx="4" ry="7" fill="#2c3e50"/>
-  <ellipse cx="78" cy="55" rx="4" ry="7" fill="#2c3e50"/>
-  <circle cx="64" cy="72" r="6" fill="#e74c3c" opacity="0.7"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <!-- ゴーストの体（メイン：丸と三角の組み合わせ） -->
+  <g id="ghost-body">
+    <!-- 頭部・胴体（大きな円） -->
+    <circle cx="200" cy="180" r="80" fill="#F2F2F2" />
+    
+    <!-- 裾の広がり（三角形の配置） -->
+    <polygon points="120,180 200,300 200,180" fill="#F2F2F2" />
+    <polygon points="280,180 200,300 200,180" fill="#F2F2F2" />
+    
+    <!-- 浮遊感を出すための下部のカッティング（背景と同色の三角で削る） -->
+    <polygon points="120,300 160,260 200,300" fill="#1E1E2E" />
+    <polygon points="200,300 240,260 280,300" fill="#1E1E2E" />
+  </g>
+
+  <!-- 顔のパーツ（完全な円のみ） -->
+  <g id="ghost-face">
+    <!-- 左目 -->
+    <circle cx="170" cy="170" r="12" fill="#2A2A3A" />
+    <!-- 右目 -->
+    <circle cx="230" cy="170" r="12" fill="#2A2A3A" />
+    <!-- 口（驚いたような丸） -->
+    <circle cx="200" cy="200" r="16" fill="#2A2A3A" />
+    
+    <!-- ほっぺ（可愛いアクセントのピンクの円） -->
+    <circle cx="150" cy="190" r="8" fill="#FF8FAB" opacity="0.6" />
+    <circle cx="250" cy="190" r="8" fill="#FF8FAB" opacity="0.6" />
+  </g>
+
+  <!-- 周囲のエフェクト（幾何学的な魂・光の粒） -->
+  <g id="sparkles">
+    <!-- 左上の小さなゴースト（丸と三角） -->
+    <circle cx="90" cy="100" r="20" fill="#D0E8FF" opacity="0.7" />
+    <polygon points="75,110 90,140 105,110" fill="#D0E8FF" opacity="0.7" />
+    
+    <!-- 右下の光（正三角形） -->
+    <polygon points="310,240 330,275 290,275" fill="#FFE5A3" opacity="0.8" />
+    
+    <!-- 小さな丸の散らばり -->
+    <circle cx="110" cy="260" r="6" fill="#FFE5A3" opacity="0.6" />
+    <circle cx="300" cy="110" r="8" fill="#D0E8FF" opacity="0.5" />
+  </g>
 </svg>

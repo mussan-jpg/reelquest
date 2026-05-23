@@ -1,9 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <rect width="128" height="128" fill="#ebedef" rx="15"/>
-  <circle cx="64" cy="55" r="30" fill="#f2f3f4" stroke="#bdc3c7" stroke-width="2"/>
-  <rect x="50" y="80" width="28" height="18" fill="#f2f3f4" stroke="#bdc3c7" stroke-width="2" rx="5"/>
-  <circle cx="50" cy="58" r="8" fill="#2c3e50"/>
-  <circle cx="78" cy="58" r="8" fill="#2c3e50"/>
-  <path d="M64 68 L60 76 H68 Z" fill="#2c3e50"/>
-  <path d="M56 85 V95 M64 85 V95 M72 85 V95" stroke="#bdc3c7" stroke-width="3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <path d="M20,45 C20,20 80,20 80,45 C80,55 75,65 70,68 L70,80 C70,83 67,85 64,85 L36,85 C33,85 30,83 30,80 L30,68 C25,65 20,55 20,45 Z" fill="#e0e0e0"/>
+  <path d="M30,80 L30,85 M40,80 L40,85 M50,80 L50,85 M60,80 L60,85 M70,80 L70,85" stroke="#b0b0b0" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="38" cy="48" r="9" fill="#202020"/>
+  <circle cx="62" cy="48" r="9" fill="#202020"/>
+  <path d="M46,62 L50,56 L54,62 Z" fill="#202020"/>
 </svg>

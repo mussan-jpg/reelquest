@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="emperorBody" x1="20" y1="28" x2="108" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7dd3fc"/>
+      <stop offset="0.48" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="crownGold" x1="38" y1="10" x2="90" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff7ad"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <path d="M64 24 C25 24 14 68 14 91 C14 116 38 122 64 122 C90 122 114 116 114 91 C114 68 103 24 64 24 Z" fill="url(#emperorBody)"/>
+  <path d="M38 34 L45 12 L58 30 L64 10 L70 30 L83 12 L90 34 Z" fill="url(#crownGold)" stroke="#b45309" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="64" cy="22" r="4" fill="#ef4444"/>
+  <circle cx="45" cy="18" r="3" fill="#22c55e"/>
+  <circle cx="83" cy="18" r="3" fill="#3b82f6"/>
+  <ellipse cx="58" cy="43" rx="19" ry="6" fill="#bae6fd" opacity="0.75"/>
+  <circle cx="47" cy="77" r="7" fill="#fff"/>
+  <circle cx="47" cy="77" r="3.5" fill="#111"/>
+  <circle cx="81" cy="77" r="7" fill="#fff"/>
+  <circle cx="81" cy="77" r="3.5" fill="#111"/>
+  <path d="M54 96 Q64 106 74 96" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M28 92 C36 100 45 104 56 105" stroke="#93c5fd" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>
+  <path d="M100 92 C92 100 83 104 72 105" stroke="#93c5fd" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>
+</svg>

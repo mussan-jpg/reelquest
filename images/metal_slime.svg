@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="metalSlimeBody" x1="24" y1="34" x2="104" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="0.42" stop-color="#94a3b8"/>
+      <stop offset="1" stop-color="#475569"/>
+    </linearGradient>
+  </defs>
+  <path d="M64 30 C30 30 20 70 20 90 C20 110 40 115 64 115 C88 115 108 110 108 90 C108 70 98 30 64 30 Z" fill="url(#metalSlimeBody)"/>
+  <ellipse cx="58" cy="42" rx="18" ry="6" fill="#ffffff" opacity="0.72"/>
+  <path d="M82 38 L94 45 L82 52 L70 45 Z" fill="#e2e8f0" opacity="0.8"/>
+  <circle cx="48" cy="75" r="6" fill="#fff"/>
+  <circle cx="48" cy="75" r="3" fill="#111"/>
+  <circle cx="80" cy="75" r="6" fill="#fff"/>
+  <circle cx="80" cy="75" r="3" fill="#111"/>
+  <path d="M56 92 Q64 98 72 92" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
