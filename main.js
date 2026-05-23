@@ -88,8 +88,48 @@ window.refreshBattleStatsPanel = function () {
     const panel = document.getElementById('battle-stats-panel');
     if (!panel || panel.classList.contains('hidden')) return;
     const activeTab = panel.dataset.activeTab || 'dealt';
+    const previousTab = panel.dataset.renderedTab;
+    const previousWidths = new Map();
+    if (previousTab === activeTab) {
+        panel.querySelectorAll('.battle-stats-row[data-battle-stats-key]').forEach(row => {
+            previousWidths.set(row.dataset.battleStatsKey, {
+                bar: row.style.getPropertyValue('--battle-stats-bar-width') || '0%',
+                taken: row.style.getPropertyValue('--battle-stats-taken-width') || '0%',
+                mitigate: row.style.getPropertyValue('--battle-stats-mitigate-width') || '0%'
+            });
+        });
+    }
+
     panel.innerHTML = renderBattleStatsPanel(gameState, activeTab);
     panel.dataset.activeTab = activeTab;
+    panel.dataset.renderedTab = activeTab;
+
+    const rows = [...panel.querySelectorAll('.battle-stats-row[data-battle-stats-key]')];
+    rows.forEach(row => {
+        const target = {
+            bar: row.style.getPropertyValue('--battle-stats-bar-width') || '0%',
+            taken: row.style.getPropertyValue('--battle-stats-taken-width') || '0%',
+            mitigate: row.style.getPropertyValue('--battle-stats-mitigate-width') || '0%'
+        };
+        row.dataset.targetBarWidth = target.bar;
+        row.dataset.targetTakenWidth = target.taken;
+        row.dataset.targetMitigateWidth = target.mitigate;
+
+        const previous = previousWidths.get(row.dataset.battleStatsKey) || { bar: '0%', taken: '0%', mitigate: '0%' };
+        row.style.setProperty('--battle-stats-bar-width', previous.bar);
+        row.style.setProperty('--battle-stats-taken-width', previous.taken);
+        row.style.setProperty('--battle-stats-mitigate-width', previous.mitigate);
+    });
+
+    // Recreateされた行に「前の幅」を一度描画させてから、次フレームで目標幅へ遷移させる。
+    panel.offsetHeight;
+    requestAnimationFrame(() => {
+        rows.forEach(row => {
+            row.style.setProperty('--battle-stats-bar-width', row.dataset.targetBarWidth || '0%');
+            row.style.setProperty('--battle-stats-taken-width', row.dataset.targetTakenWidth || '0%');
+            row.style.setProperty('--battle-stats-mitigate-width', row.dataset.targetMitigateWidth || '0%');
+        });
+    });
 };
 
 window.toggleBattleStatsPanel = function () {

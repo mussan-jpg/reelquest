@@ -2,6 +2,7 @@
 import { masterCharacters } from '../data/characters/index.js';
 import { formatCharacterTypeLabel, formatSpeciesLabel, getCharacterRarity, getCharacterRarityClass, getCharacterType, getSpeciesTooltip, showCharacterDetail } from './shared.js';
 import { getOccupiedSlots, getSlotCost, PARTY_SLOT_LIMIT } from '../partySlots.js';
+import { buildFusionReplacement, findFusionRuleForParty } from './specialEventScreen.js';
 
 let selectedPlayerIds = [];
 let selectedEnemyIds = [];
@@ -43,6 +44,20 @@ function isPicked(charId) {
     return selectedPlayerIds.includes(charId) || selectedEnemyIds.includes(charId);
 }
 
+function maybeOfferCustomFusion(selectedIds) {
+    const selectedCharacters = getSelectedCharacters(selectedIds);
+    const rule = findFusionRuleForParty(selectedCharacters);
+    if (!rule) return;
+    if (isPicked(rule.resultId)) return;
+
+    const replacement = buildFusionReplacement(selectedCharacters, rule);
+    if (!replacement) return;
+    if (!window.confirm(rule.message)) return;
+
+    selectedIds.splice(0, selectedIds.length, ...replacement.remainingParty.map(char => char.id), rule.resultId);
+    window.alert(`${replacement.removedCharacters.map(char => char.name).join(' + ')} が合体し、${replacement.resultData.name} が選択されました！`);
+}
+
 function createCustomCard(charData) {
     const card = document.createElement('div');
     const slotCost = getSlotCost(charData);
@@ -77,6 +92,7 @@ function createCustomCard(charData) {
             return;
         }
         selectedIds.push(charData.id);
+        maybeOfferCustomFusion(selectedIds);
         renderCustomScreen();
     });
 

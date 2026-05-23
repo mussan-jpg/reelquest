@@ -1,7 +1,7 @@
 import { masterCharacters } from '../data/characters/index.js';
 import { createCharacterById, getOccupiedSlots, getSlotCost, PARTY_SLOT_LIMIT } from '../partySlots.js';
 
-const FUSION_RULES = [
+export const FUSION_RULES = [
     {
         resultId: 'char_chimera',
         sourceIds: ['char_red_dragon', 'char_thunderbird'],
@@ -77,27 +77,43 @@ function getCharacterName(id) {
     return masterCharacters.find(char => char.id === id)?.name || id;
 }
 
-function offerFusion(gameState) {
-    const rule = FUSION_RULES.find(item => item.sourceSpecies
-        ? hasSpeciesSources(gameState.players, item)
-        : hasAllSources(gameState.players, item.sourceIds));
-    if (!rule) return false;
+export function findFusionRuleForParty(party) {
+    return FUSION_RULES.find(item => item.sourceSpecies
+        ? hasSpeciesSources(party, item)
+        : hasAllSources(party, item.sourceIds));
+}
 
+export function buildFusionReplacement(party, rule) {
+    if (!rule) return null;
     const resultData = masterCharacters.find(char => char.id === rule.resultId);
-    if (!resultData) return false;
+    if (!resultData) return null;
 
     const fusionSources = rule.sourceSpecies
-        ? removeSpeciesSources(gameState.players, rule)
-        : { remainingParty: removeSources(gameState.players, rule.sourceIds), removedCharacters: rule.sourceIds.map(id => ({ name: getCharacterName(id) })) };
+        ? removeSpeciesSources(party, rule)
+        : { remainingParty: removeSources(party, rule.sourceIds), removedCharacters: rule.sourceIds.map(id => ({ name: getCharacterName(id) })) };
     const remainingParty = fusionSources.remainingParty;
-    if (getOccupiedSlots(remainingParty) + getSlotCost(resultData) > PARTY_SLOT_LIMIT) return false;
+    if (getOccupiedSlots(remainingParty) + getSlotCost(resultData) > PARTY_SLOT_LIMIT) return null;
+
+    return {
+        resultData,
+        remainingParty,
+        removedCharacters: fusionSources.removedCharacters
+    };
+}
+
+function offerFusion(gameState) {
+    const rule = findFusionRuleForParty(gameState.players);
+    if (!rule) return false;
+
+    const replacement = buildFusionReplacement(gameState.players, rule);
+    if (!replacement) return false;
     if (!window.confirm(rule.message)) return false;
 
     const result = createCharacterById(rule.resultId);
     if (!result) return false;
 
-    gameState.players = [...remainingParty, result];
-    window.alert(`${fusionSources.removedCharacters.map(char => char.name).join(' + ')} が合体し、${result.name} が仲間になった！`);
+    gameState.players = [...replacement.remainingParty, result];
+    window.alert(`${replacement.removedCharacters.map(char => char.name).join(' + ')} が合体し、${result.name} が仲間になった！`);
     return true;
 }
 

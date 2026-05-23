@@ -215,8 +215,14 @@ export function renderSection(characters, prefix) {
                 </div>
 
                 <div class="battle-reel-stack">
-                    <div class="library-card-species battle-card-species" data-tooltip="${escapeHtml(getSpeciesTooltip(char))}">${formatSpeciesLabel(char)}</div>
-                    <div class="library-card-type battle-card-type ${characterType.className}">${formatCharacterTypeLabel(characterType)}</div>
+                    <div class="battle-card-tabs">
+                        <div class="library-card-type battle-card-type ${characterType.className}">
+                            <span class="battle-card-tag-label">${formatCharacterTypeLabel(characterType)}</span>
+                        </div>
+                        <div class="library-card-type battle-card-type battle-card-species" data-tooltip="${escapeHtml(getSpeciesTooltip(char))}">
+                            <span class="battle-card-tag-label">${formatSpeciesLabel(char)}</span>
+                        </div>
+                    </div>
                     <div class="roulette" id="${prefix}-roulette-${i}" 
                          style="
                             display: flex !important; 

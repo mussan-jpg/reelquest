@@ -185,7 +185,7 @@ function renderBattleStatsRow(entry, tab, maxValue) {
             : `与ダメ ${entry.damageDealt}`;
 
     return `
-        <div class="battle-stats-row battle-stats-row--${meta.tone} battle-stats-row--${entry.side}" style="--battle-stats-bar-width: ${percent}%; --battle-stats-taken-width: ${takenPercent}%; --battle-stats-mitigate-width: ${mitigatePercent}%;">
+        <div class="battle-stats-row battle-stats-row--${meta.tone} battle-stats-row--${entry.side}" data-battle-stats-key="${entry.side}-${entry.index}" style="--battle-stats-bar-width: ${percent}%; --battle-stats-taken-width: ${takenPercent}%; --battle-stats-mitigate-width: ${mitigatePercent}%;">
             <div class="battle-stats-rank-img">
                 <img src="${escapeHtml(entry.char.image)}" alt="${escapeHtml(entry.char.name)}">
             </div>

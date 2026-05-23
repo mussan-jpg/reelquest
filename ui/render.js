@@ -10,6 +10,27 @@ import {
     formatStatValue,
     buildCommandTooltip
 } from './components.js';
+import { SPECIES_BONUSES } from '../battle/setBonuses.js';
+import { getSpeciesIcon } from '../screens/shared.js';
+
+function renderSpeciesBonusNotice(party, sideClass) {
+    const activeBonuses = new Map();
+    (party || []).forEach(char => {
+        const active = char.activeSpeciesBonus;
+        if (!active?.species || activeBonuses.has(active.species)) return;
+        const bonus = SPECIES_BONUSES[active.species];
+        if (!bonus) return;
+        activeBonuses.set(active.species, bonus);
+    });
+
+    if (activeBonuses.size === 0) return '';
+
+    const bonusTags = [...activeBonuses.entries()].map(([species, bonus]) => (
+        `<span class="battle-set-bonus-tag" data-tooltip="${bonus.description}">${getSpeciesIcon({ species })} ${bonus.name}</span>`
+    )).join('');
+
+    return `<div class="battle-set-bonus-notice ${sideClass}">セット効果発動中 ${bonusTags}</div>`;
+}
 
 export function updateOrderIcons(actionQueue) {
     const nextIconContainer = document.getElementById('next-action-icon');
@@ -115,11 +136,13 @@ export function render(gameState) {
             <div class="battle-teams-row">
                 <div class="battle-team-panel battle-team-panel--allies">
                     <h2>🛡️ YOUR ALLIES</h2>
+                    ${renderSpeciesBonusNotice(gameState.players, 'battle-set-bonus-notice--allies')}
                     ${renderSection(gameState.players, 'p')}
                 </div>
 
                 <div class="battle-team-panel battle-team-panel--enemies">
                     <h2>⚔️ ENEMIES</h2>
+                    ${renderSpeciesBonusNotice(gameState.enemies, 'battle-set-bonus-notice--enemies')}
                     ${renderSection(gameState.enemies, 'e')}
                 </div>
             </div>
