@@ -6,17 +6,6 @@ import { commandEffects } from './commands.js';
 import { masterCharacters } from './characterData.js';
 import { Character } from './gameData.js';
 
-// 敵キャラクターIDの基本セット
-const baseEnemyIds = ["char_slime", "char_skeleton", "char_imp", "char_dragon", "char_thunderbird", "char_ghost"];
-
-// 画面で使用する敵ID一覧
-const allEnemyIds = baseEnemyIds;
-
-// プレイヤー側キャラクターID一覧（敵IDは除外）
-const allPlayerIds = masterCharacters
-    .filter(char => !baseEnemyIds.includes(char.id))
-    .map(char => char.id);
-
 // 戦闘ログを画面に追加する関数
 function alertLog(msg) {
     const log = document.getElementById('log');
