@@ -34,8 +34,13 @@ jobs:
           cp index.html _site/
           cp style.css _site/
           cp *.js _site/
-          cp .nojekyll _site/
+          cp -r battle _site/
+          cp -r commands _site/
+          cp -r data _site/
+          cp -r screens _site/
+          cp -r ui _site/
           cp -r images _site/
+          touch _site/.nojekyll
 
       - name: Upload static files
         uses: actions/upload-pages-artifact@v3
