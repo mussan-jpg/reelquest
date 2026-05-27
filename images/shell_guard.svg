@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>shell_guard</title>
+  <path d="M23 79 C29 42 50 23 79 28 C101 32 113 52 108 81 C93 97 43 100 23 79 Z" fill="#0ea5e9"/>
+  <path d="M34 73 C40 48 55 37 77 39 C91 41 99 52 98 73 C84 84 50 85 34 73 Z" fill="#bae6fd" opacity=".72"/>
+  <path d="M46 39 C42 55 42 70 46 85 M64 34 C60 52 60 72 64 91 M82 39 C86 56 86 71 82 86" stroke="#075985" stroke-width="4" opacity=".45" fill="none"/>
+  <path d="M25 78 C14 80 10 90 17 99 C27 98 33 91 31 82 Z" fill="#38bdf8"/>
+  <path d="M101 80 C114 78 120 88 113 100 C102 98 96 91 98 83 Z" fill="#38bdf8"/>
+  <circle cx="51" cy="63" r="5" fill="#0f172a"/>
+  <circle cx="76" cy="63" r="5" fill="#0f172a"/>
+  <path d="M54 78 Q64 84 74 78" stroke="#0f172a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M45 99 L35 117 M83 99 L93 117" stroke="#075985" stroke-width="6" stroke-linecap="round"/>
+</svg>

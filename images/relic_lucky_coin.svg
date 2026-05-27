@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Lucky Coin">
+  <defs>
+    <radialGradient id="coin" cx="38%" cy="32%" r="70%">
+      <stop offset="0%" stop-color="#fff7ad"/>
+      <stop offset="55%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </radialGradient>
+  </defs>
+  <circle cx="64" cy="64" r="46" fill="url(#coin)" stroke="#78350f" stroke-width="6"/>
+  <circle cx="64" cy="64" r="31" fill="none" stroke="#fde68a" stroke-width="5"/>
+  <path d="M64 35l7 19h20L75 66l6 20-17-12-17 12 6-20-16-12h20z" fill="#fff7ed" stroke="#92400e" stroke-width="3" stroke-linejoin="round"/>
+</svg>

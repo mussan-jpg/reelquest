@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="strategistCoat" x1="36" y1="24" x2="90" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+  <path d="M43 107 C40 80 44 47 55 34 C61 27 72 27 78 34 C89 47 92 80 86 107 Z" fill="url(#strategistCoat)" stroke="#1e293b" stroke-width="4"/>
+  <path d="M49 39 C51 24 77 24 79 39 L84 49 H44 Z" fill="#facc15" stroke="#92400e" stroke-width="3"/>
+  <circle cx="56" cy="58" r="6" fill="#f8fafc"/>
+  <circle cx="72" cy="58" r="6" fill="#f8fafc"/>
+  <circle cx="56" cy="58" r="2.5" fill="#0f172a"/>
+  <circle cx="72" cy="58" r="2.5" fill="#0f172a"/>
+  <path d="M57 75 Q64 80 71 75" stroke="#bfdbfe" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M33 67 H85 V104 H33 Z" fill="#fde68a" stroke="#78350f" stroke-width="4"/>
+  <path d="M43 78 H75 M43 89 H67 M55 78 V100" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
+  <path d="M89 29 V102" stroke="#78350f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M94 34 H115 L107 49 L115 64 H94 Z" fill="#ef4444" stroke="#7f1d1d" stroke-width="3"/>
+  <path d="M32 78 L18 68 M87 74 L101 66" stroke="#1d4ed8" stroke-width="6" stroke-linecap="round"/>
+</svg>

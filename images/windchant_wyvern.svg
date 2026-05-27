@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="windWyvernBody" x1="25" y1="20" x2="102" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bae6fd"/>
+      <stop offset=".5" stop-color="#14b8a6"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+  <path d="M37 78 C42 42 66 29 93 34 C74 45 68 66 61 101 Z" fill="#bae6fd" stroke="#0f766e" stroke-width="4"/>
+  <path d="M91 47 C112 52 116 73 99 88 C96 70 87 59 68 54 Z" fill="#67e8f9" stroke="#0f766e" stroke-width="4"/>
+  <path d="M45 62 C50 39 82 38 91 61 C86 83 58 91 47 75 Z" fill="url(#windWyvernBody)" stroke="#064e3b" stroke-width="4"/>
+  <path d="M53 45 L47 25 L65 39 Z M79 45 L91 28 L89 51 Z" fill="#99f6e4" stroke="#064e3b" stroke-width="3"/>
+  <circle cx="58" cy="59" r="6" fill="#f8fafc"/>
+  <circle cx="78" cy="59" r="6" fill="#f8fafc"/>
+  <circle cx="58" cy="59" r="2.5" fill="#0f172a"/>
+  <circle cx="78" cy="59" r="2.5" fill="#0f172a"/>
+  <path d="M63 74 Q70 80 78 73" stroke="#ccfbf1" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M35 93 C20 85 20 67 35 60" stroke="#bae6fd" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M54 98 L45 117 M78 93 L90 112" stroke="#0f766e" stroke-width="6" stroke-linecap="round"/>
+  <path d="M25 38 C41 28 49 17 51 7" stroke="#99f6e4" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M32 77 C52 59 70 49 98 39" stroke="#0f766e" stroke-width="4" fill="none" stroke-linecap="round" opacity=".75"/>
+</svg>

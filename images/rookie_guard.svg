@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="rookieGuardBg" x1="24" y1="12" x2="104" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fef3c7"/>
+      <stop offset="0.5" stop-color="#94a3b8"/>
+      <stop offset="1" stop-color="#334155"/>
+    </linearGradient>
+    <linearGradient id="rookieWoodShield" x1="38" y1="42" x2="82" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#facc15"/>
+      <stop offset="1" stop-color="#92400e"/>
+    </linearGradient>
+  </defs>
+  <path d="M66 22 C82 22 95 34 96 52 C98 80 84 105 64 112 C44 105 30 80 32 52 C33 34 48 22 66 22 Z" fill="#475569"/>
+  <path d="M48 37 C50 23 78 23 80 37 L86 44 H42 Z" fill="#cbd5e1"/>
+  <path d="M42 44 H86 L80 58 H48 Z" fill="#64748b"/>
+  <rect x="54" y="34" width="20" height="8" rx="3" fill="#f8fafc"/>
+  <circle cx="54" cy="62" r="6" fill="#f8fafc"/>
+  <circle cx="75" cy="62" r="6" fill="#f8fafc"/>
+  <circle cx="54" cy="62" r="2.5" fill="#0f172a"/>
+  <circle cx="75" cy="62" r="2.5" fill="#0f172a"/>
+  <path d="M57 78 Q64 83 72 78" stroke="#f8fafc" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M39 62 L65 52 L91 62 C89 86 80 102 65 110 C50 102 41 86 39 62 Z" fill="url(#rookieWoodShield)" stroke="#78350f" stroke-width="4"/>
+  <path d="M65 56 V104 M48 69 H82" stroke="#fef3c7" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+  <path d="M93 29 L101 24 L98 95" stroke="#78350f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M97 20 L109 25 L100 31 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="3"/>
+</svg>

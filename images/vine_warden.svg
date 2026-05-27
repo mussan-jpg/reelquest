@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="vineWardenWood" x1="36" y1="20" x2="86" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#86efac"/>
+      <stop offset="0.28" stop-color="#854d0e"/>
+      <stop offset="1" stop-color="#3f2a12"/>
+    </linearGradient>
+  </defs>
+  <path d="M50 106 C42 88 44 62 54 45 C60 33 72 33 78 45 C88 62 90 88 78 106 Z" fill="url(#vineWardenWood)" stroke="#365314" stroke-width="4"/>
+  <path d="M48 46 C39 35 45 24 55 19 C59 30 56 40 48 46 Z" fill="#bbf7d0" stroke="#166534" stroke-width="3"/>
+  <path d="M79 46 C89 35 83 24 73 19 C69 30 72 40 79 46 Z" fill="#bbf7d0" stroke="#166534" stroke-width="3"/>
+  <path d="M54 51 Q64 45 75 51" stroke="#bbf7d0" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="56" cy="61" r="5" fill="#dcfce7"/>
+  <circle cx="72" cy="61" r="5" fill="#dcfce7"/>
+  <circle cx="56" cy="61" r="2" fill="#14532d"/>
+  <circle cx="72" cy="61" r="2" fill="#14532d"/>
+  <path d="M57 78 Q64 84 72 78" stroke="#bbf7d0" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M38 56 C25 66 24 90 41 102" stroke="#22c55e" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M28 77 C43 58 69 61 84 77 C78 99 61 110 40 103 C31 99 26 89 28 77 Z" fill="#166534" stroke="#bbf7d0" stroke-width="4"/>
+  <path d="M39 80 C52 71 64 72 76 80 M38 92 C54 86 64 87 78 92 M55 68 V103" stroke="#86efac" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M83 58 C98 52 105 38 99 25" stroke="#22c55e" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <ellipse cx="102" cy="25" rx="10" ry="6" fill="#bbf7d0" transform="rotate(35 102 25)"/>
+  <path d="M43 37 C31 35 26 27 30 17" stroke="#22c55e" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <ellipse cx="30" cy="17" rx="8" ry="5" fill="#86efac" transform="rotate(-40 30 17)"/>
+  <path d="M55 106 L47 116 M74 106 L84 116" stroke="#3f2a12" stroke-width="6" stroke-linecap="round"/>
+</svg>

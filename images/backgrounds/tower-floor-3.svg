@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#08152a"/>
+      <stop offset="58%" stop-color="#121033"/>
+      <stop offset="100%" stop-color="#070914"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="44%" r="55%">
+      <stop offset="0%" stop-color="#14535c" stop-opacity="0.48"/>
+      <stop offset="100%" stop-color="#0b1025" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#11142c"/>
+      <stop offset="100%" stop-color="#060710"/>
+    </linearGradient>
+    <linearGradient id="shelfLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#050713"/>
+      <stop offset="58%" stop-color="#1e1a3d"/>
+      <stop offset="100%" stop-color="#273b58"/>
+    </linearGradient>
+    <linearGradient id="shelfRight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#273b58"/>
+      <stop offset="42%" stop-color="#1e1a3d"/>
+      <stop offset="100%" stop-color="#050713"/>
+    </linearGradient>
+    <radialGradient id="manaGlow" cx="50%" cy="38%" r="50%">
+      <stop offset="0%" stop-color="#38f8d4" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#38f8d4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#centerGlow)"/>
+  <circle cx="330" cy="360" r="132" fill="none" stroke="#38f8d4" stroke-width="2" stroke-dasharray="9 14" opacity="0.16"/>
+  <circle cx="1590" cy="360" r="132" fill="none" stroke="#38f8d4" stroke-width="2" stroke-dasharray="9 14" opacity="0.16"/>
+  <circle cx="330" cy="360" r="82" fill="none" stroke="#a78bfa" stroke-width="2" opacity="0.14"/>
+  <circle cx="1590" cy="360" r="82" fill="none" stroke="#a78bfa" stroke-width="2" opacity="0.14"/>
+  <path d="M420,1080 C560,790 710,700 960,700 C1210,700 1360,790 1500,1080 Z" fill="url(#floorGrad)" opacity="0.86"/>
+  <g stroke="#38f8d4" stroke-width="2" opacity="0.1">
+    <path d="M706,704 C654,812 604,928 560,1080" fill="none"/>
+    <path d="M960,700 C960,820 960,954 960,1080" fill="none"/>
+    <path d="M1214,704 C1266,812 1316,928 1360,1080" fill="none"/>
+    <path d="M494,845 C676,816 1244,816 1426,845" fill="none"/>
+  </g>
+
+  <rect x="0" y="0" width="260" height="1080" fill="url(#shelfLeft)"/>
+  <rect x="1660" y="0" width="260" height="1080" fill="url(#shelfRight)"/>
+  <g opacity="0.5">
+    <g fill="#2b2146">
+      <rect x="34" y="90" width="176" height="28"/>
+      <rect x="28" y="230" width="188" height="28"/>
+      <rect x="34" y="370" width="176" height="28"/>
+      <rect x="28" y="510" width="188" height="28"/>
+      <rect x="1710" y="90" width="176" height="28"/>
+      <rect x="1704" y="230" width="188" height="28"/>
+      <rect x="1710" y="370" width="176" height="28"/>
+      <rect x="1704" y="510" width="188" height="28"/>
+    </g>
+    <g stroke="#7dd3fc" stroke-width="2" opacity="0.28">
+      <path d="M160,160 l48,-28 l44,28 l-44,28 z"/>
+      <path d="M1710,640 l46,-28 l48,28 l-48,28 z"/>
+    </g>
+  </g>
+  <g fill="#38f8d4" opacity="0.34">
+    <circle cx="312" cy="282" r="4"/>
+    <circle cx="426" cy="456" r="5"/>
+    <circle cx="1498" cy="288" r="4"/>
+    <circle cx="1606" cy="470" r="5"/>
+  </g>
+  <rect width="1920" height="1080" fill="url(#manaGlow)" pointer-events="none"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>drake_whelp</title>
+  <path d="M24 86 C34 51 59 29 88 38 C109 45 112 70 94 86 C73 79 51 84 24 86 Z" fill="#fb923c"/>
+  <path d="M48 45 L56 21 L66 47" fill="#fde68a"/>
+  <path d="M74 45 L86 25 L88 56" fill="#fde68a"/>
+  <path d="M34 79 C26 70 23 60 25 48 C39 52 48 61 50 75 Z" fill="#fdba74"/>
+  <circle cx="70" cy="58" r="6" fill="white"/>
+  <circle cx="71" cy="58" r="2.5" fill="#111827"/>
+  <path d="M83 66 Q92 69 98 62" stroke="#7c2d12" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M91 71 L113 61 L96 82 Z" fill="#fb923c"/>
+  <path d="M105 66 C112 64 117 67 119 74 C112 76 106 74 103 69 Z" fill="#facc15"/>
+  <path d="M45 84 L39 105 M71 84 L77 105" stroke="#c2410c" stroke-width="6" stroke-linecap="round"/>
+</svg>

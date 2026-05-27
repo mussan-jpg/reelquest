@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>bone_knight</title>
+  <path d="M42 63 C42 38 86 38 86 63 C86 78 78 88 64 91 C50 88 42 78 42 63 Z" fill="#e5e7eb"/>
+  <circle cx="54" cy="62" r="7" fill="#111827"/>
+  <circle cx="74" cy="62" r="7" fill="#111827"/>
+  <path d="M58 78 H70 M55 84 H73" stroke="#9ca3af" stroke-width="4" stroke-linecap="round"/>
+  <path d="M64 90 L90 113 H38 Z" fill="#d1d5db"/>
+  <path d="M34 101 L18 85 M94 101 L110 85" stroke="#e5e7eb" stroke-width="7" stroke-linecap="round"/>
+  <path d="M88 42 L111 19" stroke="#9ca3af" stroke-width="6" stroke-linecap="round"/>
+  <path d="M105 17 L116 28 M111 19 L119 11" stroke="#e5e7eb" stroke-width="5" stroke-linecap="round"/>
+  <path d="M25 45 L53 30" stroke="#9ca3af" stroke-width="6" stroke-linecap="round"/>
+  <path d="M28 42 L18 33 M25 45 L15 52" stroke="#e5e7eb" stroke-width="5" stroke-linecap="round"/>
+  <path d="M64 20 L72 37 H56 Z" fill="#cbd5e1"/>
+</svg>

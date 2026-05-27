@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>grave_mage</title>
+  <path d="M31 112 V57 C31 34 45 19 64 19 C83 19 97 34 97 57 V112 L85 101 L75 112 L64 101 L53 112 L43 101 Z" fill="#6d28d9"/>
+  <path d="M43 35 C48 19 80 19 85 35 C74 30 54 30 43 35 Z" fill="#2e1065"/>
+  <circle cx="53" cy="62" r="7" fill="#f5f3ff"/>
+  <circle cx="76" cy="62" r="7" fill="#f5f3ff"/>
+  <circle cx="53" cy="62" r="3" fill="#111827"/>
+  <circle cx="76" cy="62" r="3" fill="#111827"/>
+  <path d="M54 84 Q64 77 74 84" stroke="#111827" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M34 96 H94" stroke="#a78bfa" stroke-width="5" stroke-linecap="round"/>
+  <path d="M64 45 V88 M51 68 H77" stroke="#ddd6fe" stroke-width="4" stroke-linecap="round" opacity=".78"/>
+  <path d="M24 73 C15 65 15 54 24 48" stroke="#a78bfa" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M104 73 C113 65 113 54 104 48" stroke="#a78bfa" stroke-width="5" fill="none" stroke-linecap="round"/>
+</svg>

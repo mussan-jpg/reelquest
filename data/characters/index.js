@@ -7,12 +7,7 @@ import { grade4Characters } from './grade4.js';
 import { grade5Characters } from './grade5.js';
 import { grade6Characters } from './grade6.js';
 import { characterDescriptions } from './descriptions.js';
-
-function getRarityFromCommands(commands) {
-    if (typeof commands === 'string') return 1;
-    if (!Array.isArray(commands)) return 1;
-    return Array.isArray(commands[0]) ? commands.length : 1;
-}
+import { getCharacterGrade, getCharacterSlotCost, normalizeCharacterStats } from './statBalance.js';
 
 const rawCharacters = [
     ...grade1Characters,
@@ -23,11 +18,16 @@ const rawCharacters = [
     ...grade6Characters
 ];
 
-export const masterCharacters = rawCharacters.map(char => ({
-    ...char,
-    rarity: char.rarity || getRarityFromCommands(char.commands),
-    slotCost: Math.max(1, Math.min(3, char.slotCost || 1)),
-    isSpecialOnly: !!char.isSpecialOnly,
-    species: char.species || 'none',
-    description: char.description || characterDescriptions[char.id] || '詳細不明。本人もまだ自己紹介を考え中。'
-}));
+export const masterCharacters = rawCharacters.map(char => {
+    const rarity = getCharacterGrade(char);
+    return normalizeCharacterStats({
+        ...char,
+        rarity,
+        slotCost: getCharacterSlotCost(char),
+        unitTier: Math.max(1, Math.min(3, Number(char.unitTier || char.unit_tier || 1))),
+        originalRarity: char.originalRarity || rarity,
+        isSpecialOnly: !!char.isSpecialOnly,
+        species: char.species || 'none',
+        description: char.description || characterDescriptions[char.id] || '詳細不明。本人もまだ自己紹介を考え中。'
+    });
+});

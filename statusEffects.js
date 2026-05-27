@@ -8,21 +8,21 @@ export const statusEffects = {
     "weak": {
         name: "脱力",
         color: "#3498db",
-        desc: "攻撃力が0.7倍になる（与ダメージが減少）"
+        desc: "ATKが30%ずつ低下する（重ね掛け可・加算）"
     },
     "weakened": {
         name: "弱体",
         color: "#e67e22",
-        desc: "被ダメージが増加する（受けるダメージが増加）"
+        desc: "受けるダメージが20%ずつ増加する（重ね掛け可・加算）"
     },
     "hidden": {
         name: "隠密",
         color: "#636e72",
-        desc: "被ダメージが0.8倍になる"
+        desc: "他に狙える味方がいる間、攻撃対象にならない"
     },
     "taunt": {
         name: "挑発",
-        color: "#f39c12",
+        color: "#db2777",
         desc: "単体攻撃の対象になり、被ダメージが0.6倍になる"
     },
     "paralysis": {

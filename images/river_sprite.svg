@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>river_sprite</title>
+  <path d="M64 15 C82 35 93 54 91 77 C89 101 75 115 64 119 C53 115 39 101 37 77 C35 54 46 35 64 15 Z" fill="#22d3ee"/>
+  <path d="M30 65 C45 55 59 58 72 67 C85 76 99 75 115 65" stroke="#e0f2fe" stroke-width="8" fill="none" stroke-linecap="round" opacity=".82"/>
+  <path d="M18 92 C36 83 52 86 66 95 C81 104 97 103 113 95" stroke="#bae6fd" stroke-width="7" fill="none" stroke-linecap="round" opacity=".72"/>
+  <circle cx="55" cy="69" r="5" fill="#ffffff"/>
+  <circle cx="75" cy="69" r="5" fill="#ffffff"/>
+  <circle cx="55" cy="69" r="2.5" fill="#0e7490"/>
+  <circle cx="75" cy="69" r="2.5" fill="#0e7490"/>
+  <path d="M56 86 Q64 92 73 86" stroke="#f0f9ff" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M40 42 C29 32 31 20 44 15 C57 22 57 35 48 46 Z" fill="#7dd3fc" opacity=".85"/>
+  <path d="M88 42 C99 32 97 20 84 15 C71 22 71 35 80 46 Z" fill="#7dd3fc" opacity=".85"/>
+</svg>

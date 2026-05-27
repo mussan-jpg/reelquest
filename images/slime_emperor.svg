@@ -10,17 +10,21 @@
       <stop offset="1" stop-color="#f59e0b"/>
     </linearGradient>
   </defs>
-  <path d="M64 24 C25 24 14 68 14 91 C14 116 38 122 64 122 C90 122 114 116 114 91 C114 68 103 24 64 24 Z" fill="url(#emperorBody)"/>
-  <path d="M38 34 L45 12 L58 30 L64 10 L70 30 L83 12 L90 34 Z" fill="url(#crownGold)" stroke="#b45309" stroke-width="3" stroke-linejoin="round"/>
+  <title>slime emperor</title>
+  <path d="M64 21 C24 21 13 65 14 91 C15 117 38 124 64 124 C90 124 113 117 114 91 C115 65 104 21 64 21 Z" fill="url(#emperorBody)"/>
+  <path d="M36 36 L44 11 L57 29 L64 8 L71 29 L84 11 L92 36 Z" fill="url(#crownGold)" stroke="#b45309" stroke-width="3" stroke-linejoin="round"/>
   <circle cx="64" cy="22" r="4" fill="#ef4444"/>
   <circle cx="45" cy="18" r="3" fill="#22c55e"/>
   <circle cx="83" cy="18" r="3" fill="#3b82f6"/>
-  <ellipse cx="58" cy="43" rx="19" ry="6" fill="#bae6fd" opacity="0.75"/>
+  <ellipse cx="56" cy="43" rx="22" ry="7" fill="#bae6fd" opacity=".75"/>
+  <path d="M25 88 C35 98 47 103 62 104" stroke="#93c5fd" stroke-width="5" fill="none" stroke-linecap="round" opacity=".8"/>
+  <path d="M103 88 C93 98 81 103 66 104" stroke="#93c5fd" stroke-width="5" fill="none" stroke-linecap="round" opacity=".8"/>
+  <path d="M31 111 C43 118 85 118 97 111" stroke="#1d4ed8" stroke-width="5" fill="none" stroke-linecap="round" opacity=".38"/>
   <circle cx="47" cy="77" r="7" fill="#fff"/>
   <circle cx="47" cy="77" r="3.5" fill="#111"/>
   <circle cx="81" cy="77" r="7" fill="#fff"/>
   <circle cx="81" cy="77" r="3.5" fill="#111"/>
-  <path d="M54 96 Q64 106 74 96" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
-  <path d="M28 92 C36 100 45 104 56 105" stroke="#93c5fd" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>
-  <path d="M100 92 C92 100 83 104 72 105" stroke="#93c5fd" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>
+  <path d="M54 97 Q64 107 74 97" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M19 75 C6 81 5 96 16 105" stroke="#f59e0b" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M109 75 C122 81 123 96 112 105" stroke="#f59e0b" stroke-width="6" fill="none" stroke-linecap="round"/>
 </svg>

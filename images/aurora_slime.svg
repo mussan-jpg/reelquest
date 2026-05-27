@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="auroraSlimeBody" x1="30" y1="25" x2="98" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#67e8f9"/>
+      <stop offset=".45" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <path d="M27 86 C27 54 43 30 64 30 C85 30 101 54 101 86 C101 109 83 118 64 118 C45 118 27 109 27 86 Z" fill="url(#auroraSlimeBody)" stroke="#5b21b6" stroke-width="4"/>
+  <path d="M33 76 C47 62 80 62 95 76" stroke="#f0abfc" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M42 45 C48 28 80 28 86 45 C76 55 52 55 42 45 Z" fill="#e0f2fe" stroke="#7c3aed" stroke-width="3"/>
+  <path d="M64 23 L70 39 L87 40 L74 51 L79 68 L64 58 L49 68 L54 51 L41 40 L58 39 Z" fill="#fde68a" stroke="#7c3aed" stroke-width="3"/>
+  <circle cx="52" cy="66" r="7" fill="#f8fafc"/>
+  <circle cx="77" cy="66" r="7" fill="#f8fafc"/>
+  <circle cx="52" cy="66" r="2.7" fill="#0f172a"/>
+  <circle cx="77" cy="66" r="2.7" fill="#0f172a"/>
+  <path d="M56 84 Q64 91 72 84" stroke="#f5d0fe" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M31 94 L16 104 M97 94 L112 104" stroke="#67e8f9" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="38" cy="41" r="4" fill="#ecfeff" opacity=".85"/>
+  <circle cx="91" cy="58" r="5" fill="#f5d0fe" opacity=".8"/>
+</svg>

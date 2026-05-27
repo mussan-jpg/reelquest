@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="worldgroveRobe" x1="31" y1="20" x2="97" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#dcfce7"/>
+      <stop offset=".5" stop-color="#22c55e"/>
+      <stop offset="1" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+  <path d="M62 30 C51 48 47 75 53 108 C58 116 70 116 75 108 C81 75 77 48 66 30 Z" fill="#a16207" stroke="#14532d" stroke-width="4"/>
+  <path d="M25 105 C42 93 52 91 64 111 C77 90 91 93 106 105" stroke="#166534" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M38 31 C47 16 59 20 64 31 C69 20 81 16 90 31 C79 39 49 39 38 31 Z" fill="#86efac" stroke="#166534" stroke-width="4"/>
+  <path d="M64 10 C51 21 53 35 64 45 C75 35 77 21 64 10 Z" fill="#dcfce7" stroke="#166534" stroke-width="4"/>
+  <path d="M40 59 C49 43 79 43 88 59 C80 75 48 75 40 59 Z" fill="#fef3c7" stroke="#14532d" stroke-width="4"/>
+  <path d="M28 72 C43 67 49 74 53 91 C35 93 24 86 28 72 Z" fill="#22c55e" stroke="#14532d" stroke-width="4"/>
+  <path d="M100 72 C85 67 79 74 75 91 C93 93 104 86 100 72 Z" fill="#22c55e" stroke="#14532d" stroke-width="4"/>
+  <circle cx="56" cy="61" r="5" fill="#f8fafc"/>
+  <circle cx="72" cy="61" r="5" fill="#f8fafc"/>
+  <circle cx="56" cy="61" r="2.2" fill="#052e16"/>
+  <circle cx="72" cy="61" r="2.2" fill="#052e16"/>
+  <path d="M57 76 Q64 82 72 76" stroke="#166534" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M19 45 C34 48 41 58 39 75 M109 45 C94 48 87 58 89 75" stroke="#22c55e" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <circle cx="18" cy="44" r="6" fill="#fef3c7" stroke="#166534" stroke-width="3"/>
+  <circle cx="110" cy="44" r="6" fill="#fef3c7" stroke="#166534" stroke-width="3"/>
+  <path d="M64 83 V105 M55 94 H73" stroke="#dcfce7" stroke-width="5" stroke-linecap="round"/>
+</svg>

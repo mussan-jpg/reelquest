@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="shellSlimeGelFlat" x1="31" y1="30" x2="91" y2="113" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a7f3d0"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="shellSlimeCap" x1="42" y1="18" x2="84" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff7ed"/>
+      <stop offset="1" stop-color="#fbbf24"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 87 C32 62 45 43 63 43 C82 43 96 62 96 87 C96 106 82 115 64 115 C46 115 32 106 32 87 Z" fill="url(#shellSlimeGelFlat)" stroke="#0f766e" stroke-width="4"/>
+  <path d="M42 43 C45 22 82 22 86 43 C78 53 51 53 42 43 Z" fill="url(#shellSlimeCap)" stroke="#92400e" stroke-width="4"/>
+  <path d="M51 42 Q55 28 64 24 Q73 28 77 42 M64 25 V51 M47 44 Q64 51 82 44" stroke="#78350f" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M38 78 C27 76 22 66 28 58" stroke="#5eead4" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M91 80 C102 78 108 69 101 61" stroke="#5eead4" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <circle cx="54" cy="70" r="6.5" fill="#f8fafc"/>
+  <circle cx="75" cy="70" r="6.5" fill="#f8fafc"/>
+  <circle cx="54" cy="70" r="2.6" fill="#0f172a"/>
+  <circle cx="75" cy="70" r="2.6" fill="#0f172a"/>
+  <path d="M58 87 Q64 92 71 87" stroke="#0f766e" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M82 83 L101 75 L106 94 L88 101 Z" fill="#fde68a" stroke="#92400e" stroke-width="4"/>
+  <path d="M90 84 L89 98 M98 80 L96 94" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="45" cy="51" r="4" fill="#ecfeff" opacity=".85"/>
+  <circle cx="83" cy="56" r="3.5" fill="#ecfeff" opacity=".75"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>storm_drake</title>
+  <path d="M21 82 C35 44 67 23 99 44 C83 50 83 65 99 82 C75 76 49 83 21 82 Z" fill="#818cf8"/>
+  <path d="M43 57 C22 49 17 30 28 17 C48 24 55 40 51 59 Z" fill="#a5b4fc"/>
+  <path d="M88 57 C109 49 114 30 103 17 C83 24 76 40 80 59 Z" fill="#6366f1"/>
+  <path d="M58 20 L50 45 H64 L57 70 L79 37 H65 L72 20 Z" fill="#facc15"/>
+  <circle cx="69" cy="57" r="5" fill="white"/>
+  <circle cx="70" cy="57" r="2" fill="#111827"/>
+  <path d="M87 66 L112 55 L94 77 Z" fill="#818cf8"/>
+  <path d="M31 92 C45 101 79 101 94 91" stroke="#c7d2fe" stroke-width="6" fill="none" stroke-linecap="round" opacity=".82"/>
+</svg>

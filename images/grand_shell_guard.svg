@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="grandShellGuardShell" x1="20" y1="24" x2="108" y2="105" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fef3c7"/>
+      <stop offset="0.48" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#92400e"/>
+    </linearGradient>
+    <linearGradient id="grandShellGuardBody" x1="35" y1="48" x2="91" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#075985"/>
+    </linearGradient>
+  </defs>
+  <path d="M26 74 C28 35 100 35 102 74 C95 106 33 106 26 74 Z" fill="url(#grandShellGuardShell)" stroke="#78350f" stroke-width="5"/>
+  <path d="M38 71 Q44 45 64 34 Q84 45 90 71 M64 36 V101 M31 76 Q64 92 97 76" stroke="#78350f" stroke-width="4.5" fill="none" stroke-linecap="round" opacity=".75"/>
+  <path d="M39 76 C41 98 50 116 64 119 C78 116 87 98 89 76 Z" fill="url(#grandShellGuardBody)" stroke="#075985" stroke-width="4"/>
+  <path d="M38 77 C24 72 15 60 18 47 L39 55 Z" fill="#0ea5e9" stroke="#075985" stroke-width="4"/>
+  <path d="M90 77 C104 72 113 60 110 47 L89 55 Z" fill="#0ea5e9" stroke="#075985" stroke-width="4"/>
+  <path d="M16 47 C9 34 24 25 35 36 L28 49 Z" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+  <path d="M112 47 C119 34 104 25 93 36 L100 49 Z" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+  <circle cx="54" cy="81" r="6" fill="#f8fafc"/>
+  <circle cx="74" cy="81" r="6" fill="#f8fafc"/>
+  <circle cx="54" cy="81" r="2.5" fill="#0f172a"/>
+  <circle cx="74" cy="81" r="2.5" fill="#0f172a"/>
+  <path d="M58 96 Q64 101 71 96" stroke="#e0f2fe" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M45 113 L36 123 M83 113 L92 123" stroke="#075985" stroke-width="6" stroke-linecap="round"/>
+  <path d="M45 50 L36 38 M83 50 L92 38" stroke="#fef3c7" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+</svg>

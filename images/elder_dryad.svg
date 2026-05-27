@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>elder dryad</title>
+  <path d="M44 47 C45 28 54 16 64 12 C74 16 83 28 84 47 C96 58 98 79 88 98 C80 113 70 121 64 123 C58 121 48 113 40 98 C30 79 32 58 44 47 Z" fill="#a16207"/>
+  <path d="M43 41 C30 29 25 15 34 6 C47 11 54 22 55 39 Z" fill="#166534"/>
+  <path d="M85 41 C98 29 103 15 94 6 C81 11 74 22 73 39 Z" fill="#15803d"/>
+  <path d="M56 26 C51 11 58 2 64 0 C72 6 75 17 69 30 Z" fill="#22c55e"/>
+  <path d="M31 66 C18 59 16 45 24 36" stroke="#78350f" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M97 66 C110 59 112 45 104 36" stroke="#78350f" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M42 59 C53 52 75 52 86 59" stroke="#d9f99d" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="54" cy="73" r="5" fill="#fef9c3"/>
+  <circle cx="74" cy="73" r="5" fill="#fef9c3"/>
+  <path d="M55 92 Q64 99 73 92" stroke="#fef9c3" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M52 117 C45 124 36 126 28 124" stroke="#78350f" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M76 117 C83 124 92 126 100 124" stroke="#78350f" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <circle cx="36" cy="31" r="4" fill="#bbf7d0"/>
+  <circle cx="92" cy="31" r="4" fill="#bbf7d0"/>
+</svg>

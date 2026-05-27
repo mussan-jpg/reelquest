@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>crystal slime</title>
+  <path d="M64 18 L96 42 L105 84 L82 118 H46 L23 84 L32 42 Z" fill="#22d3ee"/>
+  <path d="M64 18 L64 118 L32 42 Z" fill="#a5f3fc" opacity=".45"/>
+  <path d="M64 18 L96 42 L64 57 Z" fill="#ecfeff" opacity=".68"/>
+  <path d="M23 84 L64 57 L105 84" stroke="#0891b2" stroke-width="4" opacity=".42" fill="none"/>
+  <path d="M46 118 L64 57 L82 118" stroke="#0891b2" stroke-width="4" opacity=".36" fill="none"/>
+  <circle cx="51" cy="75" r="6" fill="#fff"/>
+  <circle cx="51" cy="75" r="3" fill="#155e75"/>
+  <circle cx="77" cy="75" r="6" fill="#fff"/>
+  <circle cx="77" cy="75" r="3" fill="#155e75"/>
+  <path d="M55 94 Q64 100 73 94" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="94" cy="35" r="4" fill="#f0f9ff"/>
+</svg>

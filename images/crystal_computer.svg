@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="crystalComputerCore" x1="32" y1="18" x2="96" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ecfeff"/>
+      <stop offset=".52" stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#0891b2"/>
+    </linearGradient>
+  </defs>
+  <path d="M64 16 L98 48 L84 105 H44 L30 48 Z" fill="url(#crystalComputerCore)" stroke="#0e7490" stroke-width="4"/>
+  <path d="M64 16 V105 M30 48 H98 M44 105 L64 48 L84 105" stroke="#0e7490" stroke-width="4" opacity=".55" fill="none"/>
+  <rect x="46" y="54" width="36" height="26" rx="6" fill="#0f172a" opacity=".72"/>
+  <circle cx="56" cy="66" r="5" fill="#a5f3fc"/>
+  <circle cx="72" cy="66" r="5" fill="#a5f3fc"/>
+  <path d="M55 88 H73" stroke="#e0f2fe" stroke-width="4" stroke-linecap="round"/>
+  <path d="M31 61 L14 52 M97 61 L114 52 M39 95 L24 109 M89 95 L104 109" stroke="#67e8f9" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="14" cy="52" r="5" fill="#e0f2fe" stroke="#0891b2" stroke-width="3"/>
+  <circle cx="114" cy="52" r="5" fill="#e0f2fe" stroke="#0891b2" stroke-width="3"/>
+  <circle cx="24" cy="109" r="5" fill="#e0f2fe" stroke="#0891b2" stroke-width="3"/>
+  <circle cx="104" cy="109" r="5" fill="#e0f2fe" stroke="#0891b2" stroke-width="3"/>
+  <path d="M49 35 H79 M54 43 H74" stroke="#ecfeff" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+</svg>

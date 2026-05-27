@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>hex_warlock</title>
+  <path d="M33 106 C33 70 42 33 64 18 C86 33 95 70 95 106 Z" fill="#581c87"/>
+  <path d="M41 45 L31 19 L58 34 Z" fill="#312e81"/>
+  <path d="M87 45 L97 19 L70 34 Z" fill="#312e81"/>
+  <circle cx="64" cy="65" r="31" fill="#c084fc"/>
+  <path d="M48 53 L64 43 L80 53 V72 L64 82 L48 72 Z" fill="none" stroke="#fef3c7" stroke-width="4"/>
+  <path d="M64 43 V82 M48 53 L80 72 M80 53 L48 72" stroke="#fef3c7" stroke-width="2.5" opacity=".86"/>
+  <circle cx="53" cy="65" r="4" fill="#111827"/>
+  <circle cx="75" cy="65" r="4" fill="#111827"/>
+  <path d="M54 87 Q64 81 75 87" stroke="#111827" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M25 84 C16 73 17 61 27 55" stroke="#a78bfa" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M103 84 C112 73 111 61 101 55" stroke="#a78bfa" stroke-width="5" fill="none" stroke-linecap="round"/>
+</svg>

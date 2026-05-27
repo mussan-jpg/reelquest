@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="rustMouseBody" x1="25" y1="22" x2="104" y2="103" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#cbd5e1"/>
+      <stop offset="0.45" stop-color="#64748b"/>
+      <stop offset="1" stop-color="#78350f"/>
+    </linearGradient>
+  </defs>
+  <path d="M33 70 C34 44 54 30 78 36 C98 41 108 58 101 80 C94 101 58 108 39 92 C35 88 32 80 33 70 Z" fill="url(#rustMouseBody)" stroke="#451a03" stroke-width="4"/>
+  <circle cx="48" cy="37" r="14" fill="#94a3b8" stroke="#78350f" stroke-width="4"/>
+  <circle cx="82" cy="35" r="13" fill="#94a3b8" stroke="#78350f" stroke-width="4"/>
+  <path d="M35 73 L20 66 L35 61" fill="#cbd5e1" stroke="#78350f" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="55" cy="63" r="6" fill="#f8fafc"/>
+  <circle cx="82" cy="61" r="6" fill="#f8fafc"/>
+  <circle cx="55" cy="63" r="2.5" fill="#0f172a"/>
+  <circle cx="82" cy="61" r="2.5" fill="#0f172a"/>
+  <path d="M65 76 L75 78 L68 84 Z" fill="#f97316"/>
+  <path d="M100 76 C121 80 114 106 92 99" stroke="#94a3b8" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M96 96 L111 108" stroke="#78350f" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="48" cy="87" r="11" fill="#334155"/>
+  <circle cx="48" cy="87" r="5" fill="#0f172a"/>
+  <circle cx="82" cy="88" r="12" fill="#334155"/>
+  <circle cx="82" cy="88" r="5" fill="#0f172a"/>
+  <path d="M42 50 H92 M50 101 L54 112 M80 101 L84 112" stroke="#f97316" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+  <path d="M67 44 L74 51 L68 58 L61 51 Z" fill="#f97316" opacity=".75"/>
+</svg>

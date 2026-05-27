@@ -1,7 +1,8 @@
 // screens/replacementScreen.js
 import { masterCharacters } from '../data/characters/index.js';
-import { formatCharacterTypeLabel, formatSpeciesLabel, getCharacterRarity, getCharacterRarityClass, getCharacterType, getSpeciesTooltip, showCharacterDetail } from './shared.js';
-import { canFitInParty, createCharacterFromData, getOccupiedSlots, getSlotCost, PARTY_SLOT_LIMIT } from '../partySlots.js';
+import { getFloorRarityRange } from '../battle/enemy.js';
+import { bindCharacterDetailTrigger, createCharacterCard, getCharacterRarity, getCharacterRarityClass, showCharacterDetail } from './shared.js';
+import { createCharacterFromData, getLimitBreakDisplayText, getOccupiedSlots, getSlotCost, PARTY_SLOT_LIMIT } from '../partySlots.js';
 
 export function showReplacementSelection(gameState) {
     return new Promise((resolve) => {
@@ -13,6 +14,7 @@ export function showReplacementSelection(gameState) {
         const partyList = document.getElementById('replacement-party-list');
         const confirmBtn = document.getElementById('replacement-confirm-btn');
         const skipBtn = document.getElementById('replacement-skip-btn');
+        const resultBackBtn = document.getElementById('replacement-result-back-btn');
 
         if (!replacementScreen || !description || !candidateList || !partyList || !confirmBtn || !skipBtn) {
             resolve();
@@ -20,67 +22,91 @@ export function showReplacementSelection(gameState) {
         }
 
         const floor = gameState.currentFloor;
-        let minRarity = 1;
-        let maxRarity = 6;
-        if (floor === 1) { maxRarity = 2; }
-        else if (floor === 2) { maxRarity = 3; }
-        else if (floor === 3) { minRarity = 2; maxRarity = 4; }
-        else if (floor === 4) { minRarity = 3; maxRarity = 5; }
-        else if (floor >= 5) { minRarity = 4; maxRarity = 6; }
+        const { minRarity, maxRarity } = getFloorRarityRange(floor + 1);
 
-        description.innerText = `次の階へ進む前に、★${minRarity}〜★${maxRarity}の新しい仲間候補から1体を選び、現在のパーティから枠が収まるように1体を入れ替えてください。現在 ${getOccupiedSlots(gameState.players)} / ${PARTY_SLOT_LIMIT}枠。`;
+        description.innerHTML = `
+            <strong>${gameState.currentFloor}階クリア</strong>
+            <span>次の敵を見て、合計${PARTY_SLOT_LIMIT}枠ぶんの次階層パーティを組み直してください。</span>
+        `;
 
         const currentIds = gameState.players.map(p => p.id);
+        const sourcePoolIds = [...new Set(gameState.players.flatMap(player => (
+            Array.isArray(player.sourceIds) && player.sourceIds.length ? player.sourceIds : [player.id]
+        )))];
         const pool = masterCharacters
             .filter(char => {
                 const rarity = getCharacterRarity(char);
-                return rarity >= minRarity && rarity <= maxRarity && !currentIds.includes(char.id) && !char.isSpecialOnly;
+                return rarity >= minRarity
+                    && rarity <= maxRarity
+                    && getSlotCost(char) <= PARTY_SLOT_LIMIT
+                    && !currentIds.includes(char.id)
+                    && !sourcePoolIds.includes(char.id)
+                    && !char.isSpecialOnly;
             })
             .map(char => char.id);
 
         const shuffled = [...pool].sort(() => 0.5 - Math.random());
-        const displayIds = shuffled.slice(0, 4);
+        const displayIds = shuffled.slice(0, 5);
+        const rebuildPoolIds = [...sourcePoolIds, ...displayIds];
 
-        let selectedCandidateId = null;
-        let selectedPartyIdx = null;
-        const candidateCards = [];
-        const partyCards = [];
+        const selectedIds = [];
 
         const updateButtons = () => {
-            const canReplace = selectedCandidateId && selectedPartyIdx !== null;
-            const candidate = masterCharacters.find(char => char.id === selectedCandidateId);
-            const removed = selectedPartyIdx !== null ? [gameState.players[selectedPartyIdx]] : [];
-            const fits = canReplace && candidate && canFitInParty(gameState.players, candidate, removed);
-            confirmBtn.disabled = !fits;
-            confirmBtn.style.background = fits ? '#2ecc71' : '#bdc3c7';
-            confirmBtn.style.color = fits ? '#fff' : '#7f8c8d';
+            const selectedCharacters = selectedIds
+                .map(id => masterCharacters.find(char => char.id === id))
+                .filter(Boolean);
+            const slots = getOccupiedSlots(selectedCharacters);
+            const complete = slots === PARTY_SLOT_LIMIT;
+            confirmBtn.disabled = !complete;
+            confirmBtn.style.background = complete ? '#2ecc71' : '#bdc3c7';
+            confirmBtn.style.color = complete ? '#fff' : '#7f8c8d';
+            description.innerHTML = `
+                <strong>${gameState.currentFloor}階クリア</strong>
+                <span>次の敵を見て、合計${PARTY_SLOT_LIMIT}枠ぶんの次階層パーティを組み直してください。</span>
+                <em class="${complete ? 'is-complete' : ''}">現在 ${slots} / ${PARTY_SLOT_LIMIT}枠</em>
+            `;
         };
 
-        const createCard = (char, extraClass = '') => {
-            const card = document.createElement('div');
-            card.className = `candidate-card ${getCharacterRarityClass(char)} ${extraClass}`.trim();
-            card.style.cursor = 'pointer';
-            const slotCost = getSlotCost(char);
-            const characterType = getCharacterType(char);
+        const getCandidateSourceMeta = (id) => {
+            if (displayIds.includes(id)) {
+                return { label: '新候補', className: 'replacement-source-badge--new' };
+            }
+            if (currentIds.includes(id)) {
+                return { label: '継続候補', className: 'replacement-source-badge--current' };
+            }
+            return { label: '素材に戻る', className: 'replacement-source-badge--source' };
+        };
 
-            card.innerHTML = `
-                <div class="candidate-img" style="height: 80px;">
-                    <img src="${char.image}" alt="${char.name}" style="width: 100%; height: 100%; object-fit: contain;">
-                </div>
-                <div class="candidate-name replacement-card-name">${char.name}</div>
-                <div class="library-card-species party-select-card-species replacement-card-species" data-tooltip="${getSpeciesTooltip(char)}">${formatSpeciesLabel(char)}</div>
-                <div class="library-card-type party-select-card-type replacement-card-type ${characterType.className}">${formatCharacterTypeLabel(characterType)}</div>
-                ${slotCost > 1 ? `<div class="slot-cost-badge">${slotCost}枠</div>` : ''}
-            `;
+        const createCard = (char, extraClass = '', options = {}) => {
+            const card = createCharacterCard(char, {
+                extraClass,
+                cursor: 'pointer',
+                imageStyle: 'height: 80px;',
+                nameClass: 'replacement-card-name',
+                speciesClass: 'replacement-card-species',
+                typeClass: 'replacement-card-type',
+                sourceMeta: options.sourceMeta
+            });
             return card;
         };
 
-        const clearCandidateSelection = () => {
-            candidateCards.forEach(card => card.classList.remove('selected'));
-        };
-
-        const clearPartySelection = () => {
-            partyCards.forEach(card => card.classList.remove('selected'));
+        const createCurrentSummaryCard = (char) => {
+            const item = document.createElement('button');
+            item.type = 'button';
+            item.className = `replacement-current-card ${getCharacterRarityClass(char)}`;
+            const slotCost = getSlotCost(char);
+            const sourceCount = Array.isArray(char.sourceIds) ? char.sourceIds.length : 0;
+            const growthText = getLimitBreakDisplayText(char);
+            item.innerHTML = `
+                <span class="replacement-current-img"><img src="${char.image}" alt="${char.name}"></span>
+                <span class="replacement-current-main">
+                    <strong>${char.name}</strong>
+                    <small>${slotCost}枠 / ${growthText}${sourceCount ? ` / 合成素材${sourceCount}体に戻ります` : ''}</small>
+                </span>
+            `;
+            item.addEventListener('click', () => showCharacterDetail(char.id));
+            bindCharacterDetailTrigger(item, char.id, null);
+            return item;
         };
 
         candidateList.innerHTML = '';
@@ -95,55 +121,53 @@ export function showReplacementSelection(gameState) {
             (gameState.nextEnemies || []).forEach(enemy => {
                 const card = createCard(enemy, 'next-enemy-card');
                 card.addEventListener('click', () => showCharacterDetail(enemy.id));
-                card.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); showCharacterDetail(enemy.id); });
                 previewList.appendChild(card);
             });
             nextEnemyPreview.appendChild(previewTitle);
             nextEnemyPreview.appendChild(previewList);
         }
 
-        displayIds.forEach(id => {
+        rebuildPoolIds.forEach(id => {
             const charData = masterCharacters.find(c => c.id === id);
             if (!charData) return;
-            const card = createCard(charData);
+            const card = createCard(charData, '', { sourceMeta: getCandidateSourceMeta(id) });
             card.addEventListener('click', () => {
-                selectedCandidateId = id;
-                clearCandidateSelection();
+                const existingIndex = selectedIds.indexOf(id);
+                if (existingIndex >= 0) {
+                    selectedIds.splice(existingIndex, 1);
+                    card.classList.remove('selected');
+                    updateButtons();
+                    return;
+                }
+                const nextCharacters = [...selectedIds, id]
+                    .map(selectedId => masterCharacters.find(char => char.id === selectedId))
+                    .filter(Boolean);
+                if (getOccupiedSlots(nextCharacters) > PARTY_SLOT_LIMIT) {
+                    window.alert(`${PARTY_SLOT_LIMIT}枠を超える編成は選べません。`);
+                    return;
+                }
+                selectedIds.push(id);
                 card.classList.add('selected');
                 updateButtons();
             });
-            card.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); showCharacterDetail(id); });
+            bindCharacterDetailTrigger(card, id, null);
             card.addEventListener('auxclick', (e) => { if (e.button === 2) { e.preventDefault(); e.stopPropagation(); showCharacterDetail(id); } });
             card.addEventListener('dblclick', () => { showCharacterDetail(id); });
             card.oncontextmenu = () => false;
-            candidateCards.push(card);
             candidateList.appendChild(card);
         });
 
         gameState.players.forEach((player, idx) => {
-            const card = createCard(player);
-            card.addEventListener('click', () => {
-                selectedPartyIdx = idx;
-                clearPartySelection();
-                card.classList.add('selected');
-                updateButtons();
-            });
-            card.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); showCharacterDetail(player.id); });
-            card.addEventListener('auxclick', (e) => { if (e.button === 2) { e.preventDefault(); e.stopPropagation(); showCharacterDetail(player.id); } });
-            card.addEventListener('dblclick', () => { showCharacterDetail(player.id); });
-            card.oncontextmenu = () => false;
-            partyCards.push(card);
+            const card = createCurrentSummaryCard(player);
             partyList.appendChild(card);
         });
 
         confirmBtn.onclick = () => {
-            if (!selectedCandidateId || selectedPartyIdx === null) return;
-            const data = masterCharacters.find(char => char.id === selectedCandidateId);
-            if (!data) return;
-            if (!canFitInParty(gameState.players, data, [gameState.players[selectedPartyIdx]])) return;
-
-            const newChar = createCharacterFromData(data);
-            gameState.players[selectedPartyIdx] = newChar;
+            const selectedCharacters = selectedIds
+                .map(id => masterCharacters.find(char => char.id === id))
+                .filter(Boolean);
+            if (getOccupiedSlots(selectedCharacters) !== PARTY_SLOT_LIMIT) return;
+            gameState.players = selectedCharacters.map(data => createCharacterFromData(data, { gameState })).filter(Boolean);
             replacementScreen.classList.add('hidden');
             battleScreen.classList.remove('hidden');
             resolve();
@@ -154,6 +178,18 @@ export function showReplacementSelection(gameState) {
             battleScreen.classList.remove('hidden');
             resolve();
         };
+
+        if (resultBackBtn) {
+            resultBackBtn.onclick = async () => {
+                if (typeof window.showBattleResult !== 'function') return;
+                resultBackBtn.disabled = true;
+                replacementScreen.classList.add('hidden');
+                await window.showBattleResult(gameState);
+                battleScreen?.classList.add('hidden');
+                replacementScreen.classList.remove('hidden');
+                resultBackBtn.disabled = false;
+            };
+        }
 
         battleScreen.classList.add('hidden');
         replacementScreen.classList.remove('hidden');

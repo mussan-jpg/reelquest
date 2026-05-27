@@ -16,14 +16,17 @@ export function setupTooltip() {
         position: fixed;
         pointer-events: none;
         z-index: 20000;
-        background: rgba(0,0,0,0.85);
+        background: rgba(17, 24, 39, 0.94);
         color: #fff;
-        padding: 6px 8px;
-        border-radius: 6px;
+        padding: 9px 11px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-left: 4px solid rgba(116, 185, 255, 0.95);
+        border-radius: 9px;
         font-size: 12px;
-        max-width: 280px;
+        max-width: 340px;
         white-space: pre-wrap;
-        line-height: 1.3;
+        line-height: 1.45;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
         display: none;
     `;
     document.body.appendChild(_tooltipEl);
@@ -43,8 +46,13 @@ export function setupTooltip() {
             const rect = el.getBoundingClientRect();
             const top = rect.top - 10 - _tooltipEl.offsetHeight;
             const left = rect.left + (rect.width / 2) - (_tooltipEl.offsetWidth / 2);
-            _tooltipEl.style.top = (top > 8 ? top : rect.bottom + 12) + 'px';
-            _tooltipEl.style.left = Math.max(8, left) + 'px';
+            const maxLeft = window.innerWidth - 16 - _tooltipEl.offsetWidth;
+            const maxTop = window.innerHeight - 16 - _tooltipEl.offsetHeight;
+            const clampedLeft = Math.min(Math.max(8, left), Math.max(8, maxLeft));
+            const preferredTop = top > 8 ? top : rect.bottom + 12;
+            const clampedTop = Math.min(Math.max(8, preferredTop), Math.max(8, maxTop));
+            _tooltipEl.style.top = clampedTop + 'px';
+            _tooltipEl.style.left = clampedLeft + 'px';
         }, 30); // 30ms の短い遅延でほぼ即時表示
     });
 

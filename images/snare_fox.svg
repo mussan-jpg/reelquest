@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="snareFoxFur" x1="28" y1="18" x2="98" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fed7aa"/>
+      <stop offset="0.45" stop-color="#f97316"/>
+      <stop offset="1" stop-color="#9a3412"/>
+    </linearGradient>
+  </defs>
+  <path d="M37 52 L45 20 L62 42 L81 20 L91 52 C103 66 98 92 78 104 C65 112 45 108 36 94 C27 80 27 64 37 52 Z" fill="url(#snareFoxFur)" stroke="#7c2d12" stroke-width="4"/>
+  <path d="M45 31 L49 51 L57 43 Z M80 31 L78 51 L70 43 Z" fill="#fde68a"/>
+  <path d="M47 73 C56 56 73 56 82 73 L64 93 Z" fill="#fff7ed"/>
+  <path d="M50 54 L57 58 M78 54 L71 58" stroke="#7c2d12" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="53" cy="62" r="5.5" fill="#f8fafc"/>
+  <circle cx="75" cy="62" r="5.5" fill="#f8fafc"/>
+  <circle cx="53" cy="62" r="2.3" fill="#0f172a"/>
+  <circle cx="75" cy="62" r="2.3" fill="#0f172a"/>
+  <path d="M60 77 L68 77 L64 83 Z" fill="#111827"/>
+  <path d="M26 88 C15 68 31 50 56 57" stroke="#fbbf24" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <circle cx="40" cy="84" r="18" fill="none" stroke="#78350f" stroke-width="5"/>
+  <path d="M28 85 L16 79 M43 66 L40 53" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
+  <path d="M87 76 C111 78 116 102 92 109 C77 113 67 102 77 92" fill="#fb923c" stroke="#7c2d12" stroke-width="4"/>
+  <path d="M92 97 C103 96 104 90 96 87" stroke="#fff7ed" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M43 105 L36 116 M82 105 L90 116" stroke="#7c2d12" stroke-width="5" stroke-linecap="round"/>
+  <path d="M57 88 Q64 94 71 88" stroke="#7c2d12" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#061a16"/>
+      <stop offset="54%" stop-color="#0b241b"/>
+      <stop offset="100%" stop-color="#04100d"/>
+    </linearGradient>
+    <radialGradient id="skyGlow" cx="50%" cy="25%" r="58%">
+      <stop offset="0%" stop-color="#49f5d1" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#07231a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#123528"/>
+      <stop offset="100%" stop-color="#03110c"/>
+    </linearGradient>
+    <linearGradient id="mossLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#03100c"/>
+      <stop offset="56%" stop-color="#173a2d"/>
+      <stop offset="100%" stop-color="#476052"/>
+    </linearGradient>
+    <linearGradient id="mossRight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#476052"/>
+      <stop offset="44%" stop-color="#173a2d"/>
+      <stop offset="100%" stop-color="#03100c"/>
+    </linearGradient>
+    <radialGradient id="plantGlow" cx="50%" cy="54%" r="55%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#skyGlow)"/>
+  <path d="M458,650 C620,560 1300,560 1462,650" fill="none" stroke="#6ee7b7" stroke-width="4" opacity="0.2"/>
+  <path d="M420,1080 C560,790 710,700 960,700 C1210,700 1360,790 1500,1080 Z" fill="url(#floorGrad)" opacity="0.86"/>
+  <g stroke="#22d3ee" stroke-width="2" opacity="0.1">
+    <path d="M706,704 C654,812 604,928 560,1080" fill="none"/>
+    <path d="M960,700 C960,820 960,954 960,1080" fill="none"/>
+    <path d="M1214,704 C1266,812 1316,928 1360,1080" fill="none"/>
+  </g>
+
+  <path d="M0,0 L236,0 L210,1080 L0,1080 Z" fill="url(#mossLeft)"/>
+  <path d="M1920,0 L1684,0 L1710,1080 L1920,1080 Z" fill="url(#mossRight)"/>
+  <g fill="none" stroke="#6ee7b7" stroke-width="5" opacity="0.28">
+    <path d="M136,120 C82,260 174,360 118,520 C70,660 158,760 98,940"/>
+    <path d="M1786,120 C1842,260 1748,360 1806,520 C1856,660 1768,760 1828,940"/>
+  </g>
+  <g fill="#22d3ee" opacity="0.4">
+    <circle cx="144" cy="394" r="5"/>
+    <circle cx="110" cy="696" r="4"/>
+    <circle cx="1798" cy="420" r="5"/>
+    <circle cx="1830" cy="716" r="4"/>
+    <circle cx="318" cy="564" r="3"/>
+    <circle cx="1602" cy="564" r="3"/>
+  </g>
+  <g fill="#0f2b20" opacity="0.68">
+    <path d="M256,780 C350,714 420,742 500,676 C450,798 342,806 256,780"/>
+    <path d="M1664,782 C1570,714 1500,742 1420,676 C1470,798 1578,806 1664,782"/>
+  </g>
+  <rect width="1920" height="1080" fill="url(#plantGlow)" pointer-events="none"/>
+</svg>

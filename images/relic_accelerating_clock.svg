@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Accelerating Clock">
+  <circle cx="64" cy="66" r="44" fill="#e0f2fe" stroke="#075985" stroke-width="6"/>
+  <circle cx="64" cy="66" r="32" fill="#f8fafc" stroke="#38bdf8" stroke-width="4"/>
+  <path d="M64 66V42m0 24l19 13" stroke="#0f172a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M43 14h42" stroke="#075985" stroke-width="7" stroke-linecap="round"/>
+  <path d="M38 104l-9 12m61-12l9 12" stroke="#075985" stroke-width="6" stroke-linecap="round"/>
+  <path d="M93 39l15-9m-73 9l-15-9" stroke="#f97316" stroke-width="5" stroke-linecap="round"/>
+</svg>

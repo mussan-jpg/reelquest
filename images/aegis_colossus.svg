@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>aegis_colossus</title>
+  <path d="M22 112 L35 42 L64 17 L93 42 L106 112 Z" fill="#475569"/>
+  <path d="M64 17 L91 42 V71 C91 93 81 108 64 119 C47 108 37 93 37 71 V42 Z" fill="#94a3b8"/>
+  <path d="M64 31 L80 45 V70 C80 85 74 96 64 104 C54 96 48 85 48 70 V45 Z" fill="#e2e8f0" opacity=".45"/>
+  <path d="M64 37 V100 M49 67 H79" stroke="#334155" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="52" cy="54" r="4" fill="#0f172a"/>
+  <circle cx="76" cy="54" r="4" fill="#0f172a"/>
+  <path d="M32 112 H96" stroke="#334155" stroke-width="8" stroke-linecap="round"/>
+  <path d="M24 69 H10 M104 69 H118" stroke="#64748b" stroke-width="9" stroke-linecap="round"/>
+</svg>

@@ -1,6 +1,6 @@
 // screens/characterSelectScreen.js
 import { masterCharacters } from '../data/characters/index.js';
-import { formatCharacterTypeLabel, formatSpeciesLabel, getCharacterRarity, getCharacterRarityClass, getCharacterType, getSpeciesTooltip, showCharacterDetail } from './shared.js';
+import { createCharacterCard, getCharacterRarity } from './shared.js';
 import { getOccupiedSlots, getSlotCost, PARTY_SLOT_LIMIT } from '../partySlots.js';
 
 let selectedPlayerIds = [];
@@ -43,32 +43,14 @@ export function setupCharacterSelection(onStart) {
         const charData = masterCharacters.find(c => c.id === id);
         if (!charData) return;
 
-        const card = document.createElement('div');
-        card.className = `candidate-card ${getCharacterRarityClass(charData)}`;
-        card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
-        card.style.transition = 'all 0.2s ease';
         const rarity = getCharacterRarity(charData);
         const stars = '★'.repeat(Math.max(1, Math.min(6, rarity)));
-        const slotCost = getSlotCost(charData);
-        const characterType = getCharacterType(charData);
-
-        card.innerHTML = `
-            <div class="candidate-img" style="cursor: pointer;" data-tooltip="右クリックで詳細表示">
-                <img src="${charData.image}" alt="${charData.name}" style="width: 100%; height: 100%; object-fit: contain;">
-            </div>
-            <div class="candidate-name party-select-card-name">${charData.name}</div>
-            <div class="party-select-card-stars">${stars}</div>
-            <div class="library-card-species party-select-card-species" data-tooltip="${getSpeciesTooltip(charData)}">${formatSpeciesLabel(charData)}</div>
-            <div class="library-card-type party-select-card-type ${characterType.className}">${formatCharacterTypeLabel(characterType)}</div>
-            ${slotCost > 1 ? `<div class="slot-cost-badge">${slotCost}枠</div>` : ''}
-        `;
-
-        const imgArea = card.querySelector('.candidate-img');
-        imgArea.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            showCharacterDetail(id);
+        const card = createCharacterCard(charData, {
+            starsHtml: `<div class="party-select-card-stars">${stars}</div>`
         });
+        card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
+        card.style.transition = 'all 0.2s ease';
+        const slotCost = getSlotCost(charData);
 
         card.addEventListener('click', () => {
             if (card.classList.contains('selected')) {

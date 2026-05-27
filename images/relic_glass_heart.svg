@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Glass Heart">
+  <defs>
+    <linearGradient id="glass" x1="24" y1="16" x2="104" y2="110">
+      <stop offset="0%" stop-color="#eff6ff"/>
+      <stop offset="45%" stop-color="#93c5fd"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <path d="M64 112C35 88 20 67 20 45c0-15 10-26 24-26 9 0 16 5 20 13 4-8 11-13 20-13 14 0 24 11 24 26 0 22-15 43-44 67z" fill="url(#glass)" stroke="#1e3a8a" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M61 27l-8 27 18-8-10 39 23-51-18 7z" fill="#ffffff" opacity=".65" stroke="#bfdbfe" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M39 39c4-6 10-8 17-6" fill="none" stroke="#f8fafc" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+</svg>

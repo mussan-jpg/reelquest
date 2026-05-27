@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>tide_hunter</title>
+  <path d="M64 18 C87 34 101 54 96 80 C92 103 76 115 61 115 C45 111 30 96 29 76 C27 52 42 33 64 18 Z" fill="#0284c7"/>
+  <path d="M35 59 C18 50 18 32 30 22 C48 28 53 43 47 61 Z" fill="#7dd3fc"/>
+  <path d="M89 57 C107 48 111 32 100 21 C82 26 75 42 80 61 Z" fill="#0369a1"/>
+  <path d="M33 95 C20 101 14 113 16 124" stroke="#075985" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M87 27 L116 17 M110 14 L119 17 L112 24" stroke="#e0f2fe" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="54" cy="72" r="5" fill="white"/>
+  <circle cx="76" cy="70" r="5" fill="white"/>
+  <circle cx="54" cy="72" r="2.5" fill="#0f172a"/>
+  <circle cx="76" cy="70" r="2.5" fill="#0f172a"/>
+  <path d="M55 88 Q66 94 78 86" stroke="#e0f2fe" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>

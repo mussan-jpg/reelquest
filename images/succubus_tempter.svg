@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="succubusDress" x1="34" y1="24" x2="94" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f9a8d4"/>
+      <stop offset=".45" stop-color="#db2777"/>
+      <stop offset="1" stop-color="#831843"/>
+    </linearGradient>
+  </defs>
+  <path d="M46 48 L33 23 L58 38 Z M82 48 L95 23 L70 38 Z" fill="#831843" stroke="#500724" stroke-width="4"/>
+  <path d="M40 108 C42 82 44 55 54 40 C59 31 70 31 76 40 C86 55 88 82 88 108 Z" fill="url(#succubusDress)" stroke="#500724" stroke-width="4"/>
+  <path d="M47 53 C51 37 77 37 81 53 C73 62 55 62 47 53 Z" fill="#fbcfe8" stroke="#831843" stroke-width="3"/>
+  <circle cx="56" cy="64" r="6" fill="#fdf2f8"/>
+  <circle cx="73" cy="64" r="6" fill="#fdf2f8"/>
+  <path d="M54 64 L59 67 M75 64 L70 67" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M57 80 Q64 87 72 80" stroke="#fdf2f8" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M36 71 C22 76 23 100 42 101" stroke="#9d174d" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M92 71 C106 76 105 100 86 101" stroke="#9d174d" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M64 98 C43 84 45 65 57 64 C62 64 64 69 64 69 C64 69 66 64 71 64 C83 65 85 84 64 98 Z" fill="#f9a8d4" stroke="#831843" stroke-width="3"/>
+  <path d="M87 104 C105 106 102 121 89 116" stroke="#500724" stroke-width="6" fill="none" stroke-linecap="round"/>
+</svg>

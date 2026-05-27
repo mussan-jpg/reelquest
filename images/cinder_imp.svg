@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>cinder_imp</title>
+  <path d="M40 45 L27 18 L57 35 Z" fill="#7f1d1d"/>
+  <path d="M88 45 L101 18 L71 35 Z" fill="#7f1d1d"/>
+  <path d="M45 35 C47 16 59 14 64 30 C70 10 85 16 81 38 C95 44 103 56 102 73 C100 96 84 111 64 111 C43 111 27 96 27 73 C27 56 33 44 45 35 Z" fill="#f97316"/>
+  <path d="M56 28 C60 16 67 16 68 31 C73 22 82 26 78 40 C70 36 62 35 54 39 C51 35 52 31 56 28 Z" fill="#fde047"/>
+  <circle cx="52" cy="64" r="5" fill="#fff7ed"/>
+  <circle cx="76" cy="64" r="5" fill="#fff7ed"/>
+  <path d="M48 55 L58 59 M80 55 L70 59" stroke="#7c2d12" stroke-width="3" stroke-linecap="round"/>
+  <path d="M54 84 Q64 91 75 84" stroke="#7c2d12" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M91 86 C111 83 116 98 104 107" stroke="#7f1d1d" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M104 106 L113 96 L116 111 Z" fill="#f97316"/>
+</svg>

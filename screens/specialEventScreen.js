@@ -1,5 +1,6 @@
 import { masterCharacters } from '../data/characters/index.js';
-import { createCharacterById, getOccupiedSlots, getSlotCost, PARTY_SLOT_LIMIT } from '../partySlots.js';
+import { createCharacterById, getLimitBreakLevel, getOccupiedSlots, getSlotCost, PARTY_SLOT_LIMIT } from '../partySlots.js';
+import { getCharacterRarity } from './shared.js';
 
 export const FUSION_RULES = [
     {
@@ -19,9 +20,11 @@ export const FUSION_RULES = [
     },
     {
         resultId: 'char_slime_emperor',
-        sourceSpecies: 'slime',
-        requiredSlots: 3,
-        message: 'スライム族が揃い、王冠の形にぷるぷる震えている。スライムエンペラーに合体させますか？'
+        sourceConditions: [
+            { species: 'slime', limitBreak: true, label: '限界突破スライム族' },
+            { species: 'slime', minRarity: 4, label: '★4以上スライム' }
+        ],
+        message: '限界を超えたスライムと高位スライムが王冠の形にぷるぷる共鳴している。スライムエンペラーに合体させますか？'
     }
 ];
 
@@ -50,6 +53,37 @@ function hasSpeciesSources(party, rule) {
     return slots >= requiredSlots;
 }
 
+function matchesSourceCondition(char, condition) {
+    if (!char || char.id === condition.resultId) return false;
+    if (condition.species && char.species !== condition.species) return false;
+    if (condition.limitBreak && getLimitBreakLevel(char) <= 0) return false;
+    if (condition.minRarity && getCharacterRarity(char) < condition.minRarity) return false;
+    return true;
+}
+
+function getConditionSources(party, rule) {
+    if (!Array.isArray(rule.sourceConditions)) return null;
+    const selected = [];
+    const used = new Set();
+
+    for (const condition of rule.sourceConditions) {
+        const matchIndex = party.findIndex((char, index) => (
+            !used.has(index)
+            && char.id !== rule.resultId
+            && matchesSourceCondition(char, { ...condition, resultId: rule.resultId })
+        ));
+        if (matchIndex < 0) return null;
+        used.add(matchIndex);
+        selected.push({ char: party[matchIndex], index: matchIndex });
+    }
+
+    return selected;
+}
+
+function hasConditionSources(party, rule) {
+    return !!getConditionSources(party, rule);
+}
+
 function removeSources(party, sourceIds) {
     const remainingSources = [...sourceIds];
     return party.filter(char => {
@@ -73,14 +107,27 @@ function removeSpeciesSources(party, rule) {
     return { remainingParty, removedCharacters };
 }
 
+function removeConditionSources(party, rule) {
+    const sources = getConditionSources(party, rule);
+    if (!sources) return { remainingParty: party, removedCharacters: [] };
+    const removeIndexes = new Set(sources.map(source => source.index));
+    return {
+        remainingParty: party.filter((_, index) => !removeIndexes.has(index)),
+        removedCharacters: sources.map(source => source.char)
+    };
+}
+
 function getCharacterName(id) {
     return masterCharacters.find(char => char.id === id)?.name || id;
 }
 
 export function findFusionRuleForParty(party) {
-    return FUSION_RULES.find(item => item.sourceSpecies
-        ? hasSpeciesSources(party, item)
-        : hasAllSources(party, item.sourceIds));
+    return FUSION_RULES.find(item => {
+        if (item.sourceConditions) return hasConditionSources(party, item);
+        return item.sourceSpecies
+            ? hasSpeciesSources(party, item)
+            : hasAllSources(party, item.sourceIds);
+    });
 }
 
 export function buildFusionReplacement(party, rule) {
@@ -88,9 +135,14 @@ export function buildFusionReplacement(party, rule) {
     const resultData = masterCharacters.find(char => char.id === rule.resultId);
     if (!resultData) return null;
 
-    const fusionSources = rule.sourceSpecies
-        ? removeSpeciesSources(party, rule)
-        : { remainingParty: removeSources(party, rule.sourceIds), removedCharacters: rule.sourceIds.map(id => ({ name: getCharacterName(id) })) };
+    const fusionSources = rule.sourceConditions
+        ? removeConditionSources(party, rule)
+        : rule.sourceSpecies
+            ? removeSpeciesSources(party, rule)
+            : {
+                remainingParty: removeSources(party, rule.sourceIds),
+                removedCharacters: rule.sourceIds.map(id => party.find(char => char.id === id) || { id, name: getCharacterName(id) })
+            };
     const remainingParty = fusionSources.remainingParty;
     if (getOccupiedSlots(remainingParty) + getSlotCost(resultData) > PARTY_SLOT_LIMIT) return null;
 
@@ -111,6 +163,7 @@ function offerFusion(gameState) {
 
     const result = createCharacterById(rule.resultId);
     if (!result) return false;
+    result.sourceIds = replacement.removedCharacters.map(char => char.id).filter(Boolean);
 
     gameState.players = [...replacement.remainingParty, result];
     window.alert(`${replacement.removedCharacters.map(char => char.name).join(' + ')} が合体し、${result.name} が仲間になった！`);
@@ -125,6 +178,7 @@ function offerFloorEvent(gameState, nextFloor) {
 
     const result = createCharacterById(rule.resultId);
     if (!result) return false;
+    result.sourceIds = (gameState.players || []).map(char => char.id);
     if (!window.confirm(rule.message)) return false;
 
     gameState.players = [result];

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>abyss_archfiend</title>
+  <path d="M34 67 C13 50 13 29 31 18 C49 30 50 49 42 68 Z" fill="#312e81"/>
+  <path d="M94 67 C115 50 115 29 97 18 C79 30 78 49 86 68 Z" fill="#312e81"/>
+  <path d="M43 43 L30 12 L61 34 Z" fill="#0f172a"/>
+  <path d="M85 43 L98 12 L67 34 Z" fill="#0f172a"/>
+  <circle cx="64" cy="68" r="35" fill="#4c1d95"/>
+  <path d="M43 69 C50 61 56 61 61 69" stroke="#f43f5e" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M67 69 C74 61 80 61 85 69" stroke="#f43f5e" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M53 90 Q64 99 77 90" stroke="#0f172a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M64 31 L70 48 H58 Z" fill="#a855f7"/>
+  <circle cx="64" cy="78" r="7" fill="#111827" opacity=".35"/>
+</svg>

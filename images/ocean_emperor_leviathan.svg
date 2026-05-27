@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="leviathanBody" x1="17" y1="23" x2="112" y2="111" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#cffafe"/>
+      <stop offset=".48" stop-color="#0891b2"/>
+      <stop offset="1" stop-color="#075985"/>
+    </linearGradient>
+  </defs>
+  <path d="M19 84 C31 48 64 35 96 48 C82 56 74 72 76 98 C54 104 32 99 19 84 Z" fill="url(#leviathanBody)" stroke="#075985" stroke-width="4"/>
+  <path d="M48 47 C55 28 87 28 97 48 C93 65 59 67 48 47 Z" fill="#67e8f9" stroke="#075985" stroke-width="4"/>
+  <path d="M55 41 L50 20 L68 34 Z M88 40 L101 22 L99 48 Z" fill="#e0f2fe" stroke="#075985" stroke-width="3"/>
+  <circle cx="64" cy="53" r="5.5" fill="#f8fafc"/>
+  <circle cx="84" cy="53" r="5.5" fill="#f8fafc"/>
+  <circle cx="64" cy="53" r="2.4" fill="#0f172a"/>
+  <circle cx="84" cy="53" r="2.4" fill="#0f172a"/>
+  <path d="M66 70 Q76 78 87 69" stroke="#e0f2fe" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M65 18 V112 M42 23 V51 C42 65 65 65 65 51 M88 23 V51 C88 65 65 65 65 51" stroke="#bae6fd" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M53 112 H77" stroke="#e0f2fe" stroke-width="8" stroke-linecap="round"/>
+  <path d="M26 75 C13 80 11 101 28 108 M101 75 C116 80 117 101 99 109" stroke="#38bdf8" stroke-width="7" fill="none" stroke-linecap="round"/>
+</svg>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/battle.css">
     <title>リールクエスト</title>
 </head>
 <body>
@@ -15,25 +16,34 @@
         <div id="app-version" class="app-version"></div>
         <div class="menu-buttons">
             <button class="menu-btn mode-normal" onclick="selectMode('rush')">
-                <div class="btn-main">👑 6階層の試練 (モード1)</div>
-                <div class="btn-sub">候補から3枠ぶん選び、6連戦を勝ち抜け！</div>
+                <div class="btn-main">👑 7階層の試練 (モード1)</div>
+                <div id="rush-slot-description" class="btn-sub">候補から設定枠ぶん選び、7階まで勝ち抜け！</div>
             </button>
-            <button class="menu-btn mode-boss" onclick="alert('今後のアップデートをお楽しみに！')">
-                <div class="btn-main">🔒 モード2 (Coming Soon)</div>
+            <button id="ranked-menu-btn" class="menu-btn mode-boss" onclick="selectMode('ranked')" disabled aria-disabled="true">
+                <div class="btn-main">🏆 ランクマッチ (モード2)</div>
+                <div class="btn-sub">サーバ側実装準備中</div>
             </button>
             <button class="menu-btn mode-endless" onclick="selectMode('custom')">
                 <div class="btn-main">⚔️ カスタムバトル (モード3)</div>
                 <div class="btn-sub">好きな味方と敵を選んで1戦だけ戦う</div>
             </button>
             <button class="menu-btn mode-library" onclick="openLibrary()">
-                <div class="btn-main">📚 キャラ図鑑</div>
-                <div class="btn-sub">全キャラのステータスを確認</div>
+                <div class="btn-main">📚 図鑑</div>
+                <div class="btn-sub">キャラとレリックの情報を確認</div>
+            </button>
+            <button class="menu-btn mode-statistics" onclick="openStatistics()">
+                <div class="btn-main">📈 統計</div>
+                <div class="btn-sub">勝率・相方・階層別ランキングを確認</div>
+            </button>
+            <button id="maintenance-menu-btn" class="menu-btn mode-maintenance hidden" onclick="openMaintenanceGate()">
+                <div class="btn-main">🛠️ 管理メンテナンス</div>
+                <div class="btn-sub">管理者用のデータ操作</div>
             </button>
         </div>
     </div>
 
     <div id="char-select-screen" class="menu-container hidden">
-        <h1 class="menu-title">👥 パーティ結成（3枠選択） 👥</h1>
+        <h1 id="char-select-title" class="menu-title">👥 パーティ結成（設定枠選択） 👥</h1>
         <div id="floor-indicator" style="font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #d63031;"></div>
         <div id="candidate-list" class="candidate-grid"></div>
         <button id="start-adventure-btn" class="menu-btn mode-normal" style="width: 300px; margin-top: 30px;" disabled>
@@ -42,16 +52,188 @@
     </div>
 
     <div id="library-screen" class="menu-container hidden">
-        <h1 class="menu-title">📚 キャラ図鑑</h1>
-        <div id="library-list" class="library-list"></div>
+        <h1 class="menu-title">📚 図鑑</h1>
+        <div class="library-layout">
+            <aside id="library-sort-controls" class="library-sort-controls"></aside>
+            <div id="library-list" class="library-list"></div>
+            <aside id="library-jump-controls" class="library-jump-controls"></aside>
+        </div>
+    </div>
+
+    <div id="statistics-screen" class="menu-container hidden">
+        <h1 class="menu-title">📈 統計</h1>
+        <div class="statistics-workspace">
+            <aside class="statistics-controls statistics-controls--species" aria-label="種族フィルター">
+                <section class="statistics-filter-group">
+                    <h2>種族</h2>
+                    <p class="statistics-filter-hint">キャラランキング用 / 右クリックで単独選択</p>
+                    <div id="statistics-character-species-filter" class="statistics-filter-buttons"></div>
+                </section>
+            </aside>
+            <aside class="statistics-controls statistics-controls--left" aria-label="主要フィルター">
+                <section class="statistics-filter-group">
+                    <h2>モード</h2>
+                    <div id="statistics-mode-filter" class="statistics-filter-buttons"></div>
+                </section>
+                <section class="statistics-filter-group">
+                    <h2>階層</h2>
+                    <div id="statistics-floor-filter" class="statistics-filter-buttons"></div>
+                </section>
+                <section class="statistics-filter-group">
+                    <h2>陣営</h2>
+                    <div id="statistics-side-filter" class="statistics-filter-buttons"></div>
+                </section>
+            </aside>
+            <main class="statistics-main">
+                <div class="statistics-layout">
+                    <section class="statistics-panel">
+                        <div class="statistics-panel-head">
+                            <h2 id="statistics-ranking-title">キャラランキング</h2>
+                            <div class="statistics-panel-head-actions">
+                                <div id="statistics-view-filter" class="statistics-filter-buttons statistics-view-filter"></div>
+                                <div class="statistics-copy-action">
+                                    <button type="button" id="statistics-copy-cursor-btn" class="statistics-copy-btn" title="現在の条件・表示中ランキングをCursor用にコピー">
+                                        Cursor用にコピー
+                                    </button>
+                                    <span id="statistics-copy-status" class="statistics-copy-status" aria-live="polite"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="statistics-set-filter-panel" class="statistics-set-filter-panel hidden"></div>
+                        <div id="statistics-ranking" class="statistics-list"></div>
+                    </section>
+                </div>
+                <div id="statistics-character-view" class="statistics-character-view hidden">
+                    <div id="statistics-character-detail"></div>
+                </div>
+                <div id="statistics-set-species-characters" class="statistics-set-species-characters hidden"></div>
+            </main>
+            <aside class="statistics-controls statistics-controls--right" aria-label="補助フィルター">
+                <section class="statistics-filter-group">
+                    <h2>最低戦闘数</h2>
+                    <div id="statistics-min-uses-presets" class="statistics-filter-buttons statistics-min-uses-presets"></div>
+                    <label class="statistics-min-uses-control">
+                        <input id="statistics-min-uses-input" type="number" min="0" step="1" value="0">
+                        <span>自由入力 / 戦以上</span>
+                    </label>
+                </section>
+                <section class="statistics-filter-group">
+                    <h2>バランス</h2>
+                    <div id="statistics-balance-filter" class="statistics-filter-buttons"></div>
+                </section>
+                <section class="statistics-filter-group">
+                    <h2>グレード</h2>
+                    <p class="statistics-filter-hint">左クリックで複数選択 / 右クリックで単独選択</p>
+                    <div id="statistics-grade-filter" class="statistics-filter-buttons"></div>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <div id="maintenance-screen" class="menu-container hidden">
+        <h1 class="menu-title">🛠️ 管理メンテナンス</h1>
+        <div class="maintenance-panel">
+            <p class="maintenance-note">
+                管理者用の操作です。公開環境ではSupabase側のメンテナンス用パスコード設定も必ず行ってください。
+            </p>
+            <section class="maintenance-preview-section">
+                <div class="maintenance-section-head">
+                    <strong>戦闘背景確認</strong>
+                    <small>指定した階層の戦闘画面へ直接移動します</small>
+                </div>
+                <div class="maintenance-floor-preview-grid">
+                    <button type="button" onclick="previewMaintenanceBattleFloor(1)">1F</button>
+                    <button type="button" onclick="previewMaintenanceBattleFloor(2)">2F</button>
+                    <button type="button" onclick="previewMaintenanceBattleFloor(3)">3F</button>
+                    <button type="button" onclick="previewMaintenanceBattleFloor(4)">4F</button>
+                    <button type="button" onclick="previewMaintenanceBattleFloor(5)">5F</button>
+                    <button type="button" onclick="previewMaintenanceBattleFloor(6)">6F</button>
+                    <button type="button" onclick="previewMaintenanceBattleFloor(7)">7F</button>
+                </div>
+            </section>
+            <section class="maintenance-preview-section">
+                <div class="maintenance-section-head">
+                    <strong>画面レイアウト確認</strong>
+                    <small>リザルト・入れ替え画面をサンプル状態で確認します</small>
+                </div>
+                <div class="maintenance-screen-preview-grid">
+                    <button type="button" onclick="previewMaintenanceResultScreen()">リザルト</button>
+                    <button type="button" onclick="previewMaintenanceReplacementScreen()">入れ替え</button>
+                </div>
+            </section>
+            <section class="maintenance-preview-section maintenance-status-test-section">
+                <div class="maintenance-section-head">
+                    <strong>状態異常VFX確認</strong>
+                    <small>バッジ・ポップアップ・行動不能演出を確認します</small>
+                </div>
+                <div id="maintenance-status-test-card" class="maintenance-status-test-card"></div>
+                <div id="maintenance-status-test-controls" class="maintenance-status-test-controls"></div>
+            </section>
+            <label class="maintenance-input-label">
+                統計データ生成件数
+                <input id="seed-stats-count-input" type="number" min="1" max="100000" step="1000" value="50000">
+            </label>
+            <section class="maintenance-preview-section maintenance-seed-filter-section">
+                <div class="maintenance-section-head">
+                    <strong>統計生成フィルター</strong>
+                    <small>空欄は全候補。例：グレード2のみ / TIER3構成のみ</small>
+                </div>
+                <div class="maintenance-seed-filter-grid">
+                    <label class="maintenance-input-label">
+                        グレード
+                        <select id="seed-stats-grade-filter"></select>
+                    </label>
+                    <label class="maintenance-input-label">
+                        種族
+                        <select id="seed-stats-species-filter"></select>
+                    </label>
+                    <label class="maintenance-input-label">
+                        種族TIER
+                        <select id="seed-stats-tier-filter"></select>
+                    </label>
+                </div>
+            </section>
+            <button id="seed-stats-btn" class="menu-btn mode-seed-stats maintenance-action-btn" onclick="generateSeedStats()">
+                <div class="btn-main">🧪 統計データ生成</div>
+                <div class="btn-sub">指定件数分のモード1統計を追加</div>
+            </button>
+            <button id="seed-custom-stats-btn" class="menu-btn mode-seed-stats maintenance-action-btn" onclick="generateCustomSeedStats()">
+                <div class="btn-main">🧪 カスタム統計データ生成</div>
+                <div class="btn-sub">ランダム編成＋両陣営レリック1個で追加</div>
+            </button>
+            <button class="menu-btn mode-maintenance-danger maintenance-action-btn" onclick="clearSupabaseMaintenanceData()">
+                <div class="btn-main">🗑️ Supabaseデータ全削除</div>
+                <div class="btn-sub">生ログ・ランク・集計テーブルを空にする</div>
+            </button>
+        </div>
+    </div>
+
+    <div id="ranked-screen" class="menu-container hidden">
+        <h1 class="menu-title">🏆 ランクマッチ</h1>
+        <div id="ranked-profile" class="ranked-profile"></div>
+        <div class="custom-battle-board ranked-battle-board">
+            <section class="custom-battle-column">
+                <h2>🛡️ 登録編成 <span id="ranked-player-slots">0 / 4</span></h2>
+                <div id="ranked-player-picks" class="custom-pick-list"></div>
+            </section>
+            <section class="custom-battle-pool">
+                <div id="ranked-character-tabs" class="custom-grade-tabs"></div>
+                <div id="ranked-character-list" class="candidate-grid custom-candidate-grid"></div>
+            </section>
+        </div>
+        <div class="ranked-action-row">
+            <button id="submit-ranked-party-btn" class="menu-btn mode-boss">この編成を登録</button>
+            <button id="start-ranked-battle-btn" class="menu-btn mode-normal" disabled>ランク戦開始</button>
+        </div>
     </div>
 
     <div id="custom-select-screen" class="menu-container hidden">
         <h1 class="menu-title">⚔️ カスタムバトル</h1>
-        <div class="custom-battle-description">味方3枠・敵3枠を自由に選んで戦えます</div>
+        <div id="custom-battle-description" class="custom-battle-description">味方設定枠・敵設定枠を自由に選んで戦えます</div>
         <div class="custom-battle-board">
             <section class="custom-battle-column">
-                <h2>🛡️ 味方を選択 <span id="custom-player-slots">0 / 3</span></h2>
+                <h2>🛡️ 味方を選択 <span id="custom-player-slots">0 / 4</span></h2>
+                <button id="custom-random-player-btn" class="custom-random-btn custom-random-btn--player" type="button">ランダム味方編成</button>
                 <div id="custom-player-picks" class="custom-pick-list"></div>
             </section>
             <section class="custom-battle-pool">
@@ -60,10 +242,11 @@
                     <button id="custom-pick-enemy-btn" class="custom-pick-target" type="button">敵にピック</button>
                 </div>
                 <div id="custom-character-tabs" class="custom-grade-tabs"></div>
+                <div id="custom-species-filter" class="custom-species-filter"></div>
                 <div id="custom-character-list" class="candidate-grid custom-candidate-grid"></div>
             </section>
             <section class="custom-battle-column">
-                <h2>⚔️ 敵を選択 <span id="custom-enemy-slots">0 / 3</span></h2>
+                <h2>⚔️ 敵を選択 <span id="custom-enemy-slots">0 / 4</span></h2>
                 <button id="custom-random-enemy-btn" class="custom-random-btn" type="button">ランダム敵編成</button>
                 <div id="custom-enemy-picks" class="custom-pick-list"></div>
             </section>
@@ -75,21 +258,49 @@
 
     <div id="replacement-screen" class="menu-container hidden">
         <h1 class="menu-title">🔄 階層クリア後のメンバー入れ替え</h1>
-        <div id="replacement-description" style="max-width: 700px; text-align: center; margin-bottom: 20px; color: #2d3436; line-height: 1.6;"></div>
-        <div id="next-enemy-preview" class="next-enemy-preview"></div>
-        <div id="replacement-candidate-list" class="candidate-grid" style="grid-template-columns: repeat(4, 120px);"></div>
-        <div style="display:flex; flex-direction:column; align-items:center; width:100%; max-width:760px; gap:10px; margin-top:20px;">
-            <div style="font-weight:bold;">現在のパーティ (1体を選択して新しい仲間と交代)</div>
-            <div id="replacement-party-list" class="candidate-grid" style="grid-template-columns: repeat(3, 120px);"></div>
+        <div id="replacement-description" class="replacement-description"></div>
+        <div class="replacement-workspace">
+            <section class="replacement-panel replacement-panel--enemy">
+                <div id="next-enemy-preview" class="next-enemy-preview"></div>
+            </section>
+            <section class="replacement-panel replacement-panel--candidate">
+                <div class="replacement-section-head">
+                    <div>
+                        <strong>次階層パーティを選ぶ</strong>
+                        <small id="replacement-source-limit">現在メンバー・合成素材・新候補から合計設定枠</small>
+                    </div>
+                    <span class="replacement-section-badge">選択エリア</span>
+                </div>
+                <div id="replacement-candidate-list" class="candidate-grid"></div>
+            </section>
+            <section class="replacement-panel replacement-panel--current">
+                <div class="replacement-section-head">
+                    <div>
+                        <strong>現在のパーティ</strong>
+                        <small>確認用。下の候補カードから次階層パーティを選びます</small>
+                    </div>
+                    <span class="replacement-section-badge replacement-section-badge--muted">確認</span>
+                </div>
+                <div id="replacement-party-list" class="replacement-current-list"></div>
+            </section>
         </div>
-        <div style="display:flex; gap:12px; margin-top: 30px; flex-wrap: wrap; justify-content: center;">
-            <button id="replacement-confirm-btn" class="menu-btn mode-normal" style="width: 240px;" disabled>
-                メンバーを入れ替える
+        <div class="replacement-action-row">
+            <button id="replacement-result-back-btn" class="menu-btn replacement-result-back-btn">
+                リザルトに戻る
             </button>
-            <button id="replacement-skip-btn" class="menu-btn replacement-skip-btn" style="width: 240px;">
+            <button id="replacement-confirm-btn" class="menu-btn mode-normal" disabled>
+                この編成で次へ
+            </button>
+            <button id="replacement-skip-btn" class="menu-btn replacement-skip-btn">
                 入れ替えずに次へ
             </button>
         </div>
+    </div>
+
+    <div id="relic-screen" class="menu-container hidden">
+        <h1 class="menu-title">レリック獲得</h1>
+        <div id="relic-description" class="relic-description"></div>
+        <div id="relic-choice-list" class="relic-choice-list"></div>
     </div>
 
     <div id="result-screen" class="menu-container hidden">
@@ -110,49 +321,82 @@
             <button id="result-continue-btn" class="menu-btn mode-normal result-continue-btn">
                 次へ
             </button>
-            <button id="result-battle-stats-button" class="icon-btn battle-stats-toggle" title="ランキング表示" aria-label="ランキング表示" onclick="toggleBattleStatsPanel()">📊</button>
             <button id="result-full-log-button" class="icon-btn full-log-toggle" title="全ログ表示" aria-label="全ログ表示" onclick="toggleFullLog()">📜</button>
         </div>
     </div>
 
     <div id="battle-screen" class="hidden">
-        <div id="floor-badge" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 12px; background: linear-gradient(135deg, #fff9e6, #fffbf0); border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <div style="font-size: 1.1em; font-weight: bold; color: #d68910;">🏰 現在の階層: <span id="floor-text">1 / 6</span> F</div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div id="next-action-icon" style="display:flex; align-items:center; gap:8px; min-width:180px; justify-content:center;"></div>
+        <div id="floor-badge" class="battle-top-bar">
+            <div class="battle-floor-status">
+                <span class="battle-floor-label">FLOOR</span>
+                <strong><span id="floor-text">1 / 7</span> F</strong>
+                <span class="battle-turn-status" aria-label="現在ターン">
+                    <span class="battle-turn-label">TURN</span>
+                    <strong id="turn-text">0</strong>
+                </span>
+            </div>
+            <div class="battle-order-status">
+                <span class="battle-order-label">行動順</span>
+                <div id="next-action-icon"></div>
             </div>
         </div>
+        <div id="turn-banner" class="turn-banner" aria-live="polite" aria-hidden="true"></div>
 
-        <div class="battle-field" id="game-container"></div>
+        <div class="battle-arena-row">
+            <aside class="battle-side-rail battle-side-rail--left" aria-hidden="true"></aside>
+            <div class="battle-field" id="game-container"></div>
+            <div id="battle-stats-panel" class="battle-stats-panel"></div>
+        </div>
         
         <div class="control-panel">
-            <div class="log-toolbar" style="display:flex; align-items:center; justify-content:center; margin-bottom: 10px; width: 100%;">
+            <div class="battle-status-console" aria-label="戦闘状況">
+                <span class="battle-status-console-label">STATUS</span>
                 <div id="log"></div>
+                <button id="full-log-button" class="icon-btn full-log-toggle" title="全ログ表示" aria-label="全ログ表示" onclick="toggleFullLog()">履歴</button>
             </div>
             <div class="action-row">
                 <button id="atk-btn" onclick="gameTurn()">バトル開始！</button>
                 <button id="end-turn-btn" class="menu-btn small-btn" onclick="advanceToTurnEnd()">このターン終了まで進める</button>
-                <button id="battle-stats-button" class="icon-btn battle-stats-toggle" title="ランキング表示" aria-label="ランキング表示" onclick="toggleBattleStatsPanel()">📊</button>
-                <button id="full-log-button" class="icon-btn full-log-toggle" title="全ログ表示" aria-label="全ログ表示" onclick="toggleFullLog()">📜</button>
+                <button id="maintenance-return-btn" class="maintenance-return-btn" type="button" onclick="returnToMaintenanceFromPreview()">管理画面へ戻る</button>
             </div>
-            <div class="debug-container">
-                <label class="debug-label">
-                    <input type="checkbox" id="debug-mode"> 🛠️ デバッグモード（行動コマンドを手動選択）
-                </label>
-                <label class="debug-label">
-                    ⚡ バトル速度
+            <div class="battle-utility-row">
+                <label class="debug-speed-control">
+                    <span class="debug-speed-label">バトル速度</span>
                     <span id="battle-speed" class="battle-speed-toggle" data-speed="1">
-                        <button type="button" class="battle-speed-btn active" data-speed="1" onclick="setBattleSpeed(1)">➤</button>
-                        <button type="button" class="battle-speed-btn" data-speed="3" onclick="setBattleSpeed(3)">➤➤</button>
-                        <button type="button" class="battle-speed-btn" data-speed="10" onclick="setBattleSpeed(10)">➤➤➤</button>
+                        <button type="button" class="battle-speed-btn active" data-speed="1" onclick="setBattleSpeed(1)">標準</button>
+                        <button type="button" class="battle-speed-btn" data-speed="3" onclick="setBattleSpeed(3)">高速</button>
+                        <button type="button" class="battle-speed-btn" data-speed="10" onclick="setBattleSpeed(10)">最速</button>
                     </span>
                 </label>
+                <div class="debug-container" data-local-only="true">
+                    <label class="debug-switch">
+                        <input type="checkbox" id="debug-mode">
+                        <span class="debug-switch-track" aria-hidden="true"></span>
+                        <span class="debug-copy">
+                            <strong>DEBUG MODE</strong>
+                            <small>行動コマンドを手動選択</small>
+                        </span>
+                    </label>
+                    <button id="debug-random-command-btn" class="debug-random-command-btn" type="button" onclick="executeRandomDebugCommand()" disabled>
+                        待機中のみ実行
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="full-log-panel" class="full-log-panel hidden"><div id="full-log-content"></div></div>
-    <div id="battle-stats-panel" class="battle-stats-panel hidden"></div>
+    <div id="full-log-panel" class="full-log-panel hidden">
+        <div class="full-log-dialog" role="dialog" aria-modal="true" aria-labelledby="full-log-title">
+            <div class="full-log-header">
+                <div>
+                    <strong id="full-log-title">階層ログ</strong>
+                    <small>現在の階層分だけ表示</small>
+                </div>
+                <button id="full-log-copy-button" class="full-log-copy-button" type="button" onclick="copyFullLogToClipboard()">コピー</button>
+            </div>
+            <div id="full-log-content"></div>
+        </div>
+    </div>
 
     <div id="detail-modal" class="modal hidden">
         <div class="modal-content">

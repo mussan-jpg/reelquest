@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Rusted Greatsword">
+  <rect x="58" y="14" width="12" height="78" rx="4" fill="#a16207" stroke="#451a03" stroke-width="4"/>
+  <path d="M64 8l18 28-12 8H58l-12-8z" fill="#78716c" stroke="#292524" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M48 78h32v12H48z" fill="#92400e" stroke="#451a03" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M55 90h18l7 28H48z" fill="#78350f" stroke="#451a03" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M59 27l8 5m-6 19l7-4m-7 22l8 3" stroke="#f97316" stroke-width="4" stroke-linecap="round"/>
+</svg>

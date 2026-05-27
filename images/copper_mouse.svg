@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>copper_mouse</title>
+  <defs>
+    <linearGradient id="copperBody" x1="30" y1="34" x2="96" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fbbf24"/>
+      <stop offset="0.55" stop-color="#b45309"/>
+      <stop offset="1" stop-color="#78350f"/>
+    </linearGradient>
+  </defs>
+  <path d="M34 63 C34 39 93 38 96 63 C100 94 82 111 63 114 C45 110 31 91 34 63 Z" fill="url(#copperBody)"/>
+  <circle cx="39" cy="43" r="16" fill="#92400e"/>
+  <circle cx="88" cy="42" r="16" fill="#92400e"/>
+  <circle cx="39" cy="43" r="9" fill="#f59e0b" opacity=".72"/>
+  <circle cx="88" cy="42" r="9" fill="#f59e0b" opacity=".72"/>
+  <path d="M44 58 L28 51 M84 58 L101 51 M43 76 L24 78 M85 76 L104 78" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="53" cy="66" r="6" fill="#fff7ed"/>
+  <circle cx="76" cy="66" r="6" fill="#fff7ed"/>
+  <circle cx="53" cy="66" r="2.8" fill="#111827"/>
+  <circle cx="76" cy="66" r="2.8" fill="#111827"/>
+  <path d="M64 76 L57 88 H71 Z" fill="#111827"/>
+  <circle cx="65" cy="45" r="8" fill="#fcd34d"/>
+  <path d="M65 38 V52 M58 45 H72" stroke="#92400e" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M94 83 C111 84 119 96 119 110" stroke="#92400e" stroke-width="6" fill="none" stroke-linecap="round"/>
+</svg>

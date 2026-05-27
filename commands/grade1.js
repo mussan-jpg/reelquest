@@ -1,72 +1,64 @@
 // commands/grade1.js
 import { addStatus } from './status.js';
 
+function applyGradeDamage(commandId, actor, target, commandEffects) {
+    const damage = commandEffects[commandId].calcDamage(actor);
+    target.hp = Math.max(0, target.hp - damage);
+    return { type: 'damage', damage };
+}
+
 export const grade1Commands = {
     // =========================================================================
     // 🔰 グレード1専用・技
     // =========================================================================
     "atk_hinoko": {
         name: "火の粉",
-        desc: "敵単体に小さな魔法ダメージを与える。",
+        desc: "単体 / 魔法 INT1.2x",
         calcDamage: (attacker) => Math.floor(attacker.int * 1.2),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_hinoko"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-            return `🔥 ${attacker.name}の「火の粉」！ ${target.name}に ${dmg} の魔法ダメージ！`;
-        }
+        apply: ({ actor, target, commandEffects }) => applyGradeDamage("atk_hinoko", actor, target, commandEffects),
+        formatLog: (event) => `🔥 ${event.actor.name}の「火の粉」！ ${event.target.name}に ${event.damage} の魔法ダメージ！`
     },
     "atk_sumihaki": {
         name: "スミ吐き",
-        desc: "敵単体に小ダメージを与え、脱力を付与する。",
+        desc: "単体 / 物理 ATK0.8x + 脱力(ATK-30%、加算)",
         calcDamage: (attacker) => Math.floor(attacker.atk * 0.8),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_sumihaki"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-            let effectMsg = "";
-            if (addStatus(target, "weak")) {
-                effectMsg = ` さらに ${target.name} を【脱力】状態にした！`;
-            }
-            return `🦑 ${attacker.name}の「スミ吐き」！ ${target.name}に ${dmg} のダメージ！${effectMsg}`;
+        apply: ({ actor, target, commandEffects }) => {
+            const damage = commandEffects["atk_sumihaki"].calcDamage(actor);
+            target.hp = Math.max(0, target.hp - damage);
+            const addedStatus = addStatus(target, "weak");
+            return { type: 'damageStatus', damage, status: 'weak', addedStatus };
+        },
+        formatLog: (event) => {
+            const effectMsg = event.addedStatus ? ` さらに ${event.target.name}を【脱力:ATK-30%】状態にした！` : '';
+            return `🦑 ${event.actor.name}の「スミ吐き」！ ${event.target.name}に ${event.damage} のダメージ！${effectMsg}`;
         }
     },
     "atk_kamitsuki": {
         name: "かみつき",
-        desc: "敵単体に中ダメージを与える。",
+        desc: "単体 / 物理 ATK1.2x",
         calcDamage: (attacker) => Math.floor(attacker.atk * 1.2),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_kamitsuki"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-            return `🦴 ${attacker.name}の「かみつき」！ ${target.name}に ${dmg} のダメージ！`;
-        }
+        apply: ({ actor, target, commandEffects }) => applyGradeDamage("atk_kamitsuki", actor, target, commandEffects),
+        formatLog: (event) => `🦴 ${event.actor.name}の「かみつき」！ ${event.target.name}に ${event.damage} のダメージ！`
     },
     "atk_scream": {
         name: "叫び声",
-        desc: "敵単体に小さな魔法ダメージを与える。",
+        desc: "単体 / 魔法 INT1.0x",
         calcDamage: (attacker) => Math.floor(attacker.int * 1.0),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_scream"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-            return `📢 ${attacker.name}の「叫び声」！ ${target.name}に ${dmg} の魔法ダメージ！`;
-        }
+        apply: ({ actor, target, commandEffects }) => applyGradeDamage("atk_scream", actor, target, commandEffects),
+        formatLog: (event) => `📢 ${event.actor.name}の「叫び声」！ ${event.target.name}に ${event.damage} の魔法ダメージ！`
     },
     "atk_hikaki": {
         name: "ひっかき",
-        desc: "敵単体に小ダメージを与える。",
+        desc: "単体 / 物理 ATK1.1x",
         calcDamage: (attacker) => Math.floor(attacker.atk * 1.1),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_hikaki"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-            return `🐾 ${attacker.name}の「ひっかき」！ ${target.name}に ${dmg} のダメージ！`;
-        }
+        apply: ({ actor, target, commandEffects }) => applyGradeDamage("atk_hikaki", actor, target, commandEffects),
+        formatLog: (event) => `🐾 ${event.actor.name}の「ひっかき」！ ${event.target.name}に ${event.damage} のダメージ！`
     },
     "atk_taiatari": {
         name: "たいあたり",
-        desc: "敵単体に中ダメージを与える。",
+        desc: "単体 / 物理 ATK1.3x",
         calcDamage: (attacker) => Math.floor(attacker.atk * 1.3),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_taiatari"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-            return `💥 ${attacker.name}の「たいあたり」！ ${target.name}に ${dmg} のダメージ！`;
-        }
+        apply: ({ actor, target, commandEffects }) => applyGradeDamage("atk_taiatari", actor, target, commandEffects),
+        formatLog: (event) => `💥 ${event.actor.name}の「たいあたり」！ ${event.target.name}に ${event.damage} のダメージ！`
     }
 };

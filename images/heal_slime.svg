@@ -1,11 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <path d="M64 30 C30 30 20 70 20 90 C20 110 40 115 64 115 C88 115 108 110 108 90 C108 70 98 30 64 30 Z" fill="#2ecc71"/>
-  <ellipse cx="64" cy="40" rx="15" ry="5" fill="#7bed9f"/>
-  <rect x="58" y="50" width="12" height="30" rx="3" fill="#ffffff"/>
-  <rect x="49" y="59" width="30" height="12" rx="3" fill="#ffffff"/>
-  <circle cx="48" cy="78" r="6" fill="#fff"/>
-  <circle cx="48" cy="78" r="3" fill="#111"/>
-  <circle cx="80" cy="78" r="6" fill="#fff"/>
-  <circle cx="80" cy="78" r="3" fill="#111"/>
-  <path d="M56 96 Q64 102 72 96" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <title>heal slime</title>
+  <path d="M64 25 C35 25 21 60 23 87 C25 110 44 118 64 118 C84 118 103 110 105 87 C107 60 93 25 64 25 Z" fill="#22c55e"/>
+  <ellipse cx="55" cy="39" rx="20" ry="7" fill="#bbf7d0" opacity=".62"/>
+  <rect x="55" y="47" width="18" height="42" rx="5" fill="#f8fafc"/>
+  <rect x="45" y="59" width="38" height="18" rx="5" fill="#f8fafc"/>
+  <path d="M33 94 C41 100 49 104 60 105" stroke="#dcfce7" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/>
+  <path d="M95 94 C87 100 79 104 68 105" stroke="#dcfce7" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/>
+  <circle cx="49" cy="80" r="6" fill="#f8fafc"/>
+  <circle cx="49" cy="80" r="3" fill="#14532d"/>
+  <circle cx="79" cy="80" r="6" fill="#f8fafc"/>
+  <circle cx="79" cy="80" r="3" fill="#14532d"/>
+  <path d="M56 98 Q64 104 72 98" stroke="#f8fafc" stroke-width="4" fill="none" stroke-linecap="round"/>
 </svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>leaf healer</title>
+  <path d="M64 118 C43 93 31 68 38 43 C45 18 75 14 96 25 C100 55 91 91 64 118 Z" fill="#84cc16"/>
+  <path d="M63 111 C62 77 68 50 91 27" stroke="#f7fee7" stroke-width="5" opacity=".75" fill="none"/>
+  <path d="M43 74 C30 74 21 84 22 98 C34 99 44 93 47 81 Z" fill="#bef264"/>
+  <path d="M82 68 C98 66 108 75 109 90 C96 94 84 88 80 76 Z" fill="#65a30d"/>
+  <rect x="53" y="47" width="23" height="44" rx="6" fill="#f8fafc"/>
+  <rect x="58" y="54" width="13" height="30" rx="2" fill="#22c55e"/>
+  <rect x="49" y="63" width="31" height="12" rx="2" fill="#22c55e"/>
+  <circle cx="55" cy="95" r="4" fill="#f8fafc"/>
+  <circle cx="75" cy="88" r="4" fill="#f8fafc"/>
+  <path d="M54 105 Q64 111 75 103" stroke="#f8fafc" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>

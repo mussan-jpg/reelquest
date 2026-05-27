@@ -38,6 +38,7 @@ jobs:
           cp -r commands _site/
           cp -r data _site/
           cp -r screens _site/
+          cp -r services _site/
           cp -r ui _site/
           cp -r images _site/
           touch _site/.nojekyll

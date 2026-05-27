@@ -1,8 +1,49 @@
 // ui/components.js
 import { commandEffects } from '../commands/index.js';
 import { statusEffects } from '../statusEffects.js';
-import { formatCharacterTypeLabel, formatSpeciesLabel, getCharacterType, getSpeciesTooltip } from '../screens/shared.js';
+import { LIMIT_BREAK_MAX_LEVEL, LIMIT_BREAK_REQUIRED_BATTLES, LIMIT_BREAK_TOTAL_REQUIRED_BATTLES, getCharacterLevel, getLimitBreakLevel } from '../partySlots.js';
+import { getBaseActionCount, getPendingExtraActionCount, getRemainingActionCount, getStoredActionCount } from '../battle/actionCount.js';
 import { escapeHtml } from './tooltip.js';
+export { getReelGradeStyle } from './rarityTheme.js';
+
+export function renderOptionButtons(container, options, config = {}) {
+    if (!container) return;
+    const {
+        activeValue,
+        activeValues,
+        className = 'statistics-filter-btn',
+        dataKey = 'value',
+        onClick,
+        onContextMenu
+    } = config;
+    const activeSet = activeValues instanceof Set ? activeValues : null;
+    container.innerHTML = options.map(option => {
+        const value = String(option.value);
+        const active = activeSet ? activeSet.has(value) : value === String(activeValue);
+        return `
+            <button type="button" class="${className} ${active ? 'active' : ''}" data-${dataKey}="${value}">
+                ${option.label}
+            </button>
+        `;
+    }).join('');
+    container.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', () => onClick?.(button.dataset[dataKey]));
+        if (onContextMenu) {
+            button.addEventListener('contextmenu', event => {
+                event.preventDefault();
+                onContextMenu(button.dataset[dataKey], event);
+            });
+        }
+    });
+}
+
+export function renderGradeTabs(container, grades, config = {}) {
+    const options = [
+        { value: 'all', label: config.allLabel || 'すべて' },
+        ...grades.map(grade => ({ value: String(grade), label: `★${grade}` }))
+    ];
+    renderOptionButtons(container, options, config);
+}
 
 export function getCommandName(commandId) {
     return commandEffects[commandId] ? commandEffects[commandId].name : commandId;
@@ -24,60 +65,267 @@ export function buildCommandTooltip(effect, char) {
             tooltipText += `\n\n【予想回復量: ${heal}】`;
         }
     }
+    if (typeof effect.calcShield === 'function') {
+        const shield = effect.calcShield(char);
+        if (shield > 0) {
+            tooltipText += `\n\n【予想シールド付与量: ${shield}】`;
+        }
+    }
 
     return tooltipText;
 }
 
-export function formatStatValue(icon, current, base) {
+function getPositiveCommandValue(effect, methodName, char) {
+    if (typeof effect?.[methodName] !== 'function') return 0;
+    return Math.max(0, Math.floor(Number(effect[methodName](char) || 0)));
+}
+
+function getStatChangePreviews(effect) {
+    const desc = String(effect?.desc || '');
+    const previews = [];
+    const seen = new Set();
+    const pattern = /\b(ATK|INT|SPD)(?:\/(ATK|INT|SPD))?(?:\/(ATK|INT|SPD))?\s*([+-])\s*(\d+)(?!\d)(?!\s*[%x倍])/g;
+    let match;
+    while ((match = pattern.exec(desc))) {
+        const stats = [match[1], match[2], match[3]].filter(Boolean);
+        const sign = match[4];
+        const amount = Number(match[5] || 0);
+        if (!amount) continue;
+        stats.forEach(stat => {
+            const key = `${stat}:${sign}:${amount}`;
+            if (seen.has(key)) return;
+            seen.add(key);
+            previews.push({
+                type: sign === '-' ? 'debuff' : 'buff',
+                stat: stat.toLowerCase(),
+                value: `${sign}${amount}`
+            });
+        });
+    }
+    return previews;
+}
+
+export function getCommandForecastValues(effect, char) {
+    if (!effect || !char) return [];
+    const values = [
+        { type: 'damage', value: getPositiveCommandValue(effect, 'calcDamage', char) },
+        { type: 'heal', value: getPositiveCommandValue(effect, 'calcHeal', char) },
+        { type: 'shield', value: getPositiveCommandValue(effect, 'calcShield', char) }
+    ].filter(item => item.value > 0);
+
+    values.push(...getStatChangePreviews(effect));
+
+    return values;
+}
+
+export function renderCommandForecast(effect, char) {
+    const values = getCommandForecastValues(effect, char);
+    if (values.length === 0) return '';
+
+    return `<span class="cmd-forecast" aria-label="予測値">${values
+        .slice(0, 4)
+        .map(item => `<span class="cmd-forecast-value cmd-forecast-value--${item.type}${item.stat ? ` cmd-forecast-value--${item.stat}` : ''}">${item.value}</span>`)
+        .join('')}</span>`;
+}
+
+export function formatStatValue(icon, current, base, options = {}) {
     const diff = current - base;
+    const setBonus = Number(options.setBonus || 0);
+    const valueStateClass = diff < 0 ? ' is-debuffed' : (diff > 0 || setBonus > 0) ? ' is-buffed' : '';
     const diffHtml = diff === 0
         ? ''
         : `<span class="stat-delta ${diff > 0 ? 'positive' : 'negative'}">${diff > 0 ? '+' : ''}${diff}</span>`;
 
-    return `<div>${icon}${current}${diffHtml}</div>`;
+    return `<div class="battle-stat-row">
+        <span class="battle-stat-icon">${icon}</span>
+        <span class="battle-stat-value${valueStateClass}">${current}</span>
+        <span class="battle-stat-modifiers">${diffHtml}</span>
+    </div>`;
 }
 
-// 💡 修正：リールのグレードスタイルに、カード（キャラクターセクション）全体の背景用スタイル(cardBg)を追加
-export function getReelGradeStyle(reelIdx) {
-    switch (reelIdx) {
-        case 0: // ★1 (銅)
-            return {
-                text: "★1",
-                style: "background: linear-gradient(135deg, #a05a2c, #d08a5c) !important; color: #fff !important; border: 1px solid #703a1c !important;",
-                cardBg: "#f2dcc9"
-            };
-        case 1: // ★2 (銀)
-            return {
-                text: "★2",
-                style: "background: linear-gradient(135deg, #bdc3c7, #ecf0f1) !important; color: #333 !important; border: 1px solid #95a5a6 !important;",
-                cardBg: "#e1e8eb"
-            };
-        case 2: // ★3 (金)
-            return {
-                text: "★3",
-                style: "background: linear-gradient(135deg, #f1c40f, #f39c12) !important; color: #fff !important; border: 1px solid #d35400 !important; text-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;",
-                cardBg: "#ffe999"
-            };
-        case 3: // ★4 エピック
-            return {
-                text: "★4",
-                style: "background: linear-gradient(135deg, #5b6ee1, #9b59b6) !important; color: #fff !important; border: 1px solid #3442a8 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.45) !important;",
-                cardBg: "linear-gradient(135deg, #d7e7ff, #e8ddff)"
-            };
-        case 4: // ★5 ミシック
-            return {
-                text: "★5",
-                style: "background: linear-gradient(135deg, #312e81, #4c1d95, #14b8a6) !important; color: #fff !important; border: 1px solid #24115f !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.55) !important;",
-                cardBg: "linear-gradient(135deg, #d8ccff, #bac8ff, #a7f3d0)"
-            };
-        case 5: // ★6 レジェンド
-        default:
-            return {
-                text: "★6",
-                style: "background: linear-gradient(45deg, #ff7675, #ffeaa7, #55efc4, #74b9ff, #a29bfe) !important; background-size: 400% 400% !important; animation: rainbow-bg 4s ease infinite !important; color: #fff !important; border: 1px solid #fff !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;",
-                cardBg: "linear-gradient(135deg, #ffd6c6, #ffeaa5, #c9f3e8, #d9dcff)"
-            };
+export function formatSetStatRail(char) {
+    const activeBonus = char?.activeSpeciesBonus || {};
+    const dynamicAtkBonus = Number(char?.humanPointAtkBonus || 0) + Number(char?.demonDoomAtkBonus || 0) + Number(char?.undeadLastStandAtkBonus || 0) + Number(char?.dragonReelAtkBonus || 0);
+    const dynamicIntBonus = Number(char?.humanPointIntBonus || 0) + Number(char?.demonDoomIntBonus || 0) + Number(char?.undeadLastStandIntBonus || 0) + Number(char?.dragonReelIntBonus || 0);
+    const rows = [
+        { label: 'ATK', staticValue: Number(activeBonus.atkBonus || 0), dynamicValue: dynamicAtkBonus, base: (char?.baseAtk ?? char?.atk ?? 0) },
+        { label: 'INT', staticValue: Number(activeBonus.intBonus || 0), dynamicValue: dynamicIntBonus, base: (char?.baseInt ?? char?.int ?? 0) },
+        { label: 'SPD', staticValue: Number(activeBonus.spdBonus || 0), dynamicValue: 0, base: (char?.baseSpd ?? char?.spd ?? 0) }
+    ];
+
+    return rows.map(row => {
+        const value = row.staticValue + row.dynamicValue;
+        if (!value) return '<span class="battle-set-stat-chip is-empty"></span>';
+        const baseWithoutSet = row.base - row.staticValue;
+        const detail = [
+            row.staticValue ? `常時セット +${row.staticValue}` : '',
+            row.dynamicValue ? `戦闘中セット +${row.dynamicValue}` : ''
+        ].filter(Boolean).join(' / ');
+        const tooltip = `${row.label}: 基礎 ${baseWithoutSet}${detail ? ` / ${detail}` : ''}`;
+        return `<span class="battle-set-stat-chip" data-tooltip="${escapeHtml(tooltip)}">S+${value}</span>`;
+    }).join('');
+}
+
+export function formatHpValue(char) {
+    const hpBonus = Number(char?.activeSpeciesBonus?.hpBonus || 0);
+    const maxHp = Number(char?.maxHp || 0);
+    const baseMaxHp = Math.max(1, maxHp - hpBonus);
+    const setBonusHtml = hpBonus === 0
+        ? ''
+        : `<span class="battle-hp-set-bonus" data-tooltip="${escapeHtml(`最大HP: 基礎 ${baseMaxHp} + セット効果 ${hpBonus} = ${maxHp}`)}">S+${hpBonus}</span>`;
+
+    return `${Math.max(0, char.hp)} / ${maxHp}${setBonusHtml}`;
+}
+
+export function formatShieldValue(char) {
+    const shield = Math.max(0, Math.floor(Number(char?.shield || 0)));
+    if (shield <= 0) return '';
+    return `<span class="battle-shield-chip" data-tooltip="${escapeHtml(`シールド: 次に受けるダメージを${shield}軽減し、その分だけ減少します`)}">SH ${shield}</span>`;
+}
+
+function renderProgressPips(current, total, options = {}) {
+    const safeTotal = Math.max(1, Number(total || 1));
+    const safeCurrent = Math.max(0, Math.min(safeTotal, Number(current || 0)));
+    const filled = options.forceFull ? safeTotal : safeCurrent;
+    return Array.from({ length: safeTotal }, (_, index) => (
+        `<span class="battle-progress-pip ${index < filled ? 'is-filled' : ''}"></span>`
+    )).join('');
+}
+
+function getLimitBreakProgressMeta(char) {
+    const level = getLimitBreakLevel(char);
+    const exp = Math.min(LIMIT_BREAK_TOTAL_REQUIRED_BATTLES, Math.max(0, Number(char?.limitBreakExp || char?.limit_break_exp || 0)));
+    if (level >= LIMIT_BREAK_MAX_LEVEL) {
+        return {
+            label: `LB${LIMIT_BREAK_MAX_LEVEL}`,
+            current: LIMIT_BREAK_REQUIRED_BATTLES,
+            total: LIMIT_BREAK_REQUIRED_BATTLES,
+            forceFull: true,
+            tooltip: `限界突破${LIMIT_BREAK_MAX_LEVEL}済み`
+        };
     }
+
+    const currentStageExp = exp % LIMIT_BREAK_REQUIRED_BATTLES;
+    const current = currentStageExp === 0 && exp > 0 ? LIMIT_BREAK_REQUIRED_BATTLES : currentStageExp;
+    return {
+        label: level > 0 ? `LB${level}` : 'EXP',
+        current,
+        total: LIMIT_BREAK_REQUIRED_BATTLES,
+        forceFull: false,
+        tooltip: level > 0
+            ? `限界突破${level} / 次まで ${current}/${LIMIT_BREAK_REQUIRED_BATTLES}`
+            : `限界突破まで ${current}/${LIMIT_BREAK_REQUIRED_BATTLES}`
+    };
+}
+
+function getBattleStackChips(char) {
+    const chips = [];
+    const dragonAtk = Number(char?.dragonReelAtkBonus || 0);
+    const dragonInt = Number(char?.dragonReelIntBonus || 0);
+    if (char?.species === 'dragon' && (dragonAtk > 0 || dragonInt > 0)) {
+        const stage = Math.max(1, Number(char?.dragonReelStage || 0));
+        const labelValue = dragonAtk === dragonInt ? `A/I+${dragonAtk}` : `A+${dragonAtk} I+${dragonInt}`;
+        chips.push({
+            label: `竜R${stage} ${labelValue}`,
+            tooltip: `竜族 リール補正\nリール段数: ${stage}\nATK+${dragonAtk} / INT+${dragonInt}`,
+            className: 'battle-stack-chip--dragon'
+        });
+    }
+    const humanPoints = Number(char?.humanSetPoints || 0);
+    if (humanPoints > 0) chips.push({ label: `士${humanPoints}`, tooltip: `士気: ${humanPoints}` });
+    const doom = Number(char?.demonDoomCount || 0);
+    if (doom > 0) chips.push({ label: `破${doom}`, tooltip: `破滅カウント: ${doom}` });
+    const core = Number(char?.constructRecycleCore || 0);
+    if (core > 0) chips.push({ label: `廃材${formatCompactStackValue(core)}`, tooltip: `無機族 廃材: ${Math.floor(core)}`, className: 'battle-stack-chip--construct' });
+    const slimeMucus = Number(char?.slimeMucus || 0);
+    if (slimeMucus > 0) {
+        chips.push({
+            label: `粘${formatCompactStackValue(slimeMucus)}`,
+            tooltip: `スライム族 粘液: ${Math.floor(slimeMucus)}\nターン終了時の粘液再生/分裂追撃、分裂再行動の消費に使われます`,
+            className: 'battle-stack-chip--slime'
+        });
+    }
+    const natureBuds = Number(char?.natureBuds || 0);
+    if (natureBuds > 0) {
+        chips.push({
+            label: `芽${formatCompactStackValue(natureBuds)}`,
+            tooltip: `自然族 芽吹き: ${Math.floor(natureBuds)}\nターン終了時の芽吹き循環、魔法開花の消費に使われます`,
+            className: 'battle-stack-chip--nature'
+        });
+    }
+    const tide = Number(char?.aquaticTide || 0);
+    if (tide > 0) {
+        chips.push({
+            label: `潮${formatCompactStackValue(tide)}`,
+            tooltip: `水棲族 潮流: ${Math.floor(tide)}\nターン終了時、潮流反射の固定ダメージに変換されます`,
+            className: 'battle-stack-chip--tide'
+        });
+    }
+    const huntStacks = Number(char?.beastHuntStacks || 0);
+    if (huntStacks > 0) {
+        chips.push({
+            label: `狩${formatCompactStackValue(huntStacks)}`,
+            tooltip: `獣族 狩猟: ${Math.floor(huntStacks)}\n回避時に上限なしで蓄積し、ターン開始時の群れの号令に加算されます`,
+            className: 'battle-stack-chip--hunt'
+        });
+    }
+    const undeadAtk = Number(char?.undeadLastStandAtkBonus || 0);
+    const undeadInt = Number(char?.undeadLastStandIntBonus || 0);
+    const undeadPercent = Math.round(Number(char?.undeadLastStandPercent || 0) * 100);
+    if (undeadAtk || undeadInt) {
+        chips.push({
+            label: `死+${undeadPercent}%`,
+            tooltip: `不死族 死力: 現在HPに応じてATK/INT+${undeadPercent}%（ATK+${undeadAtk} / INT+${undeadInt}）`,
+            className: 'battle-stack-chip--undead'
+        });
+    }
+    return chips;
+}
+
+function formatCompactStackValue(value) {
+    const amount = Math.max(0, Math.floor(Number(value || 0)));
+    if (amount >= 1000) return `${Math.floor(amount / 100) / 10}k`;
+    return String(amount);
+}
+
+function getActionCountMeta(char) {
+    const base = getBaseActionCount(char);
+    const stored = getStoredActionCount(char);
+    const pending = getPendingExtraActionCount(char);
+    const remaining = getRemainingActionCount(char);
+    const label = `${remaining}回`;
+    const tooltip = pending > 0
+        ? `このターンの残り行動: ${remaining}回（保持${stored}回 + 追加予約${pending}回 / 基本${base}回）`
+        : `このターンの残り行動: ${remaining}回（基本${base}回）`;
+    return { base, stored, pending, remaining, label, tooltip };
+}
+
+export function formatBattleProgressPanel(char) {
+    const lb = getLimitBreakProgressMeta(char);
+    const characterLevel = getCharacterLevel(char);
+    const actionCount = getActionCountMeta(char);
+    const chips = getBattleStackChips(char);
+    const chipHtml = chips.length
+        ? chips.map(chip => `<span class="battle-stack-chip ${escapeHtml(chip.className || '')}" data-tooltip="${escapeHtml(chip.tooltip)}">${escapeHtml(chip.label)}</span>`).join('')
+        : '<span class="battle-stack-chip is-empty">STK</span>';
+
+    return `
+        <div class="battle-progress-side-panel">
+            <div class="battle-progress-row" data-tooltip="${escapeHtml(lb.tooltip)}">
+                <span class="battle-progress-label">${escapeHtml(lb.label)}</span>
+                <span class="battle-progress-pips">${renderProgressPips(lb.current, lb.total, { forceFull: lb.forceFull })}</span>
+            </div>
+            <div class="battle-progress-row battle-progress-row--level" data-tooltip="${escapeHtml(`現在Lv${characterLevel}`)}">
+                <span class="battle-progress-label">Lv</span>
+                <strong>${characterLevel}</strong>
+            </div>
+            <div class="battle-progress-row battle-progress-row--actions ${actionCount.pending > 0 || actionCount.remaining > actionCount.base ? 'has-extra-actions' : ''}" data-tooltip="${escapeHtml(actionCount.tooltip)}">
+                <span class="battle-progress-label">ACT</span>
+                <strong>${escapeHtml(actionCount.label)}${actionCount.pending > 0 ? `<small>+${actionCount.pending}</small>` : ''}</strong>
+            </div>
+            <div class="battle-stack-row">${chipHtml}</div>
+        </div>
+    `;
 }
 
 // コマンド（ルーレット）の生成
@@ -88,35 +336,15 @@ export function generateCommands(prefix, charIdx, currentCommands) {
         const cmdName = getCommandName(id);
         const isActive = i === 0 ? 'active' : '';
         return `
-            <div class="cmd-item ${isActive}" id="${prefix}-${charIdx}-c${i}"
-                 style="
-                    writing-mode: vertical-rl !important;
-                    text-orientation: upright !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    padding: 3px 1px !important; 
-                    font-size: 0.75em !important; 
-                    font-weight: bold !important;
-                    width: 28px !important;
-                    flex-shrink: 0 !important;
-                    height: 94px !important;
-                    box-sizing: border-box !important;
-                    letter-spacing: 1px !important;
-                    line-height: 1 !important;
-                    white-space: nowrap !important;
-                    transition: background-color 0.1s, color 0.1s;
-                    border-right: 1px solid #ccc;
-                    background: #ffffff;
-                 ">
-                ${cmdName}
+            <div class="cmd-item battle-command ${isActive}" id="${prefix}-${charIdx}-c${i}">
+                <span class="cmd-name">${escapeHtml(cmdName)}</span>
             </div>
         `;
     }).join('');
 }
 
 // マヒバッジの文字を黒にして視認性を向上
-export function generateStatusBadges(statusList) {
+export function generateStatusBadges(statusList, character = null) {
     if (!statusList || statusList.length === 0) return '';
     return statusList.map(statusId => {
         let effect = statusEffects ? statusEffects[statusId] : null;
@@ -130,119 +358,20 @@ export function generateStatusBadges(statusList) {
             }
         }
         // data-tooltip 属性に説明を入れてカスタムツールチップで詳細を表示
-        const titleText = effect.desc ? `${effect.name} - ${effect.desc}` : effect.name;
+        const stackCount = Math.max(1, Math.floor(Number(character?.statusStacks?.[statusId] || 1)));
+        const stackText = stackCount > 1 ? ` x${stackCount}` : '';
+        const tauntTurns = statusId === 'taunt' ? Math.max(0, Math.floor(Number(character?.tauntDuration || 0))) : 0;
+        const durationText = tauntTurns > 0 ? ` ${tauntTurns}T` : '';
+        const titleText = effect.desc
+            ? `${effect.name}${stackText}${durationText} - ${effect.desc}${durationText ? `（残り${tauntTurns}ターン）` : ''}`
+            : `${effect.name}${stackText}${durationText}`;
         return `
-            <span class="status-badge" data-tooltip="${escapeHtml(titleText)}"
+            <span class="status-badge" data-status-id="${escapeHtml(statusId)}" data-tooltip="${escapeHtml(titleText)}"
                   style="background-color: ${effect.color}; color: ${statusId === 'paralysis' ? '#1a1a1a' : '#ffffff'};">
-                ${effect.name}
+                ${effect.name}${stackText}
+                ${tauntTurns > 0 ? `<span class="status-badge-turns" aria-label="残り${tauntTurns}ターン">${tauntTurns}</span>` : ''}
             </span>
         `;
     }).join('');
 }
 
-// 各チーム（陣営）のキャラクターセクションを生成
-export function renderSection(characters, prefix) {
-    return characters.map((char, i) => {
-        const activeReelIdx = char.currentReel !== undefined ? char.currentReel : 0;
-        const currentCmds = (char.commands && Array.isArray(char.commands[0]))
-            ? char.commands[activeReelIdx]
-            : char.commands;
-
-        const isDead = char.hp <= 0;
-        const isParalyzed = char.status && char.status.includes('paralysis');
-        const slotCost = Math.max(1, Math.min(3, char.slotCost || 1));
-        const characterType = getCharacterType(char);
-        const rarityClass = `rarity-${Math.max(1, Math.min(6, char.rarity || (char.commands && Array.isArray(char.commands[0]) ? char.commands.length : 1)))}`;
-
-        // 現在のリールのスタイル（バッジ用）
-        const currentGrade = getReelGradeStyle(activeReelIdx);
-
-        // 💡 修正：最大グレードのスタイルを取得（カード背景用）
-        const maxReelIdx = (char.commands && Array.isArray(char.commands[0])) ? char.commands.length - 1 : 0;
-        const maxGrade = getReelGradeStyle(maxReelIdx);
-
-        // 💡 修正：デフォルト背景を白から「最大グレードに応じた背景(maxGrade.cardBg)」に変更
-        let statusCardStyle = `background: ${maxGrade.cardBg} !important;`;
-        if (maxGrade.cardAnimation) {
-            statusCardStyle += ` background-size: 400% 400% !important; animation: ${maxGrade.cardAnimation} !important;`;
-        }
-
-        if (isDead) {
-            statusCardStyle = 'box-shadow: inset 0 0 15px rgba(231, 76, 60, 0.2) !important; background: #fce4e4 !important;';
-        }
-
-        return `
-            <div class="character-section ${rarityClass} ${isDead ? 'is-dead' : ''}${isParalyzed ? ' is-paralyzed' : ''}" id="${prefix}-section-${i}" 
-                 style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: space-between !important; gap: 8px; margin-bottom: 8px; padding: 6px; border-radius: 8px; width: 100%; max-width: 100%; box-sizing: border-box; ${statusCardStyle}">
-                
-                <div style="display: flex; flex-direction: column; width: 150px; flex-shrink: 0; gap: 4px;">
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <span style="font-weight: bold; font-size: 0.85em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px;">
-                            ${char.name}
-                        </span>
-                        <span id="${prefix}-reel-badge-${i}" style="padding: 1px 4px; font-size: 0.75em; font-weight: bold; border-radius: 3px; white-space: nowrap; ${currentGrade.style}">${currentGrade.text}</span>
-                    </div>
-                    ${slotCost > 1 ? `<div class="slot-cost-badge slot-cost-badge--battle">${slotCost}枠モンスター</div>` : ''}
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.8em; font-weight: bold; color: #333;">
-                        <span>HP</span>
-                        <span class="hp-text" id="${prefix}-hp-text-${i}" style="white-space: nowrap;">${char.hp}/${char.maxHp}</span>
-                    </div>
-                    
-                    <div class="hp-bar-container" style="width: 100%; height: 8px; background-color: #ddd; border-radius: 4px; overflow: hidden;">
-                        <div class="hp-bar" id="${prefix}-hp-bar-${i}" style="width: ${(char.hp / char.maxHp) * 100}%; height: 100%; background-color: #4cd137; transition: width 0.3s ease, background-color 0.3s ease;"></div>
-                    </div>
-                    
-                    <div id="${prefix}-status-${i}" style="display: flex; gap: 2px; min-height: 16px; align-items: center; width: 100%; flex-wrap: wrap;">
-                        ${generateStatusBadges(char.status)}
-                    </div>
-
-                    <div style="display: flex; gap: 6px; align-items: center; width: 100%;">
-                            <div class="character-image" 
-                                oncontextmenu="event.preventDefault(); window.showCharacterDetail('${char.id}')"
-                                style="width: 56px; height: 56px; border: 1.5px solid #333; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 4px; flex-shrink: 0; box-sizing: border-box; cursor: pointer;"
-                                data-tooltip="右クリックで全リール表示">
-                            <img src="${char.image}" alt="${char.name}" style="width: 100%; height: 100%; object-fit: contain;">
-                        </div>
-                        
-                        <div id="${prefix}-stats-${i}" class="stat-list" style="font-size: 0.7em; color: #444; display: flex; flex-direction: column; gap: 2px; background: rgba(0,0,0,0.04); padding: 4px; border-radius: 4px; flex: 1; box-sizing: border-box; text-align: left;">
-                            ${formatStatValue('⚔️', char.atk, char.baseAtk ?? char.atk)}
-                            ${formatStatValue('🔮', char.int, char.baseInt ?? char.int)}
-                            ${formatStatValue('👟', char.spd, char.baseSpd ?? char.spd)}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="battle-reel-stack">
-                    <div class="battle-card-tabs">
-                        <div class="library-card-type battle-card-type ${characterType.className}">
-                            <span class="battle-card-tag-label">${formatCharacterTypeLabel(characterType)}</span>
-                        </div>
-                        <div class="library-card-type battle-card-type battle-card-species" data-tooltip="${escapeHtml(getSpeciesTooltip(char))}">
-                            <span class="battle-card-tag-label">${formatSpeciesLabel(char)}</span>
-                        </div>
-                    </div>
-                    <div class="roulette" id="${prefix}-roulette-${i}" 
-                         style="
-                            display: flex !important; 
-                            flex-direction: row !important; 
-                            width: 100% !important;
-                            max-width: none !important;
-                            flex: 0 0 98px !important;
-                            min-width: 0 !important;
-                            height: 98px !important;      
-                            border: 2px solid #333; 
-                            border-radius: 5px; 
-                            overflow: hidden; 
-                            background: #ffffff;            
-                            box-sizing: border-box;
-                         ">
-                        ${generateCommands(prefix, i, currentCmds)}
-                    </div>
-                </div>
-
-            </div>
-        `;
-    }).join('');
-}

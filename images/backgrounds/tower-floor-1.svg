@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#20242b"/>
+      <stop offset="58%" stop-color="#151820"/>
+      <stop offset="100%" stop-color="#0b0d12"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="48%" r="52%">
+      <stop offset="0%" stop-color="#3b4252" stop-opacity="0.62"/>
+      <stop offset="100%" stop-color="#111317" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#242934"/>
+      <stop offset="100%" stop-color="#0b0d12"/>
+    </linearGradient>
+    <linearGradient id="stoneLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d0f14"/>
+      <stop offset="58%" stop-color="#2b303a"/>
+      <stop offset="100%" stop-color="#4b5563"/>
+    </linearGradient>
+    <linearGradient id="stoneRight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4b5563"/>
+      <stop offset="42%" stop-color="#2b303a"/>
+      <stop offset="100%" stop-color="#0d0f14"/>
+    </linearGradient>
+    <radialGradient id="torchLeft" cx="11%" cy="35%" r="28%">
+      <stop offset="0%" stop-color="#ffb15f" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ff7a18" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="torchRight" cx="89%" cy="35%" r="28%">
+      <stop offset="0%" stop-color="#ffb15f" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ff7a18" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#centerGlow)"/>
+  <path d="M520,690 C710,602 1210,602 1400,690" fill="none" stroke="#343b47" stroke-width="6" opacity="0.34"/>
+  <path d="M420,1080 C560,790 710,700 960,700 C1210,700 1360,790 1500,1080 Z" fill="url(#floorGrad)" opacity="0.88"/>
+
+  <g stroke="#4b5563" stroke-width="2" opacity="0.18">
+    <path d="M706,704 C654,812 604,928 560,1080" fill="none"/>
+    <path d="M960,700 C960,820 960,954 960,1080" fill="none"/>
+    <path d="M1214,704 C1266,812 1316,928 1360,1080" fill="none"/>
+    <path d="M502,826 C676,792 1244,792 1418,826" fill="none"/>
+    <path d="M454,948 C648,918 1272,918 1466,948" fill="none"/>
+  </g>
+
+  <rect x="0" y="0" width="230" height="1080" fill="url(#stoneLeft)"/>
+  <path d="M210,0 L312,0 L284,1080 L145,1080 Z" fill="url(#stoneLeft)" opacity="0.72"/>
+  <rect x="1700" y="0" width="220" height="1080" fill="url(#stoneRight)"/>
+  <path d="M1710,0 L1608,0 L1638,1080 L1774,1080 Z" fill="url(#stoneRight)" opacity="0.72"/>
+
+  <g opacity="0.5" stroke="#111827" stroke-width="3">
+    <line x1="218" y1="0" x2="218" y2="1080"/>
+    <line x1="1702" y1="0" x2="1702" y2="1080"/>
+  </g>
+  <g opacity="0.26" stroke="#6b7280" stroke-width="2">
+    <line x1="64" y1="140" x2="230" y2="140"/>
+    <line x1="38" y1="420" x2="230" y2="420"/>
+    <line x1="28" y1="700" x2="220" y2="700"/>
+    <line x1="1690" y1="150" x2="1870" y2="150"/>
+    <line x1="1690" y1="430" x2="1890" y2="430"/>
+    <line x1="1700" y1="710" x2="1880" y2="710"/>
+  </g>
+
+  <rect width="1920" height="1080" fill="url(#torchLeft)" pointer-events="none"/>
+  <rect width="1920" height="1080" fill="url(#torchRight)" pointer-events="none"/>
+  <rect width="1920" height="1080" fill="rgba(0,0,0,0.12)" pointer-events="none"/>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="leogaldMane" x1="24" y1="17" x2="104" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fde68a"/>
+      <stop offset=".42" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#7c2d12"/>
+    </linearGradient>
+  </defs>
+  <path d="M64 13 L75 31 L95 20 L94 43 L118 44 L101 62 L116 82 L92 84 L93 111 L72 99 L64 121 L56 99 L35 111 L36 84 L12 82 L27 62 L10 44 L34 43 L33 20 L53 31 Z" fill="url(#leogaldMane)" stroke="#431407" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="64" cy="65" r="29" fill="#fde68a" stroke="#92400e" stroke-width="4"/>
+  <path d="M44 58 C49 47 58 43 64 43 C70 43 79 47 84 58 C81 78 47 78 44 58 Z" fill="#f59e0b"/>
+  <circle cx="55" cy="61" r="5.5" fill="#f8fafc"/>
+  <circle cx="73" cy="61" r="5.5" fill="#f8fafc"/>
+  <circle cx="55" cy="61" r="2.5" fill="#111827"/>
+  <circle cx="73" cy="61" r="2.5" fill="#111827"/>
+  <path d="M62 70 L66 70 L64 76 Z" fill="#431407"/>
+  <path d="M55 83 Q64 91 73 83" stroke="#431407" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M28 98 L15 116 M100 98 L113 116" stroke="#92400e" stroke-width="8" stroke-linecap="round"/>
+  <path d="M35 112 L19 122 M93 112 L109 122" stroke="#facc15" stroke-width="5" stroke-linecap="round"/>
+</svg>

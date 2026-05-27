@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Underdog Banner">
+  <path d="M27 16v98" stroke="#451a03" stroke-width="8" stroke-linecap="round"/>
+  <path d="M31 18h72l-13 22 13 22H31z" fill="#dc2626" stroke="#7f1d1d" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M45 32h33" stroke="#fef2f2" stroke-width="6" stroke-linecap="round"/>
+  <path d="M45 48h44" stroke="#fca5a5" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="27" cy="18" r="9" fill="#facc15" stroke="#713f12" stroke-width="4"/>
+</svg>

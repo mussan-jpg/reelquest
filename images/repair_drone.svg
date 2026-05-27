@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="repairDroneBody" x1="30" y1="25" x2="96" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e2e8f0"/>
+      <stop offset="0.45" stop-color="#64748b"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="repairDroneGlow" x1="32" y1="36" x2="98" y2="102" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a5f3fc"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <path d="M38 47 C42 31 86 31 90 47 L100 70 C104 91 86 105 64 105 C42 105 24 91 28 70 Z" fill="url(#repairDroneBody)" stroke="#0f172a" stroke-width="4"/>
+  <rect x="43" y="45" width="42" height="27" rx="10" fill="#0f172a" opacity=".65"/>
+  <circle cx="54" cy="58" r="6" fill="#67e8f9"/>
+  <circle cx="74" cy="58" r="6" fill="#67e8f9"/>
+  <circle cx="54" cy="58" r="2.5" fill="#0f172a"/>
+  <circle cx="74" cy="58" r="2.5" fill="#0f172a"/>
+  <path d="M57 78 H72" stroke="#a5f3fc" stroke-width="4" stroke-linecap="round"/>
+  <path d="M30 70 L14 58" stroke="url(#repairDroneGlow)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M14 58 L20 47 M14 58 L7 68" stroke="#e2e8f0" stroke-width="5" stroke-linecap="round"/>
+  <path d="M98 70 L114 58" stroke="url(#repairDroneGlow)" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="116" cy="56" r="10" fill="none" stroke="#67e8f9" stroke-width="5"/>
+  <path d="M36 96 L27 113 M92 96 L101 113" stroke="#475569" stroke-width="6" stroke-linecap="round"/>
+  <path d="M27 113 H18 M101 113 H110" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+  <rect x="49" y="86" width="30" height="20" rx="6" fill="#e2e8f0" stroke="#334155" stroke-width="3"/>
+  <path d="M64 91 V101 M59 96 H69" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+  <path d="M44 35 L38 24 M84 35 L90 24" stroke="#67e8f9" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="38" cy="24" r="4" fill="#a5f3fc"/>
+  <circle cx="90" cy="24" r="4" fill="#a5f3fc"/>
+</svg>

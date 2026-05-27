@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>bubble slime</title>
+  <path d="M64 28 C35 28 22 63 24 88 C26 111 45 118 64 118 C85 118 104 110 104 88 C104 63 94 28 64 28 Z" fill="#38bdf8" opacity=".92"/>
+  <circle cx="37" cy="38" r="10" fill="#e0f2fe" opacity=".8"/>
+  <circle cx="93" cy="34" r="8" fill="#e0f2fe" opacity=".75"/>
+  <circle cx="102" cy="69" r="11" fill="#e0f2fe" opacity=".65"/>
+  <circle cx="30" cy="82" r="7" fill="#e0f2fe" opacity=".65"/>
+  <ellipse cx="58" cy="44" rx="21" ry="8" fill="#ecfeff" opacity=".5"/>
+  <circle cx="49" cy="76" r="6" fill="#fff"/>
+  <circle cx="49" cy="76" r="3" fill="#0f172a"/>
+  <circle cx="78" cy="76" r="6" fill="#fff"/>
+  <circle cx="78" cy="76" r="3" fill="#0f172a"/>
+  <path d="M55 94 Q64 101 73 94" stroke="#ecfeff" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>

@@ -4,14 +4,14 @@ export const STATUS_EFFECT_RULES = {
     poison: {},
     paralysis: {},
     weak: {
-        attackPowerFactor: 0.7
+        stackable: true,
+        maxStacks: 3,
+        attackPowerFactorPerStack: 0.8
     },
     weakened: {
-        damageTakenFactor: 1.2
+        damageTakenDelta: 0.2
     },
-    hidden: {
-        damageTakenFactor: 0.8
-    },
+    hidden: {},
     taunt: {
         damageTakenFactor: 0.6,
         defaultDuration: 2
@@ -85,7 +85,6 @@ export function refreshAttackPower(character) {
 export function applyAttackModifier(character, source, factor) {
     if (!character || !source || typeof factor !== 'number') return;
     if (!Array.isArray(character.attackPowerModifiers)) character.attackPowerModifiers = [];
-    if (source === 'weak' && character.attackPowerModifiers.some(mod => mod.source === 'weak')) return;
     character.attackPowerModifiers.push({ source, factor });
     refreshAttackPower(character);
 }
@@ -100,6 +99,22 @@ export function hasStatus(character, statusId) {
     return !!(character && Array.isArray(character.status) && character.status.includes(statusId));
 }
 
+function ensureStatusStacks(character) {
+    if (!character || typeof character !== 'object') return {};
+    if (!character.statusStacks || typeof character.statusStacks !== 'object') {
+        character.statusStacks = {};
+    }
+    return character.statusStacks;
+}
+
+export function getStatusStackCount(character, statusId) {
+    const rule = STATUS_EFFECT_RULES[statusId];
+    if (!rule?.stackable) return hasStatus(character, statusId) ? 1 : 0;
+    if (!hasStatus(character, statusId)) return 0;
+    const stacks = Number(character?.statusStacks?.[statusId] || 0);
+    return Math.max(1, Math.floor(stacks));
+}
+
 export function addStatus(character, statusId, options = {}) {
     if (!character || !statusId) return false;
     if (!Array.isArray(character.status)) character.status = [];
@@ -110,6 +125,17 @@ export function addStatus(character, statusId, options = {}) {
     }
 
     const rule = STATUS_EFFECT_RULES[statusId];
+    if (rule?.stackable) {
+        const stacks = ensureStatusStacks(character);
+        const currentStacks = Math.max(0, Number(stacks[statusId] || 0));
+        const maxStacks = Number.isFinite(rule.maxStacks) ? Math.max(1, Math.floor(rule.maxStacks)) : Infinity;
+        if (currentStacks >= maxStacks) {
+            syncStatusEffects(character);
+            return false;
+        }
+        stacks[statusId] = Math.min(maxStacks, currentStacks + 1);
+    }
+
     if (rule?.defaultDuration) {
         const duration = options.duration ?? rule.defaultDuration ?? 0;
         const durationKey = `${statusId}Duration`;
@@ -121,12 +147,15 @@ export function addStatus(character, statusId, options = {}) {
     }
 
     syncStatusEffects(character);
-    return !alreadyHadStatus;
+    return rule?.stackable ? true : !alreadyHadStatus;
 }
 
 export function removeStatus(character, statusId) {
     if (!character || !statusId || !Array.isArray(character.status)) return;
     character.status = character.status.filter(status => status !== statusId);
+    if (character.statusStacks) {
+        delete character.statusStacks[statusId];
+    }
     if (character.statusSources) {
         delete character.statusSources[statusId];
     }
@@ -137,15 +166,34 @@ export function syncStatusEffects(character) {
     if (!character || typeof character !== 'object') return;
     if (!Array.isArray(character.status)) character.status = [];
     if (!Array.isArray(character.attackPowerModifiers)) character.attackPowerModifiers = [];
+    ensureStatusStacks(character);
 
     Object.entries(STATUS_EFFECT_RULES).forEach(([statusId, rule]) => {
-        if (typeof rule.attackPowerFactor !== 'number') return;
-
         const hasStatusEffect = character.status.includes(statusId);
-        const hasModifier = character.attackPowerModifiers.some(mod => mod.source === statusId);
+        if (rule.stackable && !hasStatusEffect) {
+            delete character.statusStacks[statusId];
+        }
+        if (
+            typeof rule.attackPowerFactor !== 'number'
+            && typeof rule.attackPowerDelta !== 'number'
+            && typeof rule.attackPowerFactorPerStack !== 'number'
+        ) return;
 
-        if (hasStatusEffect && !hasModifier) {
-            character.attackPowerModifiers.push({ source: statusId, factor: rule.attackPowerFactor });
+        const modifierIndex = character.attackPowerModifiers.findIndex(mod => mod.source === statusId);
+        const hasModifier = modifierIndex >= 0;
+
+        if (hasStatusEffect) {
+            const stacks = getStatusStackCount(character, statusId);
+            const factor = typeof rule.attackPowerFactorPerStack === 'number'
+                ? Math.max(0, rule.attackPowerFactorPerStack ** stacks)
+                : typeof rule.attackPowerDelta === 'number'
+                    ? Math.max(0, 1 + rule.attackPowerDelta * stacks)
+                    : rule.attackPowerFactor;
+            if (hasModifier) {
+                character.attackPowerModifiers[modifierIndex].factor = factor;
+            } else {
+                character.attackPowerModifiers.push({ source: statusId, factor });
+            }
         } else if (!hasStatusEffect && hasModifier) {
             character.attackPowerModifiers = character.attackPowerModifiers.filter(mod => mod.source !== statusId);
         }
@@ -179,24 +227,39 @@ export function resetBattleStats(character) {
     character.statBonuses = { atk: 0, int: 0, spd: 0 };
     character.attackPowerModifiers = [];
     character.status = [];
+    character.statusStacks = {};
     character.statusSources = {};
     character.poisonedIndices = [];
     character.tauntDuration = 0;
+    character.pendingUndeadLastStand = null;
+    character.pendingUndeadReviveAction = false;
+}
+
+function getDamageTakenFactorEntries(character) {
+    const statuses = Array.isArray(character?.status) ? character.status : [];
+    return statuses
+        .map(statusId => {
+            const rule = STATUS_EFFECT_RULES[statusId];
+            if (!rule) return null;
+            if (typeof rule.damageTakenDelta === 'number') {
+                return {
+                    statusId,
+                    factor: Math.max(0, 1 + rule.damageTakenDelta * getStatusStackCount(character, statusId))
+                };
+            }
+            return typeof rule.damageTakenFactor === 'number'
+                ? { statusId, factor: rule.damageTakenFactor }
+                : null;
+        })
+        .filter(Boolean);
 }
 
 export function getStatusDefenseMultiplier(character) {
-    if (!character || !Array.isArray(character.status)) return 1;
-    return character.status.reduce((multiplier, statusId) => {
-        const factor = STATUS_EFFECT_RULES[statusId]?.damageTakenFactor;
-        return typeof factor === 'number' ? multiplier * factor : multiplier;
-    }, 1);
+    return getDamageTakenFactorEntries(character).reduce((multiplier, entry) => multiplier * entry.factor, 1);
 }
 
 function calculateStatusAdjustedDamageWithMitigation(baseDamage, target) {
-    const statuses = Array.isArray(target?.status) ? target.status : [];
-    const factorEntries = statuses
-        .map(statusId => ({ statusId, factor: STATUS_EFFECT_RULES[statusId]?.damageTakenFactor }))
-        .filter(entry => typeof entry.factor === 'number');
+    const factorEntries = getDamageTakenFactorEntries(target);
 
     let damage = baseDamage;
     let mitigatedDamage = 0;
@@ -216,13 +279,6 @@ function calculateStatusAdjustedDamageWithMitigation(baseDamage, target) {
         }
     });
 
-    const speciesDamageTakenFactor = target?.activeSpeciesBonus?.damageTakenFactor;
-    if (typeof speciesDamageTakenFactor === 'number' && speciesDamageTakenFactor < 1) {
-        const beforeReduction = damage;
-        damage = Math.max(0, Math.floor(damage * speciesDamageTakenFactor));
-        mitigatedDamage += Math.max(0, beforeReduction - damage);
-    }
-
     return { damage, mitigatedDamage, guardMitigatedDamage };
 }
 
@@ -237,8 +293,10 @@ export function getSpeedEvasionChance(attacker, target) {
     if (targetSpeed <= attackerSpeed) return 0;
 
     const relativeAdvantage = (targetSpeed - attackerSpeed) / attackerSpeed;
-    const speciesBonus = target.activeSpeciesBonus?.evasionBonus || 0;
-    return clamp(relativeAdvantage * 0.18 + speciesBonus, 0, 0.5);
+    const setBonusEvasion = target?.species === 'beast'
+        ? Number(target?.activeSpeciesBonus?.beastEvasionChanceBonus || 0)
+        : 0;
+    return clamp(relativeAdvantage * 0.35 + setBonusEvasion, 0, 0.7);
 }
 
 export function calculateAdjustedDamageBreakdown(rawDamage, target, options = {}) {
@@ -272,106 +330,75 @@ export function calculateAdjustedDamage(rawDamage, target, options = {}) {
     return calculateAdjustedDamageBreakdown(rawDamage, target, options).finalDamage;
 }
 
+function applyStatusAttack(commandId, statusId, actor, target, commandEffects) {
+    const damage = commandEffects[commandId].calcDamage(actor);
+    target.hp = Math.max(0, target.hp - damage);
+    const addedStatus = addStatus(target, statusId);
+    return { type: 'damageStatus', damage, status: statusId, addedStatus };
+}
+
+function formatStatusAttackLog(event, commandName, statusLabel) {
+    let message = `⚔️ ${event.actor.name}の「${commandName}」！ ${event.target.name}に ${event.damage} のダメージ！`;
+    if (event.addedStatus) message += ` さらに ${event.target.name}を【${statusLabel}】にした！`;
+    return message;
+}
+
 export const statusCommands = {
     // =========================================================================
     // 🤢 状態異常・弱体化系
     // =========================================================================
     "atk04": {
         name: "毒攻撃",
-        desc: "敵単体に小ダメージを与え、毒を付与する。",
+        desc: "単体 / 物理 ATK0.8x + 毒",
         calcDamage: (attacker) => Math.floor(attacker.atk * 0.8),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk04"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-
-            let msg = `🤢 ${attacker.name}の「毒攻撃」！ ${target.name}に ${dmg} のダメージ！`;
-
-            if (addStatus(target, "poison")) {
-                msg += ` さらに ${target.name} を【毒状態】にした！`;
-            }
-            return msg;
-        }
+        apply: ({ actor, target, commandEffects }) => applyStatusAttack("atk04", "poison", actor, target, commandEffects),
+        formatLog: (event) => formatStatusAttackLog(event, "毒攻撃", "毒")
     },
     "atk_paralyze": {
         name: "マヒ攻撃",
-        desc: "敵単体に小ダメージを与え、マヒを付与する。",
+        desc: "単体 / 物理 ATK0.9x + マヒ",
         calcDamage: (attacker) => Math.floor(attacker.atk * 0.9),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_paralyze"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-
-            let msg = `⚡ ${attacker.name}の「マヒ攻撃」！ ${target.name}に ${dmg} のダメージ！`;
-
-            if (Math.random() < 1.0) {
-                if (addStatus(target, "paralysis")) {
-                    msg += ` さらに ${target.name} は身体が痺れて【マヒ状態】になった！`;
-                }
-            }
-            return msg;
-        }
+        apply: ({ actor, target, commandEffects }) => applyStatusAttack("atk_paralyze", "paralysis", actor, target, commandEffects),
+        formatLog: (event) => formatStatusAttackLog(event, "マヒ攻撃", "マヒ")
     },
     "atk_weaken": {
         name: "弱体化攻撃",
-        desc: "敵単体に小ダメージを与え、脱力を付与する。",
+        desc: "単体 / 魔法 INT1.0x + 脱力(ATK-30%、加算)",
         calcDamage: (attacker) => Math.floor(attacker.int * 1.0),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_weaken"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-
-            let msg = `📉 ${attacker.name}の「弱体化攻撃」！ ${target.name}に ${dmg} のダメージ！`;
-
-            if (addStatus(target, "weak")) {
-                msg += ` さらに ${target.name} を【脱力状態】にした！`;
-            }
-            return msg;
-        }
+        apply: ({ actor, target, commandEffects }) => applyStatusAttack("atk_weaken", "weak", actor, target, commandEffects),
+        formatLog: (event) => formatStatusAttackLog(event, "弱体化攻撃", "脱力:ATK-30%")
     },
     "atk_weakened": {
         name: "弱体呪詛",
-        desc: "敵単体に小ダメージを与え、弱体を付与する。",
+        desc: "単体 / 魔法 INT1.2x + 弱体(被ダメ+20%、加算)",
         calcDamage: (attacker) => Math.floor(attacker.int * 1.2),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_weakened"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-
-            let msg = `🛡️ ${attacker.name}の「弱体呪詛」！ ${target.name}に ${dmg} のダメージ！`;
-
-            if (addStatus(target, "weakened")) {
-                msg += ` さらに ${target.name} は防護が崩れて【弱体状態】になった！`;
-            }
-            return msg;
-        }
+        apply: ({ actor, target, commandEffects }) => applyStatusAttack("atk_weakened", "weakened", actor, target, commandEffects),
+        formatLog: (event) => formatStatusAttackLog(event, "弱体呪詛", "弱体:被ダメ+20%")
     },
     "atk_guard_break": {
         name: "防御崩し",
-        desc: "敵単体に中ダメージを与え、弱体を付与する。",
+        desc: "単体 / 物理 ATK1.1x + 弱体(被ダメ+20%、加算)",
         calcDamage: (attacker) => Math.floor(attacker.atk * 1.1),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_guard_break"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-
-            let msg = `🛡️ ${attacker.name}の「防御崩し」！ ${target.name}に ${dmg} のダメージ！`;
-            if (addStatus(target, "weakened")) {
-                msg += ` ${target.name}の守りが崩れて【弱体状態】になった！`;
-            }
-            return msg;
-        }
+        apply: ({ actor, target, commandEffects }) => applyStatusAttack("atk_guard_break", "weakened", actor, target, commandEffects),
+        formatLog: (event) => formatStatusAttackLog(event, "防御崩し", "弱体:被ダメ+20%")
     },
     "atk_prank": {
         name: "いやがらせ",
-        desc: "敵単体に小ダメージを与え、脱力と弱体を付与する。",
+        desc: "単体 / 混合 (ATK+INT)0.45x + 脱力(ATK-30%、加算) + 弱体(被ダメ+20%、加算)",
         calcDamage: (attacker) => Math.floor((attacker.int + attacker.atk) * 0.45),
-        action: (attacker, target, commandEffects) => {
-            const dmg = commandEffects["atk_prank"].calcDamage(attacker);
-            target.hp = Math.max(0, target.hp - dmg);
-
-            let msg = `😈 ${attacker.name}の「いやがらせ」！ ${target.name}に ${dmg} のダメージ！`;
+        apply: ({ actor, target, commandEffects }) => {
+            const damage = commandEffects["atk_prank"].calcDamage(actor);
+            target.hp = Math.max(0, target.hp - damage);
             const addedWeak = addStatus(target, "weak");
             const addedWeakened = addStatus(target, "weakened");
-            if (addedWeak || addedWeakened) {
-                msg += ` さらに調子を崩して${addedWeak ? '【脱力】' : ''}${addedWeakened ? '【弱体】' : ''}状態になった！`;
+            return { type: 'damageStatus', damage, status: 'weak,weakened', addedWeak, addedWeakened };
+        },
+        formatLog: (event) => {
+            let message = `😈 ${event.actor.name}の「いやがらせ」！ ${event.target.name}に ${event.damage} のダメージ！`;
+            if (event.addedWeak || event.addedWeakened) {
+                message += ` さらに${event.addedWeak ? '【脱力:ATK-30%】' : ''}${event.addedWeakened ? '【弱体:被ダメ+20%】' : ''}状態にした！`;
             }
-            return msg;
+            return message;
         }
     }
 };

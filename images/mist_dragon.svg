@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="mistDragonBody" x1="20" y1="24" x2="108" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e0e7ff"/>
+      <stop offset=".5" stop-color="#94a3b8"/>
+      <stop offset="1" stop-color="#475569"/>
+    </linearGradient>
+  </defs>
+  <path d="M23 71 C41 36 82 33 105 55 C89 58 78 70 73 101 C55 98 35 89 23 71 Z" fill="url(#mistDragonBody)" stroke="#475569" stroke-width="4"/>
+  <path d="M45 52 C49 31 80 31 88 52 C80 69 53 69 45 52 Z" fill="#c4b5fd" stroke="#475569" stroke-width="4"/>
+  <path d="M50 42 L44 20 L64 36 Z M82 42 L94 22 L91 48 Z" fill="#e0e7ff" stroke="#475569" stroke-width="3"/>
+  <circle cx="58" cy="56" r="6" fill="#f8fafc"/>
+  <circle cx="78" cy="56" r="6" fill="#f8fafc"/>
+  <circle cx="58" cy="56" r="2.5" fill="#0f172a"/>
+  <circle cx="78" cy="56" r="2.5" fill="#0f172a"/>
+  <path d="M63 72 Q70 78 78 72" stroke="#f8fafc" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M20 50 C45 36 79 36 108 53" stroke="#c4b5fd" stroke-width="8" fill="none" stroke-linecap="round" opacity=".85"/>
+  <path d="M15 78 C43 63 76 64 112 81" stroke="#e2e8f0" stroke-width="8" fill="none" stroke-linecap="round" opacity=".9"/>
+  <path d="M31 101 C58 87 77 89 100 101" stroke="#c4b5fd" stroke-width="7" fill="none" stroke-linecap="round" opacity=".8"/>
+  <path d="M88 82 C105 87 111 105 96 116" stroke="#64748b" stroke-width="7" fill="none" stroke-linecap="round"/>
+</svg>

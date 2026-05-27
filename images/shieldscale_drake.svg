@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="shieldscaleBody" x1="24" y1="22" x2="100" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bbf7d0"/>
+      <stop offset="0.45" stop-color="#22c55e"/>
+      <stop offset="1" stop-color="#14532d"/>
+    </linearGradient>
+    <linearGradient id="shieldscalePlate" x1="40" y1="36" x2="88" y2="102" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#dcfce7"/>
+      <stop offset="1" stop-color="#16a34a"/>
+    </linearGradient>
+  </defs>
+  <path d="M34 72 C30 49 46 33 63 33 C86 33 102 53 95 79 C88 103 54 112 39 95 C35 90 33 81 34 72 Z" fill="url(#shieldscaleBody)" stroke="#14532d" stroke-width="4"/>
+  <path d="M46 41 L39 21 L58 35 Z M80 39 L91 21 L92 45 Z" fill="#86efac" stroke="#14532d" stroke-width="3"/>
+  <path d="M53 49 Q64 42 78 49" stroke="#bbf7d0" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="55" cy="58" r="6" fill="#f8fafc"/>
+  <circle cx="76" cy="58" r="6" fill="#f8fafc"/>
+  <circle cx="55" cy="58" r="2.5" fill="#0f172a"/>
+  <circle cx="76" cy="58" r="2.5" fill="#0f172a"/>
+  <path d="M62 73 L70 73 L66 79 Z" fill="#14532d"/>
+  <path d="M40 72 L64 41 L90 72 C87 93 76 105 64 111 C52 105 43 93 40 72 Z" fill="url(#shieldscalePlate)" stroke="#064e3b" stroke-width="4"/>
+  <path d="M64 47 V103 M50 73 Q64 61 78 73 M51 88 Q64 78 77 88" stroke="#065f46" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M94 76 C114 76 119 101 97 107" stroke="#22c55e" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M101 96 L112 104" stroke="#86efac" stroke-width="5" stroke-linecap="round"/>
+  <path d="M38 88 L24 98" stroke="#86efac" stroke-width="7" stroke-linecap="round"/>
+  <path d="M51 108 L44 118 M76 108 L84 118" stroke="#14532d" stroke-width="6" stroke-linecap="round"/>
+  <path d="M69 29 L75 14 L81 31" fill="#bbf7d0" stroke="#14532d" stroke-width="3"/>
+  <path d="M45 63 L31 56 M88 62 L103 55" stroke="#14532d" stroke-width="4" stroke-linecap="round"/>
+</svg>

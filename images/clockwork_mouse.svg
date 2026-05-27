@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="clockMouseBody" x1="28" y1="30" x2="100" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="0.45" stop-color="#94a3b8"/>
+      <stop offset="1" stop-color="#475569"/>
+    </linearGradient>
+  </defs>
+  <circle cx="42" cy="44" r="16" fill="#cbd5e1"/>
+  <circle cx="86" cy="44" r="16" fill="#cbd5e1"/>
+  <path d="M34 58 C34 34 94 34 94 58 C94 88 80 108 64 112 C48 108 34 88 34 58 Z" fill="url(#clockMouseBody)"/>
+  <circle cx="54" cy="64" r="5" fill="#111827"/>
+  <circle cx="74" cy="64" r="5" fill="#111827"/>
+  <path d="M64 74 L58 84 L70 84 Z" fill="#f59e0b"/>
+  <path d="M50 94 Q64 102 78 94" stroke="#e2e8f0" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M92 84 Q112 86 118 104" stroke="#64748b" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <circle cx="64" cy="40" r="9" fill="#facc15"/>
+  <path d="M64 31 V49 M55 40 H73" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+</svg>

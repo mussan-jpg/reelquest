@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>sproutling</title>
+  <path d="M48 60 C38 42 43 27 61 20 C77 31 78 48 65 64 Z" fill="#69db7c"/>
+  <path d="M79 62 C99 51 112 58 116 77 C101 91 84 84 72 69 Z" fill="#37b24d"/>
+  <path d="M64 56 C59 73 58 90 62 116" stroke="#2b8a3e" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M45 110 C52 118 76 118 84 110 C82 91 72 78 63 78 C53 78 45 91 45 110 Z" fill="#8d6e63"/>
+  <path d="M45 111 C35 114 27 119 22 124" stroke="#6d4c41" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M84 111 C94 114 101 119 106 124" stroke="#6d4c41" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="57" cy="95" r="4" fill="#fff7ed"/>
+  <circle cx="72" cy="95" r="4" fill="#fff7ed"/>
+  <path d="M58 106 Q65 110 72 106" stroke="#fff7ed" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
